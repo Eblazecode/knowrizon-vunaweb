@@ -1,0 +1,97 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}books categories {% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+   <div class="row">
+      <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Computer Science Books</h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+The eLibrary organizes its book collection into various categories
+based on the different areas within Computer Science.
+This categorization helps users easily find books
+related to their specific field of study or interest. Below are the
+areas and their associated book categories:
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+  <!-- SEARCH FILTER FORM FOR BOOKS-->
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+        <div class="card-header">
+            <h4>Search Books</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="GET">
+            <div class="form-group">
+                <label for="search">Search by title or author</label>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Enter search term">
+</div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            </div>
+        </div>
+    </div>
+   </div>
+
+    <div class="row sortable-card">
+    <div class="col-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Computer Science</h4>
+            </div>
+            <div class="card-body">
+                <h2>Books in {{ category|title }}</h2>
+                <div class="book-list row">
+                    {% if books %}
+                        {% for book in books %}
+                            <div class="book-item col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <!-- Display book cover -->
+                                    <img
+                                        src="{{ book.thumbnailLink|default:'/static/images/default-cover.png' }}"
+                                        alt="Book Cover"
+                                        class="card-img-top"
+                                        style="height: 200px; object-fit: cover;">
+
+                                    <div class="card-body text-center">
+                                        <!-- Book name -->
+                                        <h5 class="card-title">{{ book.name }}</h5>
+                                        <!-- View/Download button -->
+                                        <a href="{{ book.webViewLink }}" target="_blank" class="btn btn-primary btn-sm">View/Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No books available for this category.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+{% endblock %}

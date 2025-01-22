@@ -1,0 +1,408 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}books categories {% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Book categories</h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+The eLibrary organizes its book collection into various categories
+                          based on the faculties they belong to.
+                          This categorization helps users easily find books
+                          related to their field of study or interest. Below are the
+                          faculties and their associated book categories:
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+</div>
+<section class="section">
+  <div class="section-body">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="bootstrap snippet">
+              <section id="portfolio" class="gray-bg padding-top-bottom">
+                <!--==== Portfolio Filters ====-->
+                <div class="categories">
+                  <ul>
+                    <li class="active">
+                      <a href="#" data-filter="*">All Faculties</a>
+                    </li>
+                    <li>
+                      <a href="#" data-filter=".science">Nat.App.Science</a>
+                    </li>
+                    <li>
+                      <a href="#" data-filter=".mgtsci">Manage.Sci</a>
+                    </li>
+                    <li>
+                      <a href="#" data-filter=".medicine">Medicine</a>
+                    </li>
+                    <li>
+                        <a href="#" data-filter=".engineering">Engineering</a>
+                  </li>
+
+                  <li>
+                      <a href="#" data-filter=".humanities">Humanities</a>
+                    </li>
+
+                    <li>
+                      <a href="#" data-filter=".socsci">Social sci.</a>
+                    </li>
+                    <li>
+                      <a href="#" data-filter=".education">Education</a>
+                    </li>
+                    <li>
+                      <a href="#" data-filter=".law">law</a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- ======= book category items 1 ===-->
+                <div class="projects-container scrollimation in mt-2">
+                  <div class="row">
+                    <article class="col-md-2 col-sm-4 portfolio-item science">
+                      <div class="portfolio-thumb in">
+                        <a href="{% url 'computer_science_category' %}" class="main-link">
+                        <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/compsci.webp' %}" alt="">
+                         <!-- card header contains dept -->
+
+
+                          <h6 class="text-decoration-none text-capitalize p-4">computer sci dept</h6>
+                          <span class="project-title">computer sci dept</span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="{% url 'computer_science_category' %}" title="Science Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="{% url 'computer_science_category' %}"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item science">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/chemistry.webp' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">chemistry department </h6>
+                          <span class="project-title"> chem.  department </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="link centered" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item law">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-100" src="{% static 'assets/img/books/book_cate/law.jpg' %}" alt="">
+                         <h6 class="text-decoration-none p-3 text-capitalize">Law department </h6>
+                          <span class="project-title">Law department </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge centered cboxElement" href="#" title="Law Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item socsio">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/masscommpol.jpg' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">Mass communication</h6>
+                          <span class="project-title">Mass communication</span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Arts Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item medicine">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/medicals.jpg' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-3">Medicine college</h6>
+                          <span class="project-title">Medicine college </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Medicine Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item mgtsci">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/business.webp' %}" alt="">
+                          <h6 class="text-decoration-none p-3">Business Administration</h6>
+                          <span class="project-title">Business Administration </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Business Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <!-- Add more articles for other books and faculties as needed -->
+
+
+                  </div>
+
+
+                  <!-- ======= book category items 2 ===-->
+                  <div class="row">
+                    <article class="col-md-2 col-sm-4 portfolio-item mgtsci ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                        <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/account.png' %}" alt="">
+                         <!-- card header contains dept -->
+
+
+                          <h6 class="text-decoration-none text-capitalize p-4">Accounting dept</h6>
+                          <span class="project-title">Account dept </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Science Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item science">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/physics.jpg' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">physics department </h6>
+                          <span class="project-title"> physics  department </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="link centered" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item engineering ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/mechengr.png' %}" alt="">
+                         <h6 class="text-decoration-none p-3 text-capitalize">Mech. Engr. department </h6>
+                          <span class="project-title">mech Engr </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge centered cboxElement" href="#" title="Law Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item socsci">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/econs.png' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">Economics</h6>
+                          <span class="project-title">Mass communication</span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Arts Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item science ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/softengr.webp' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-3">software engineering</h6>
+                          <span class="project-title">Medicine college </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Medicine Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item socsci ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/politicalimg.webp' %}" alt="">
+                          <h6 class="text-decoration-none p-3">political science</h6>
+                          <span class="project-title">political science </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Business Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <!-- Add more articles for other books and faculties as needed -->
+
+
+                  </div>
+
+                  <!-- ======= book category items 3 ===-->
+                  <div class="row">
+                    <article class="col-md-2 col-sm-4 portfolio-item mgtsci ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                        <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/Entrepreneurship.png' %}" alt="">
+                         <!-- card header contains dept -->
+
+
+                          <h6 class="text-decoration-none text-capitalize p-4">Entrepreneurship </h6>
+                          <span class="project-title">ENT  dept </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Science Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item mgtsci">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/marketing.png' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">Marketing </h6>
+                          <span class="project-title"> Mkt  department </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="link centered" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item science">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/microbiology.jpg' %}" alt="">
+                         <h6 class="text-decoration-none p-3 text-capitalize">microbiology </h6>
+                          <span class="project-title">micro biology </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge centered cboxElement" href="#" title="Law Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item humanities">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/philosophy.webp' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">philosophy</h6>
+                          <span class="project-title">philosophy </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Arts Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item socsci ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/historyrel.jpg' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-3">History internation & relations</h6>
+                          <span class="project-title">HIS </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Medicine Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item science ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/biochem.png' %}" alt="">
+                          <h6 class="text-decoration-none p-3">Biochemistry  </h6>
+                          <span class="project-title">political science </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Business Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <!-- Add more articles for other books and faculties as needed -->
+
+
+                  </div>
+
+                    <!-- ======= book category items 4 ===-->
+                  <div class="row">
+                    <article class="col-md-2 col-sm-4 portfolio-item mgtsci ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                        <img class="img-responsive img-center w-75" src="{% static 'assets/img/books/book_cate/bsnkfii.webp' %}" alt="">
+                         <!-- card header contains dept -->
+
+
+                          <h6 class="text-decoration-none text-capitalize p-4">banking finance  </h6>
+                          <span class="project-title">banking fin </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Science Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item humanities">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center w-100" src="{% static 'assets/img/books/book_cate/theology.png' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">Theology </h6>
+                          <span class="project-title"> theology </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="link centered" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-4 portfolio-item science">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-100" src="{% static 'assets/img/books/book_cate/biology.png' %}" alt="">
+                         <h6 class="text-decoration-none p-3 text-capitalize">Biology </h6>
+                          <span class="project-title">biology </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge centered cboxElement" href="#" title="Law Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item engineering">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/comprengrr.png' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-4">computer engineering </h6>
+                          <span class="project-title">computer engr </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Arts Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item engineering ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/elecelect.jpg' %}" alt="">
+                          <h6 class="text-decoration-none text-capitalize p-3">electrical electronics</h6>
+                          <span class="project-title">EEE</span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Medicine Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <article class="col-md-2 col-sm-6 portfolio-item education ">
+                      <div class="portfolio-thumb in">
+                        <a href="#" class="main-link">
+                          <img class="img-responsive img-center  w-75" src="{% static 'assets/img/books/book_cate/education.webp' %}" alt="">
+                          <h6 class="text-decoration-none p-3">education  </h6>
+                          <span class="project-title">education </span>
+                          <span class="overlay-mask"></span>
+                        </a>
+                        <a class="enlarge cboxElement" href="#" title="Business Book 1"><i class="fa fa-expand fa-fw"></i></a>
+                        <a class="link" href="#"><i class="fa fa-eye fa-fw"></i></a>
+                      </div>
+                    </article>
+                    <!-- Add more articles for other books and faculties as needed -->
+
+
+                  </div>
+
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

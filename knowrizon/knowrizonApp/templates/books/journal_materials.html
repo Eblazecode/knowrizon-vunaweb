@@ -1,0 +1,365 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %} upload materials {% endblock %}
+
+{% block content %}
+
+
+
+    <script>
+    function loadCourses() {
+        const department = document.getElementById('department').value;
+        const courseSelect = document.getElementById('course');
+        const courseSelect2 = document.getElementById('course2');
+        const courseSelect3 = document.getElementById('course3');
+        courseSelect.innerHTML = '';
+        courseSelect2.innerHTML = '';
+        courseSelect3.innerHTML = '';
+
+        fetch(`/get-courses/${department}/`)
+            .then(response => response.json())
+            .then(data => {
+                data.courses.forEach(course => {
+                    const option1 = document.createElement('option');
+                    option1.value = course;
+                    option1.text = course;
+                    courseSelect.add(option1);
+
+                    const option2 = document.createElement('option');
+                    option2.value = course;
+                    option2.text = course;
+                    courseSelect2.add(option2);
+
+                    const option3 = document.createElement('option');
+                    option3.value = course;
+                    option3.text = course;
+                    courseSelect3.add(option3);
+                });
+            });
+    }
+</script>
+<div class="row">
+      <div class="card col-lg-3 ">
+  <div class="card-header">
+    <h4>  </h4>
+  </div>
+  <div class="card-body">
+    <ul class="list-unstyled">
+      <li class="media">
+        <img class="mr-3 w-25" src="{% static 'assets/img/books/book_cate/pdf.png' %}"  alt="Generic placeholder image">
+        <div class="media-body">
+          <h1 class="mt-0 ">journal  material  </h1>
+          <p class="pt-3">Description: Digital versions of traditional books that can be read on devices like tablets, smartphones, or eReaders.
+Use Case: Useful for extended reading on various topics, ranging from academic
+            textbooks to fiction and non-fiction works.</p>
+
+            <!-- font awesome upload icon -->
+            <div class="text-center">
+              <i class="fas fa-upload fa-10x"></i>
+            </div>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+         <div class="col-sm-12  col-md-10  col-lg-6 col-xl-6 ">
+
+            <div class="card card-primary">
+              <div class="card-header">
+                  <!-- ALERT MESSAGE -->
+                  {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-dismissible col-5 mt-2 ml-2
+                        {% if message.tags == 'error' %}
+                            alert-danger
+                        {% elif message.tags == 'success' %}
+                            alert-success
+                        {% elif message.tags == 'info' %}
+                            alert-info
+                        {% elif message.tags == 'warning' %}
+                            alert-warning
+                        {% endif %}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+
+
+              </div>
+                    {% endfor %}
+                {% endif %}
+              </div>
+
+              <div class="card-body">
+    <form method="POST" id="journal_upload_form" action="{% url 'upload_journal_books' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="journal_title">Journal Title</label>
+        <input id="journal_title" type="text" class="form-control" name="journal_title" required>
+    </div>
+    <div class="form-group">
+        <label for="journal_description">Description</label>
+        <textarea id="journal_description" class="form-control" name="journal_description" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="journal_cover_file">Upload Cover Page</label>
+        <input id="journal_cover_file" type="file" class="form-control" name="journal_cover_image" required>
+    </div>
+    <div class="form-group">
+        <label for="journal_file">Upload Journal</label>
+        <input id="journal_file" type="file" class="form-control" name="journal_file" accept="application/pdf" required>
+    </div>
+    <div class="form-group">
+        <label for="journal_author">Author</label>
+        <input id="journal_author" type="text" class="form-control" name="journal_author" required>
+    </div>
+    <div class="form-group">
+        <label for="journal_upload_date">Date</label>
+        <input id="journal_upload_date" type="datetime-local" class="form-control" name="journal_upload_date" required>
+    </div>
+   <div class="form-group">
+    <label for="journal_tags">Tags</label>
+    <div id="journal_tags" class="form-control h-100">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Science" id="tag_science">
+            <label class="form-check-label" for="tag_science">Science</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Technology" id="tag_technology">
+            <label class="form-check-label" for="tag_technology">Technology</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Engineering" id="tag_engineering">
+            <label class="form-check-label" for="tag_engineering">Engineering</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Mathematics" id="tag_mathematics">
+            <label class="form-check-label" for="tag_mathematics">Mathematics</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Education" id="tag_education">
+            <label class="form-check-label" for="tag_education">Education</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Business" id="tag_business">
+            <label class="form-check-label" for="tag_business">Business</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Arts" id="tag_arts">
+            <label class="form-check-label" for="tag_arts">Arts</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="journal_tags" value="Humanities" id="tag_humanities">
+            <label class="form-check-label" for="tag_humanities">Humanities</label>
+        </div>
+    </div>
+</div>
+    <div class="form-group">
+        <label for="journal_faculty">Faculty</label>
+        <select id="journal_faculty" class="form-control" name="journal_faculty" required>
+            <option value="Natural and Applied Sciences">Natural and Applied Sciences</option>
+            <option value="Social Sciences">Social Sciences</option>
+            <option value="Humanities">Humanities</option>
+            <option value="Management Sciences">Management Sciences</option>
+            <option value="Education">Education</option>
+            <option value="Law">Law</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="department">Department</label>
+        <select id="department" class="form-control" name="journal_department" onchange="loadCourses()">
+            <option value="">Select a department</option>
+            <option value="Political Science and Diplomacy">Political Science and Diplomacy</option>
+            <option value="Economics">Economics</option>
+            <option value="Industrial Chemistry">Industrial Chemistry</option>
+            <option value="Physics with Electronics">Physics with Electronics</option>
+            <option value="Applied Microbiology">Applied Microbiology</option>
+            <option value="Philosophy">Philosophy</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Mass Communication">Mass Communication</option>
+            <option value="English and Literary Studies">English and Literary Studies</option>
+            <option value="History and International Relations">History and International Relations</option>
+            <option value="Marketing and Advertising">Marketing and Advertising</option>
+            <option value="Accounting">Accounting</option>
+            <option value="Theology">Theology</option>
+            <option value="English Education">English Education</option>
+            <option value="Economics Education">Economics Education</option>
+            <option value="Chemistry Education">Chemistry Education</option>
+            <option value="Physics Education">Physics Education</option>
+            <option value="Educational Management">Educational Management</option>
+            <option value="Business Administration">Business Administration</option>
+            <option value="Entrepreneurial Studies">Entrepreneurial Studies</option>
+            <option value="Peace And Conflict Studies">Peace And Conflict Studies</option>
+            <option value="B.Eng Computer Engineering">B.Eng Computer Engineering</option>
+            <option value="B.Eng Electrical and Electronic Engineering">B.Eng Electrical and Electronic Engineering</option>
+            <option value="Law">Law</option>
+            <option value="SOFTWARE ENGINEERING">SOFTWARE ENGINEERING</option>
+            <option value="Nursing">Nursing</option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Medical Laboratory Sciences">Medical Laboratory Sciences</option>
+            <option value="Sacred Theology">Sacred Theology</option>
+            <option value="Computer science Education">Computer science Education</option>
+            <option value="Medicine and Surgery">Medicine and Surgery</option>
+            <option value="Religious Education">Religious Education</option>
+            <option value="Public Administration">Public Administration</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="course">Journal thematic area 1</label>
+        <select class="form-control" id="course" name="journal_category">
+            <option value="">Select a category</option>
+        </select>
+    </div>
+
+          <div class="form-group">
+        <label for="course">Journal thematic area 2</label>
+        <select class="form-control" id="course2" name="journal_category">
+            <option value="">Select a category</option>
+        </select>
+    </div>
+
+          <div class="form-group">
+        <label for="course">Journal thematic area 3</label>
+        <select class="form-control" id="course3" name="journal_category">
+            <option value="">Select a category</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="journal_level">Journal Level</label>
+        <select id="journal_level" class="form-control" name="journal_level" required>
+            <option value="">Select a level</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="all level">All level</option>
+            <option value="700">Postgraduate</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lg w-25 btn-block">Upload Journal</button>
+    </div>
+</form>
+              </div>
+              <div class="mb-4 text-muted text-center">
+                ADD MULTIPLE STAFF ? <a href="{% url 'upload_students_records' %}">UPLOAD  FILE </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="settingSidebar">
+    <a href="javascript:void(0)" class="settingPanelToggle">
+      <i class="fa fa-spin fa-cog"></i>
+    </a>
+    <div class="settingSidebar-body ps-container ps-theme-default">
+      <div class="fade show active">
+        <div class="setting-panel-header">Setting Panel</div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Select Layout</h6>
+          <div class="selectgroup layout-color w-50">
+            <label class="selectgroup-item">
+              <input type="radio" name="value" value="1" class="selectgroup-input-radio select-layout" checked>
+              <span class="selectgroup-button">Light</span>
+            </label>
+            <label class="selectgroup-item">
+              <input type="radio" name="value" value="2" class="selectgroup-input-radio select-layout">
+              <span class="selectgroup-button">Dark</span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Sidebar Color</h6>
+          <div class="selectgroup selectgroup-pills sidebar-color">
+            <label class="selectgroup-item">
+              <input type="radio" name="icon-input" value="1" class="selectgroup-input select-sidebar">
+              <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip" data-original-title="Light Sidebar">
+                <i class="fas fa-sun"></i>
+              </span>
+            </label>
+            <label class="selectgroup-item">
+              <input type="radio" name="icon-input" value="2" class="selectgroup-input select-sidebar" checked>
+              <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip" data-original-title="Dark Sidebar">
+                <i class="fas fa-moon"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Color Theme</h6>
+          <div class="theme-setting-options">
+            <ul class="choose-theme list-unstyled mb-0">
+              <li title="white" class="active">
+                <div class="white"></div>
+              </li>
+              <li title="cyan">
+                <div class="cyan"></div>
+              </li>
+              <li title="black">
+                <div class="black"></div>
+              </li>
+              <li title="purple">
+                <div class="purple"></div>
+              </li>
+              <li title="orange">
+                <div class="orange"></div>
+              </li>
+              <li title="green">
+                <div class="green"></div>
+              </li>
+              <li title="red">
+                <div class="red"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <div class="theme-setting-options">
+            <label class="m-b-0">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="mini_sidebar_setting">
+              <span class="custom-switch-indicator"></span>
+              <span class="control-label p-l-10">Mini Sidebar</span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <div class="theme-setting-options">
+            <label class="m-b-0">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="sticky_header_setting">
+              <span class="custom-switch-indicator"></span>
+              <span class="control-label p-l-10">Sticky Header</span>
+            </label>
+          </div>
+        </div>
+        <div class="mt-4 mb-4 p-3 align-center rt-sidebar-last-ele">
+          <a href="#" class="btn btn-icon icon-left btn-primary btn-restore-theme">
+            <i class="fas fa-undo"></i> Restore Default
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

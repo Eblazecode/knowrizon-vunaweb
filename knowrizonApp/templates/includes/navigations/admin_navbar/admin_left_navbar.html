@@ -1,0 +1,106 @@
+{% load static %}
+
+<!-- ADMIN LEFT SIDE NAVBAR -->
+
+      <div class="main-sidebar sidebar-style-2">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+          <a href="admin_dashboard.html">
+  <img alt="image" src="{% static 'assets/img/logo.png' %}" class="header-logo" />
+  <span class="logo-name">vunaweb  </span>
+</a>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="menu-header">Main</li>
+            <li class="dropdown active">
+           <a href="{% url 'admin_dashboard' %}" class="nav-link">
+  <i data-feather="monitor"></i>
+  <span>Dashboard</span>
+</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="briefcase"></i><span>User management </span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'add_users' %}">Add users(students, faculty, staff)</a></li>
+                        <li><a class="nav-link" href="{% url 'approve_requests' %}">Approve requests</a></li>
+                        <li><a class="nav-link" href="{% url 'manage_user_roles' %}">Manage user roles</a></li>
+                        <li><a class="nav-link" href="{% url 'handle_password_resets' %}">Handle password resets</a></li>
+                        <li><a class="nav-link" href="{% url 'monitor_user_activity' %}">Monitor User Activity</a></li>
+                        <li><a class="nav-link" href="{% url 'oversee_user_permissions' %}">Oversee User Permissions</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Content Management</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'upload_materials' %}">Upload Digital Resources</a></li>
+                <li><a class="nav-link" href="{% url 'upload_materials' %}">manage Resources</a></li>
+                <li><a class="nav-link" href="portfolio.html">Review Content Submissions</a></li>
+                <li><a class="nav-link" href="blog.html">Create and Manage Content Categories</a></li>
+
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="mail"></i><span>Subscription and Membership Mgt</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="email-inbox.html">Handle Subscription Plans</a></li>
+                <li><a class="nav-link" href="email-compose.html">Monitor Subscription Payments</a></li>
+                <li><a class="nav-link" href="email-read.html">Provide Customer Support</a></li>
+              </ul>
+            </li>
+            <li class="menu-header">SECONDARY </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="copy"></i><span>
+                 Library Maintenance </span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="alert.html">Database Maintenance:</a></li>
+                <li><a class="nav-link" href="badge.html">Monitor Content Usage </a></li>
+                <li><a class="nav-link" href="breadcrumb.html">System Updates and Upgrades:</a></li>
+
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="shopping-bag"></i><span>Reporting and Analytics</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="avatar.html">Generate Reports</a></li>
+                <li><a class="nav-link" href="card.html">Track Content Trends</a></li>
+                <li><a class="nav-link" href="modal.html">View System Health Metrics</a></li>
+
+              </ul>
+            </li>
+            <li><a class="nav-link" href="blank.html"><i data-feather="file"></i><span>Blank Page</span></a></li>
+            <li class="menu-header">security</li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="layout"></i><span>Compliance and Security</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="basic-form.html">Ensure Data Privacy and Security</a></li>
+                <li><a class="nav-link" href="forms-advanced-form.html">Audit and Log Monitoring </a></li>
+                <li><a class="nav-link" href="forms-editor.html">Monitor Content for Copyright Compliance</a></li>
+                <li><a class="nav-link" href="forms-validation.html">Validation</a></li>
+                <li><a class="nav-link" href="form-wizard.html">Form Wizard</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="grid"></i><span>Event and Notification Management</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="basic-table.html">Announce New Content and Features</a></li>
+                <li><a class="nav-link" href="advance-table.html">Organize Virtual Events</a></li>
+                <li><a class="nav-link" href="datatables.html">Datatable</a></li>
+                <li><a class="nav-link" href="export-table.html">Export Table</a></li>
+                <li><a class="nav-link" href="editable-table.html">Editable Table</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="pie-chart"></i><span>Content Recommendation System Management</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="chart-amchart.html">Analyze and Improve Search Functionality:</a></li>
+
+              </ul>
+            </li>
+
+          </ul>
+        </aside>
+      </div>
+<!--ADMIN LEFT NAVBAR ENDS-->

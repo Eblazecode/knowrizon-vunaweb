@@ -1,0 +1,59 @@
+{% load static %}
+
+<!-- ADMIN LEFT SIDE NAVBAR -->
+
+      <div class="main-sidebar sidebar-style-2">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+          <a href="admin_dashboard.html">
+  <img alt="image" src="{% static 'assets/img/logo.png' %}" class="header-logo" />
+  <span class="logo-name">vunaweb  </span>
+</a>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="menu-header">Main</li>
+            <li class="dropdown active">
+           <a href="{% url 'student_dashboard' %}" class="nav-link">
+  <i data-feather="monitor"></i>
+  <span>Dashboard</span>
+</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="briefcase"></i><span>Books </span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'book_category' %}">book category </a></li>
+                        <li><a class="nav-link" href="{% url 'approve_requests' %}">book shelf </a></li>
+                        <li><a class="nav-link" href="{% url 'manage_user_roles' %}">reading challenge </a></li>
+
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Journals</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'library_materials_category' %}">Add and Manage Digital Resources</a></li>
+
+
+              </ul>
+            </li>
+
+            <li class="menu-header">SECONDARY </li>
+              <!-- AI SECTION-->
+                <li class="menu-header">AI FEATURES </li>
+                <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="monitor"></i><span>AI Assistant</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="avatar.html">summarizer</a></li>
+                <li><a class="nav-link" href="card.html">Virtual Study Assistant</a></li>
+                <li><a class="nav-link" href="modal.html"> Smart Search Engine</a></li>
+                <li><a class="nav-link" href="modal.html"> Plagiarism Detection</a></li>
+                <li><a class="nav-link" href="modal.html"> Text-to-Speech and Accessibility Tools</a></li>
+
+              </ul>
+            </li>
+
+          </ul>
+        </aside>
+      </div>
+<!--ADMIN LEFT NAVBAR ENDS-->

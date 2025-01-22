@@ -1,0 +1,22 @@
+# Environment variables
+.env
+
+# Python bytecode
+*.pyc
+__pycache__/
+
+
+media/config
+# SQLite database
+db.sqlite3
+
+# Logs
+*.log
+media/config/service_account_API.json
+
+
+
+# IDE-specific files
+.vscode/
+.idea/
+

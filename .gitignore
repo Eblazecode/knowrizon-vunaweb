@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Python bytecode
+*.pyc
+__pycache__/
+
+
+media/config
+# SQLite database
+db.sqlite3
+
+# Logs
+*.log
+knowrizon/media/config/service_account_API.json
+knowrizon/media/config/client_secret.json
+
+
+# IDE-specific files
+.vscode/
+.idea/
+
+.vercel

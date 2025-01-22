@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+
+<!-- admin_register.html  21 Nov 2019 04:05:01 GMT -->
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>students REGISTER </title>
+  <!-- General CSS Files -->
+<!-- General CSS Files -->
+<link rel="stylesheet" href="{% static 'assets/css/app.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/bundles/jquery-selectric/selectric.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bundles/izitoast/css/iziToast.min.css' %}">
+<!-- Template CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+<!-- Custom style CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+<link rel='shortcut icon' type='image/x-icon' href="{% static 'assets/img/favicon.ico' %}" />
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <section class="section">
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h4>Students Registration </h4>
+
+
+              </div>
+              <div class="card-body">
+                <form method="" >
+                    {% csrf_token %}
+                  <div class="row">
+                    <div class="form-group col-6">
+                      <label for="fname">First Name</label>
+                      <input id="fname" type="text" class="form-control" name="student_fname" autofocus>
+                    </div>
+                    <div class="form-group col-6">
+                      <label for="lname">Last Name</label>
+                      <input id="lname" type="text" class="form-control" name="student_lname">
+                    </div>
+                  </div>
+                    <div class="row">
+                         <div class="form-group col-6">
+                      <label for="mat_no">Matric num</label>
+                      <input id="mat_no" type="text" class="form-control" name="student_mat_no">
+                    </div>
+
+                        <div class="form-group col-6">
+  <label for="gender">Gender</label>
+  <select id="gender" class="form-control" name="student_gender">
+    <option value="">Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+ 
+  </select>
+</div>
+                    </div>
+                 <div class="form-group">
+  <label for="email">Email</label>
+  <input id="email" type="email" class="form-control" name="student_email" required>
+  <div class="invalid-feedback">
+  </div>
+</div>
+
+                  <div class="form-group">
+  <label for="department">Department</label>
+  <select id="department" class="form-control" name="student_department">
+         <option value="">Select a department</option>
+                                <option value="Political Science and Diplomacy">Political Science and Diplomacy</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Industrial Chemistry">Industrial Chemistry</option>
+                                <option value="Physics with Electronics">Physics with Electronics</option>
+                                <option value="Applied Microbiology">Applied Microbiology</option>
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Mass Communication">Mass Communication</option>
+                                <option value="English and Literary Studies">English and Literary Studies</option>
+                                <option value="History and International Relations">History and International Relations</option>
+                                <option value="Marketing and Advertising">Marketing and Advertising</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Theology">Theology</option>
+                                <option value="English Education">English Education</option>
+                                <option value="Economics Education">Economics Education</option>
+                                <option value="Chemistry Education">Chemistry Education</option>
+                                <option value="Physics Education">Physics Education</option>
+                                <option value="Educational Management">Educational Management</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Entrepreneurial Studies">Entrepreneurial Studies</option>
+                                <option value="Peace And Conflict Studies">Peace And Conflict Studies</option>
+                                <option value="B.Eng Computer Engineering">B.Eng Computer Engineering</option>
+                                <option value="B.Eng Electrical and Electronic Engineering">B.Eng Electrical and Electronic Engineering</option>
+                                <option value="Law">Law</option>
+                                <option value="SOFTWARE ENGINEERING">SOFTWARE ENGINEERING</option>
+                                <option value="Nursing">Nursing</option>
+                                <option value="Pharmacy">Pharmacy</option>
+                                <option value="Medical Laboratory Sciences">Medical Laboratory Sciences</option>
+                                <option value="Sacred Theology">Sacred Theology</option>
+                                <option value="Computer science Education">Computer science Education</option>
+                                <option value="Medicine and Surgery">Medicine and Surgery</option>
+                                <option value="Religious Education">Religious Education</option>
+                                <option value="Public Administration">Public Administration</option>
+  </select>
+
+</div>
+                  <div class="row">
+                    <div class="form-group col-6">
+                      <label for="password" class="d-block">Password</label>
+                      <input id="password" type="password" class="form-control pwstrength" data-indicator="pwindicator"
+                        name="student_password">
+                      <div id="pwindicator" class="pwindicator">
+                        <div class="bar"></div>
+                        <div class="label"></div>
+                      </div>
+                    </div>
+                    <div class="form-group col-6">
+                      <label for="password2" class="d-block">Password Confirmation</label>
+                      <input id="password2" type="password" class="form-control" name="password-confirm">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="agree" class="custom-control-input" id="agree">
+                      <label class="custom-control-label" for="agree">I agree with the terms and conditions</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit"   class="btn btn-primary btn-lg btn-block">
+                      Register
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="mb-4 text-muted text-center">
+                Already Registered? <a href="{% url 'admin_login' %}">Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- General JS Scripts -->
+
+  <script src="{% static 'assets/js/app.min.js' %}"></script>
+<!-- JS Libraries -->
+<script src="{% static 'assets/bundles/jquery-pwstrength/jquery.pwstrength.min.js' %}"></script>
+<script src="{% static 'assets/bundles/jquery-selectric/jquery.selectric.min.js' %}"></script>
+<!-- Page Specific JS File -->
+<script src="{% static 'assets/js/page/auth-register.js' %}"></script>
+<!-- Template JS File -->
+<script src="{% static 'assets/js/scripts.js' %}"></script>
+
+<!-- Template JS File -->
+<script src="{% static 'assets/bundles/sweetalert/sweetalert.min.js' %}"></script>
+<!-- General JS Scripts -->
+
+<!-- JS Libraries -->
+<script src="{% static 'assets/js/scripts.js' %}"></script>
+<!-- Custom JS File -->
+<script src="{% static 'assets/js/custom.js' %}"></script>
+
+<!-- Page Specific JS File -->
+<script src="{% static 'assets/js/page/sweetalert.js' %}"></script>
+
+</body>
+
+
+<!-- admin_register.html  21 Nov 2019 04:05:02 GMT -->
+</html>

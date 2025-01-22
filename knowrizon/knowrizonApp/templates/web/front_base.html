@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link href="{% static 'frontend/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontend/css/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'frontend/css/templatemo-kind-heart-charity.css' %}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body id="section_1">
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 d-flex flex-wrap">
+                    <p class="d-flex me-4 mb-0">
+                        <i class="bi-robot me-2"></i>
+                        vuna AI e-library
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+
+
+    <script src="{% static 'frontend/js/jquery.min.js' %}"></script>
+    <script src="{% static 'frontend/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'frontend/js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'frontend/js/click-scroll.js' %}"></script>
+    <script src="{% static 'frontend/js/counter.js' %}"></script>
+    <script src="{% static 'frontend/js/custom.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

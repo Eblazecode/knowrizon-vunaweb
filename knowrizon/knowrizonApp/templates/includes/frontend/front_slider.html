@@ -1,0 +1,50 @@
+
+{% load static %}
+
+
+{% block navigations %}
+{% include 'includes/frontend/navigation.html' %}
+{% endblock %}
+
+
+<section class="hero-section hero-section-full-height">
+    <div class="container-fluid">
+        <div class="row bg-secondary bg-gradient">
+            <div class="col-lg-10 col-12 p-0 offset-lg-2 ">
+                <div id="hero-slide" class="carousel carousel-fade slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="{% static 'frontend/images/slide/blackhappy2.jpg' %}" class="carousel-image img-fluid" alt="...">
+                            <div class="carousel-caption d-flex flex-column justify-content-end">
+                                <h1>All books </h1>
+                                <p>immersive learning experince </p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="{% static 'frontend/images/slide/volunteer-selecting-organizing-clothes-donations-charity.jpg' %}" class="carousel-image img-fluid" alt="...">
+                            <div class="carousel-caption d-flex flex-column justify-content-end">
+                                <h1> AI powered </h1>
+                                <p>unbeatable partner for academic research </p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="{% static 'frontend/images/slide/blackconfused.jpg' %}" class="carousel-image img-fluid" alt="...">
+                            <div class="carousel-caption d-flex flex-column justify-content-end">
+                                <h1>seamless  </h1>
+                                <p>search amazing for  books that fuels your interest </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#hero-slide" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#hero-slide" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

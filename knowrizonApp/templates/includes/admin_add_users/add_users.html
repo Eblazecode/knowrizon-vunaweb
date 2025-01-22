@@ -1,0 +1,229 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %}vunaweb plus{% endblock %}
+
+{% block content %}
+
+<!--modeal section-->
+
+ <h2 class="section-title">Add  Users </h2>
+   <!--FEEBACK MODAL-->
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible col-5 mt-2 ml-2
+            {% if message.tags == 'error' %}
+                alert-danger
+            {% elif message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'info' %}
+                alert-info
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+                <p class="section-lead">
+             you can add students, staff and library content managers here
+            </p>
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4>Add students </h4>
+
+                      <div class="card-header-action">
+                    <a href="{% url 'manage_students_users' %}" class="btn btn-primary">
+                      View All
+                    </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p>Students, both undergraduate and postgraduate, use the eLibrary to access
+                        academic resources, submit assignments,
+                        and participate in academic discussions. They can also manage their profiles
+                    </p>
+
+                      <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addStudentsModal">ADD STUDENT </button>
+                       <a type="button" href="{% url 'upload_students_records' %}" class="btn btn-danger">BULK UPLOAD</a>
+            </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4>Academic staff </h4>
+                    <div class="card-header-action">
+                     <a href="{% url 'manage_staff_users' %}" class="btn btn-primary">
+                      View All
+                    </a>
+                  </div>
+                  </div>
+                  <div class="card-body">
+                    <p> Academic Staff includes faculty members and lecturers. They contribute academic
+                        content to the eLibrary, manage their personal profiles,
+                        and interact with students through the system. </p>
+                        <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addStaffModal">ADD A STAFF</button>
+                        <a type="button" href="{% url 'upload_staff_records' %}" class="btn btn-danger">BULK UPLOAD</a>
+                        </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4>Admin </h4>
+                    <div class="card-header-action">
+                      <a href="#" class="btn btn-primary">
+                        View All
+                      </a>
+                        </div>
+                  </div>
+                  <div class="card-body">
+                    <p>The Admin is responsible for overseeing the overall management of the system.
+                        They manage user accounts, verify new users upon their first login,
+                        assign roles, and handle system maintenance tasks.</p>
+                        <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addContentManagerModal">ADD ADMIN</button>
+                            </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4> Content Managers  </h4>
+                    <div class="card-header-action">
+                      <a href="#" class="btn btn-primary">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p>Library Content Managers manage the digital library’s resources, curate content, handle document classification,
+                        and ensure that resources are up-to-date and properly categorized.</p>
+                        <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addContentManagerModal">ADD CONTENT MGR.</button>
+                        </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4>External Researcher </h4>
+                    <div class="card-header-action">
+                      <a href="#" class="btn btn-primary">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p>External Researchers are non-faculty researchers who collaborate with the university or have access to specific resources.
+                        They may contribute research content and access certain eLibrary resources for collaborative or individual research projects.</p>
+                        <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addResearcherModal">ADD RESEARCHER</button>
+                        </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h4>University Management </h4>
+                    <div class="card-header-action">
+                      <a href="#" class="btn btn-primary">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p>University Management, particularly the IT support team, ensures the system's technical functionality. They assist with troubleshooting,
+                        handle technical issues, and work to keep the system secure and efficient.</p>
+                        <div class="user-cta">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addContentManagerModal">ADD UNIVERSITY MGMT</button>
+                        </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+<!-- Add Students Modal -->
+<div class="modal fade" id="addStudentsModal" tabindex="-1" role="dialog" aria-labelledby="addStudentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Student Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'includes/admin_add_users/add_students.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Staff Modal -->
+<div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Academic Staff Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'includes/admin_add_users/add_academic_staff.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Content Manager Modal -->
+<div class="modal fade" id="addContentManagerModal" tabindex="-1" role="dialog" aria-labelledby="addContentManagerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Library Content Manager Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'includes/admin_add_users/add_content_managers.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Researcher Modal -->
+<div class="modal fade" id="addResearcherModal" tabindex="-1" role="dialog" aria-labelledby="addResearcherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">External Researcher Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'includes/admin_add_users/add_researcher.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+      {% endblock %}
