@@ -1018,7 +1018,7 @@ def authenticate_google_drive():
         else:
             # Initiate OAuth flow and save credentials
             flow = InstalledAppFlow.from_client_secrets_file(
-                'media/config/client_secret.json', SCOPES)
+                'knowrizon/media/config/client_secret.json', SCOPES)
             creds = flow.run_local_server(port=8081)  # Use a fixed port for consistency
 
         # Save the credentials to a token.pickle file for future use
