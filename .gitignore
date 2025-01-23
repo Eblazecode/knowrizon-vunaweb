@@ -13,10 +13,6 @@ db.sqlite3
 # Logs
 *.log
 
-git add -f knowrizon/media/config/service_account_API.json
-git commit -m "Force add service account file"
-git push heroku main
-
 
 
 # IDE-specific files
