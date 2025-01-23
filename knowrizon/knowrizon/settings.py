@@ -17,7 +17,6 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ SECRET_KEY = 'django-insecure-a_tup5@ay4ag3$8q2kx8%1rdo1q@wzj5$+38(nsk%apg%=m7v0
 DEBUG = True
 
 ALLOWED_HOSTS = ['https://knowrizon-vunaweb-7c3f8d25c0ce.herokuapp.com/']
-
 
 # Application definition
 
@@ -86,25 +84,24 @@ SESSION_COOKIE_NAME = 'sessionid'  # Default: 'sessionid
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-   # 'default': {
-  #      'ENGINE': 'django.db.backends.postgresql',
-   #     'NAME': 'knowrizon',
-   #     'USER': 'postgres',
-   #     'PASSWORD': 'blaze',
-   #     'HOST': 'localhost',
-   #     'PORT': '5432',
+    # 'default': {
+    #      'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'knowrizon',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'blaze',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
 
     #}
 
     'default': dj_database_url.config(
-        default=os.getenv('postgres://u53vmo04k3m2oh:p83504009385ca46f1fa238c466fdf9f86bcd8c758253b0d2c9aab80e547848ba@caij57unh724n3.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1a9l8ugebhrae')
+        default=os.getenv(
+            'postgres://u53vmo04k3m2oh:p83504009385ca46f1fa238c466fdf9f86bcd8c758253b0d2c9aab80e547848ba@caij57unh724n3.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1a9l8ugebhrae')
     )
 
-    }
+}
 
 # settings.py
-
-
 
 
 # Password validation
@@ -125,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -137,16 +133,28 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+import os
+from pathlib import Path
+
+# Define the static root directory
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Define the static files directory
+static_dir = Path(BASE_DIR / 'static')
+
+# Create the directories if they do not exist
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT)
+
+if not static_dir.exists():
+    os.makedirs(static_dir)
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Collected static files will go here
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # For Heroku
-
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # MEDIA URL
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
