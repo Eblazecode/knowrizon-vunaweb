@@ -148,16 +148,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-# Add this line to read the service account file path from an environment variable
-SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', 'knowrizon/media/config/service_account_API.json')
-
 import os
 import json
+import logging
 from google.oauth2 import service_account
+
+logger = logging.getLogger(__name__)
 
 GOOGLE_CREDENTIALS = os.environ.get("GOOGLE_CREDENTIALS")
 if GOOGLE_CREDENTIALS:
-    SERVICE_ACCOUNT_INFO = json.loads(GOOGLE_CREDENTIALS)
-    credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO)
+    try:
+        SERVICE_ACCOUNT_INFO = json.loads(GOOGLE_CREDENTIALS)
+        credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO)
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding JSON for GOOGLE_CREDENTIALS: {e}")
+        raise ValueError("Invalid Google credentials JSON!")
 else:
     raise ValueError("Google credentials not found!")
