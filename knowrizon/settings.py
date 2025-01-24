@@ -149,31 +149,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 # MEDIA URL
 
-
-import os
-from pathlib import Path
-import os
-from pathlib import Path
-
-# Define the base directory
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Define the static root directory where static files will be collected
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Absolute path
-
-# Define the static files directory where your CSS, JS, and image files reside
-# Comment out or remove this line for Heroku since it is not necessary to manually specify static dirs on Heroku
-# STATICFILES_DIRS = [BASE_DIR / 'static']  # Comment out or remove this line
-
-# URL to serve static files (on production, Whitenoise will handle it)
 STATIC_URL = '/static/'
-
-# Whitenoise for serving static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Make sure the directories are created if they do not exist (optional)
-if not os.path.exists(STATIC_ROOT):
-    os.makedirs(STATIC_ROOT)
 
 
 MEDIA_URL = '/media/'
