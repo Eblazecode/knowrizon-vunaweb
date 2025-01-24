@@ -14,6 +14,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -86,15 +89,21 @@ SESSION_COOKIE_NAME = 'sessionid'  # Default: 'sessionid
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'knowrizon',
-        'USER': 'postgres',
-        'PASSWORD': 'blaze',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    # 'default': {
+    #      'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'knowrizon',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'blaze',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
 
-    }
+    #}
+
+    'default': dj_database_url.config(
+        default=os.getenv(
+            'postgres://u53vmo04k3m2oh:p83504009385ca46f1fa238c466fdf9f86bcd8c758253b0d2c9aab80e547848ba@caij57unh724n3.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1a9l8ugebhrae')
+    )
+
 }
 # settings.py
 
