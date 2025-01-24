@@ -162,6 +162,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+import logging
+from django.core.exceptions import DisallowedHost
 
-# Add this line to read the service account file path from an environment variable
-SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', 'knowrizon/media/config/service_account_API.json')
+logger = logging.getLogger(__name__)
+
+try:
+    # Your existing code
+    pass
+except DisallowedHost as e:
+    logger.error(f"DisallowedHost error: {e}")
+    raise
