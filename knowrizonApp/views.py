@@ -994,22 +994,35 @@ from googleapiclient.discovery import build
 # Define the scope for read-only access
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-# Read the base64 encoded service account file from the environment variable
-encoded_service_account = os.getenv('GOOGLE_CREDENTIALS')
+try:
+    # Read the base64 encoded service account file from the environment variable
+    encoded_service_account = os.getenv('GOOGLE_CREDENTIALS')
 
-# Decode the base64 string
-decoded_service_account = base64.b64decode(encoded_service_account).decode('utf-8')
+    if not encoded_service_account:
+        raise ValueError("The 'GOOGLE_CREDENTIALS' environment variable is not set or empty.")
 
-# Load the JSON data
-service_account_info = json.loads(decoded_service_account)
+    # Decode the base64 string
+    try:
+        decoded_service_account = base64.b64decode(encoded_service_account).decode('utf-8')
+    except (base64.binascii.Error, UnicodeDecodeError) as e:
+        raise ValueError(f"Failed to decode the 'GOOGLE_CREDENTIALS' environment variable: {e}")
 
-# Create credentials from the service account info
-credentials = service_account.Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+    # Load the JSON data
+    try:
+        service_account_info = json.loads(decoded_service_account)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"The 'GOOGLE_CREDENTIALS' environment variable is not valid JSON: {e}")
 
-# Build the Google Drive service
-drive_service = build('drive', 'v3', credentials=credentials)
+    # Create credentials from the service account info
+    credentials = service_account.Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
 
+    # Build the Google Drive service
+    drive_service = build('drive', 'v3', credentials=credentials)
 
+except Exception as e:
+    # Log the error (you can customize this as needed)
+    print(f"Error initializing Google Drive service: {e}")
+    drive_service = None  # Ensure the service is None if initialization fails
 
 
 import os
