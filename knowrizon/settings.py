@@ -148,20 +148,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+
+import logging
+
+logger = logging.getLogger(__name__)
+
 import os
+import base64
 import json
 import logging
 from google.oauth2 import service_account
 
 logger = logging.getLogger(__name__)
 
-GOOGLE_CREDENTIALS = os.environ.get("GOOGLE_CREDENTIALS")
+GOOGLE_CREDENTIALS = os.getenv('GOOGLE_CREDENTIALS')
 if GOOGLE_CREDENTIALS:
     try:
-        SERVICE_ACCOUNT_INFO = json.loads(GOOGLE_CREDENTIALS)
-        credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO)
-    except json.JSONDecodeError as e:
-        logger.error(f"Error decoding JSON for GOOGLE_CREDENTIALS: {e}")
+        # Decode the base64 string
+        decoded_service_account = base64.b64decode(GOOGLE_CREDENTIALS).decode('utf-8')
+
+        # Load the JSON data
+        service_account_info = json.loads(decoded_service_account)
+
+        # Create credentials from the service account info
+        credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
+        logger.error(f"Error decoding or parsing GOOGLE_CREDENTIALS: {e}")
         raise ValueError("Invalid Google credentials JSON!")
 else:
     raise ValueError("Google credentials not found!")
