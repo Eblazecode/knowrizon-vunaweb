@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-a_tup5@ay4ag3$8q2kx8%1rdo1q@wzj5$+38(nsk%apg%=m7v0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://knowrizon-vunaweb-7c3f8d25c0ce.herokuapp.com/']
+ALLOWED_HOSTS = [
+    'knowrizon-vunaweb-7c3f8d25c0ce.herokuapp.com',
+    '127.0.0.1',  # Localhost for development
+    'localhost',  # Optional for local testing
+]
 
 # Application definition
 
