@@ -153,7 +153,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Absolute path
 
 # Define the static files directory where your CSS, JS, and image files reside
 # Comment out or remove this line for Heroku since it is not necessary to manually specify static dirs on Heroku
-STATICFILES_DIRS = [BASE_DIR / 'knowrizonApp/static']  # Comment out or remove this line
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Comment out or remove this line
 
 # URL to serve static files (on production, Whitenoise will handle it)
 STATIC_URL = '/static/'
