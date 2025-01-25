@@ -1027,7 +1027,7 @@ def authenticate_google_drive():
 def get_folder_contents(folder_id):
     """Fetch contents of a Google Drive folder."""
     creds = authenticate_google_drive()  # Ensure you're getting fresh credentials
-    service = build('drive', 'v3', credentials=creds)
+    service = build('drive', 'v3', credentials=credentials)
 
     # Fetch folder contents
     results = service.files().list(
