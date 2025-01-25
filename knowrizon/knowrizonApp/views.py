@@ -2,6 +2,8 @@ import logging
 import os
 import uuid
 from datetime import datetime
+
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.shortcuts import render
@@ -984,22 +986,18 @@ def journal_materials_upload(request):
     return render(request, 'books/journal_materials.html')
 
 
-# GOOGLE DRIVE CATALOGUING
-
-
-# Define the scope for read-only access
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-
 import os
 import pickle
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2 import service_account
 from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
 
 # GOOGLE DRIVE API SETUP
 # Read the service account file path from the environment variable
 SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', 'knowrizon/media/config/service_acc.json')
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
+# Authenticate with Service Account (Only for Server-side Use)
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
 
@@ -1032,7 +1030,7 @@ def authenticate_google_drive():
 
 def get_folder_contents(folder_id):
     """Fetch contents of a Google Drive folder."""
-    creds = authenticate_google_drive()
+    creds = authenticate_google_drive()  # Ensure you're getting fresh credentials
     service = build('drive', 'v3', credentials=creds)
 
     # Fetch folder contents
@@ -1045,39 +1043,6 @@ def get_folder_contents(folder_id):
     return results.get('files', [])
 
 
-def thematic_areas_view(request):
-    """View to display folders and their contents."""
-    # Example thematic areas with folder IDs
-    thematic_areas = [
-        {'name': 'Programming', 'folder_id': '1ABcdEFGHIJK123456789'},
-        {'name': 'Artificial Intelligence', 'folder_id': '2LMnoPQRS987654321'},
-        {'name': 'Data Science', 'folder_id': '3UVWxyZ123987654321'}
-    ]
-
-    # Fetch contents for each thematic area
-    for area in thematic_areas:
-        area['contents'] = get_folder_contents(area['folder_id'])
-
-    return render(request, 'thematic_areas.html', {'thematic_areas': thematic_areas})
-
-
-def computer_sci_book_category(request):
-    return render(request, 'books/computer_sci_book_category.html')
-
-
-# knowrizon/knowrizonApp/views.py
-
-def view_books(request, category):
-    # Logic to fetch books based on the category
-    context = {
-        'category': category,
-        'books': []  # Replace with actual book fetching logic
-    }
-    return render(request, 'books/comp_sci_books.html', context)
-
-
-# COMPUTER SCIENCE BOOKS CATEGORIES FUNCTION FROM drivefolders_API.py
-# COMPUTER SCIENCE CATEGORY MAPPING TO DRIVE FOLDERS; BOOKS CATEGORIES: folder ids
 COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "algorithms": "1V7NViMHyErE0DHnVkupfMYkEAGzmIZND",
     "artificial_intelligence": "folder_id_ai",
@@ -1119,7 +1084,7 @@ def view_comp_sci_books(request, category):
     if not folder_id:
         return render(request, 'error.html', {"message": "Category not found"})
 
-    # Fetch files from the folder
+    # Fetch files from the folder (using service_account credentials)
     results = drive_service.files().list(
         q=f"'{folder_id}' in parents and mimeType='application/pdf'",
         fields="files(id, name, webViewLink, thumbnailLink)"
