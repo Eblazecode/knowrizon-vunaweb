@@ -19,6 +19,7 @@ from .models import academic_staff  # Ensure you have the 'students' model impor
 logger = logging.getLogger(__name__)
 
 import logging
+
 # import drivefolders_API
 
 
@@ -1002,6 +1003,7 @@ SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
 
+
 def authenticate_google_drive():
     """Authenticate Google Drive API and return credentials."""
     creds = None
@@ -1103,7 +1105,6 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "computational_mathematics": "folder_id_computational_mathematics",
     "computer_vision": "folder_id_computer_vision",
 }
-
 
 
 def view_comp_sci_books(request, category):
