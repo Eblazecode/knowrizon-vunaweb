@@ -4,7 +4,14 @@ from datetime import datetime
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.shortcuts import render
+import os
+import pickle
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
+
+from google.auth.transport.requests import Request
+from google.oauth2 import id_token
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.functions import datetime
@@ -1025,10 +1032,19 @@ except Exception as e:
     drive_service = None  # Ensure the service is None if initialization fails
 
 
-import os
-import pickle
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+
+
+def generate_jwt_token(credentials):
+    try:
+        # Refresh the credentials to ensure they are valid
+        credentials.refresh(Request())
+        # Generate the ID token
+        token = id_token.fetch_id_token(Request(), credentials.token_uri)
+        return token
+    except Exception as e:
+        print(f"Error generating JWT token: {e}")
+        return None
+
 
 #
 def authenticate_google_drive():
@@ -1132,6 +1148,7 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "computational_mathematics": "folder_id_computational_mathematics",
     "computer_vision": "folder_id_computer_vision",
 }
+
 
 def view_comp_sci_books(request, category):
     # Get the folder ID for the category
