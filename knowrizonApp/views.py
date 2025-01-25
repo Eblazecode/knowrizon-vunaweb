@@ -990,107 +990,108 @@ def journal_materials_upload(request):
     return render(request, 'books/journal_materials.html')
 
 
-# GOOGLE DRIVE CATALOGUING
-
 import os
 import base64
 import json
+import pickle
 from google.oauth2 import service_account
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from django.shortcuts import render
+from google_auth_oauthlib.flow import InstalledAppFlow
 
-# Define the scope for read-only access
+# Define the scope for Google Drive access
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-try:
-    # Read the base64 encoded service account file from the environment variable
-    encoded_service_account = os.getenv('GOOGLE_CREDENTIALS')
-
-    if not encoded_service_account:
-        raise ValueError("The 'GOOGLE_CREDENTIALS' environment variable is not set or empty.")
-
-    # Decode the base64 string
+# Initialize Google Drive API service
+def initialize_drive_service():
     try:
+        # Read base64-encoded service account JSON from the environment variable
+        encoded_service_account = os.getenv('GOOGLE_CREDENTIALS')
+
+        if not encoded_service_account:
+            raise ValueError("The 'GOOGLE_CREDENTIALS' environment variable is not set or is empty.")
+
+        # Decode the base64 string
         decoded_service_account = base64.b64decode(encoded_service_account).decode('utf-8')
-    except (base64.binascii.Error, UnicodeDecodeError) as e:
-        raise ValueError(f"Failed to decode the 'GOOGLE_CREDENTIALS' environment variable: {e}")
 
-    # Load the JSON data
-    try:
+        # Load the decoded JSON into a dictionary
         service_account_info = json.loads(decoded_service_account)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"The 'GOOGLE_CREDENTIALS' environment variable is not valid JSON: {e}")
 
-    # Create credentials from the service account info
-    credentials = service_account.Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+        # Create credentials object
+        credentials = service_account.Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
 
-    # Build the Google Drive service
-    drive_service = build('drive', 'v3', credentials=credentials)
+        # Initialize and return the Google Drive service
+        return build('drive', 'v3', credentials=credentials)
 
-except Exception as e:
-    # Log the error (you can customize this as needed)
-    print(f"Error initializing Google Drive service: {e}")
-    drive_service = None  # Ensure the service is None if initialization fails
+    except Exception as e:
+        print(f"Error initializing Google Drive service: {e}")
+        return None
 
 
-
-
+# Generate a JWT token for authentication
 def generate_jwt_token(credentials):
     try:
-        # Refresh the credentials to ensure they are valid
+        # Refresh the credentials
         credentials.refresh(Request())
-        # Generate the ID token
-        token = id_token.fetch_id_token(Request(), credentials.token_uri)
-        return token
+
+        # Return the token property directly
+        return credentials.token
     except Exception as e:
         print(f"Error generating JWT token: {e}")
         return None
 
 
-#
+# Authenticate Google Drive with OAuth2
 def authenticate_google_drive():
-    """Authenticate Google Drive API and return credentials."""
     creds = None
+    token_path = 'token.pickle'
 
-    # Check if the token.pickle file exists
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    # Check if saved credentials exist
+    if os.path.exists(token_path):
+        with open(token_path, 'rb') as token:
             creds = pickle.load(token)
 
-    # If there are no valid credentials, let the user log in
+    # If no valid credentials, use OAuth2 flow
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())  # Refresh expired credentials
+            creds.refresh(Request())
         else:
-            # Initiate OAuth flow and save credentials
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'media/config/client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=8081)  # Use a fixed port for consistency
+            flow = InstalledAppFlow.from_client_secrets_file('media/config/client_secret.json', SCOPES)
+            creds = flow.run_local_server(port=8081)
 
-        # Save the credentials to a token.pickle file for future use
-        with open('token.pickle', 'wb') as token:
+        # Save new credentials for future use
+        with open(token_path, 'wb') as token:
             pickle.dump(creds, token)
 
     return creds
 
 
+# Fetch folder contents from Google Drive
 def get_folder_contents(folder_id):
-    """Fetch contents of a Google Drive folder."""
-    creds = authenticate_google_drive()
-    service = build('drive', 'v3', credentials=creds)
+    try:
+        # Initialize Drive API service
+        drive_service = initialize_drive_service()
+        if not drive_service:
+            raise Exception("Google Drive service failed to initialize.")
 
-    # Fetch folder contents
-    results = service.files().list(
-        q=f"'{folder_id}' in parents",
-        pageSize=100,
-        fields="files(id, name, mimeType)"
-    ).execute()
+        # Query the folder contents
+        results = drive_service.files().list(
+            q=f"'{folder_id}' in parents",
+            pageSize=100,
+            fields="files(id, name, mimeType, webViewLink)"
+        ).execute()
 
-    return results.get('files', [])
+        return results.get('files', [])
+
+    except Exception as e:
+        print(f"Error fetching folder contents: {e}")
+        return []
 
 
+# Thematic areas view
 def thematic_areas_view(request):
-    """View to display folders and their contents."""
-    # Example thematic areas with folder IDs
+    """View to display thematic areas and their contents."""
     thematic_areas = [
         {'name': 'Programming', 'folder_id': '1ABcdEFGHIJK123456789'},
         {'name': 'Artificial Intelligence', 'folder_id': '2LMnoPQRS987654321'},
@@ -1104,75 +1105,28 @@ def thematic_areas_view(request):
     return render(request, 'thematic_areas.html', {'thematic_areas': thematic_areas})
 
 
-def computer_sci_book_category(request):
-    return render(request, 'books/computer_sci_book_category.html')
-
-
-# knowrizon/knowrizonApp/views.py
-
-def view_books(request, category):
-    # Logic to fetch books based on the category
-    context = {
-        'category': category,
-        'books': []  # Replace with actual book fetching logic
-    }
-    return render(request, 'books/comp_sci_books.html', context)
-
-
-# COMPUTER SCIENCE BOOKS CATEGORIES FUNCTION FROM drivefolders_API.py
-# COMPUTER SCIENCE CATEGORY MAPPING TO DRIVE FOLDERS; BOOKS CATEGORIES: folder ids
+# Computer science book category mapping
 COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "algorithms": "1V7NViMHyErE0DHnVkupfMYkEAGzmIZND",
     "artificial_intelligence": "folder_id_ai",
     "computer_networks": "folder_id_networks",
-    "computer_programming": "folder_id_programming",
-    "computer_security": "folder_id_security",
     "data_science": "folder_id_data_science",
-    "database_management": "folder_id_database",
-    "distributed_systems": "folder_id_distributed_systems",
     "machine_learning": "folder_id_machine_learning",
     "operating_systems": "folder_id_os",
-    "software_engineering": "folder_id_software_engineering",
-    "web_development": "folder_id_web_dev",
-    "quantum_computing": "folder_id_quantum_computing",
-    "cloud_computing": "folder_id_cloud_computing",
-    "blockchain": "folder_id_blockchain",
-    "big_data": "folder_id_big_data",
-    "iot": "folder_id_iot",
-    "cyber_security": "folder_id_cyber_security",
-    "mobile_application": "folder_id_mobile_app",
-    "robotics": "folder_id_robotics",
-    "data_structures": "folder_id_data_structures",
-    "computer_graphics": "folder_id_graphics",
-    "optimization": "folder_id_optimization",
-    "computational_mathematics": "folder_id_computational_mathematics",
-    "computer_vision": "folder_id_computer_vision",
+    # Add other categories and their folder IDs...
 }
 
 
+# View books by category
 def view_comp_sci_books(request, category):
-    # Get the folder ID for the category
+    """Fetch and display books for a specific computer science category."""
     folder_id = COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER.get(category)
 
-    # Debugging: Print category and folder ID
-    print("Requested Category:", category)
-    print("Mapped Folder ID:", folder_id)
-
-    # Check if folder ID exists
     if not folder_id:
-        return render(request, 'error.html', {"message": "Category not found"})
+        return render(request, 'error.html', {"message": "Category not found."})
 
     # Fetch files from the folder
-    results = drive_service.files().list(
-        q=f"'{folder_id}' in parents and mimeType='application/pdf'",
-        fields="files(id, name, webViewLink, thumbnailLink)"
-    ).execute()
+    books = get_folder_contents(folder_id)
 
-    # Get the list of books
-    books = results.get('files', [])
-
-    # Debugging: Print the fetched books
-    print("Fetched Books:", books)
-
-    # Render the template
+    # Render the books in the template
     return render(request, 'books/comp_sci_books.html', {"books": books, "category": category})
