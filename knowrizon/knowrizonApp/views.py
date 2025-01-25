@@ -997,7 +997,7 @@ from google.auth.transport.requests import Request
 
 # GOOGLE DRIVE API SETUP
 # Read the service account file path from the environment variable
-SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', 'knowrizon/media/config/service_account_API.json')
+SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', 'knowrizon/media/config/service_acc.json')
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
