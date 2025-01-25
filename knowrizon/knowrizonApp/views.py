@@ -1021,10 +1021,6 @@ def authenticate_google_drive():
                 'knowrizon/media/config/client_secret.json', SCOPES)
             creds = flow.run_local_server(port=8081)  # Use a fixed port for consistency
 
-        # Save the credentials to a token.pickle file for future use
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
     return creds
 
 
