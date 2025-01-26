@@ -68,6 +68,9 @@ urlpatterns = [
 
     # DRIVE BOOKS CATALOGUING
 
+    # DEPT BOOKS CATEGORIES
+    path('computer_sci_materials/', views.computer_sci_book_category, name='computer_science_category'),
+
     # ... other paths ...
     path('view_books/<str:category>/', views.view_books, name='view_books'),
 

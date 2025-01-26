@@ -991,6 +991,9 @@ def journal_materials_upload(request):
 
 
 # GOOGLE DRIVE CATALOGUING
+def computer_sci_book_category(request):
+    return render(request, 'books/computer_sci_book_category.html')
+
 
 
 # Define the scope for read-only access
