@@ -1009,7 +1009,7 @@ from googleapiclient.discovery import build
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 # Load the service account JSON from the environment variable
-SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')  # Ensure this is set in your Heroku config
+SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_CREDENTIALS')  # Ensure this is set in your Heroku config
 
 if not SERVICE_ACCOUNT_FILE:
     raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set.")
