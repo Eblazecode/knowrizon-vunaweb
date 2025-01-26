@@ -995,10 +995,6 @@ def journal_materials_upload(request):
 
 # Define the scope for read-only access
 
-import os
-import pickle
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
 
 import os
 import json
@@ -1009,23 +1005,23 @@ from googleapiclient.discovery import build
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 # Load the service account JSON from the environment variable
-SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_CREDENTIALS')  # Ensure this is set in your Heroku config
+SERVICE_ACCOUNT_JSON = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')  # Ensure this is set in your Heroku config
 
-if not SERVICE_ACCOUNT_FILE:
-    raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set.")
+if not SERVICE_ACCOUNT_JSON:
+    raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set or empty.")
 
-# Parse the JSON string to a dictionary
-SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_FILE)
+try:
+    # Parse the JSON string to a dictionary
+    SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
+except json.JSONDecodeError as e:
+    raise ValueError(f"Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON: {e}")
 
 # Create credentials using the loaded JSON
-credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 
 # Build the Drive API service
 drive_service = build('drive', 'v3', credentials=credentials)
 
-
-def computer_sci_book_category(request):
-    return render(request, 'books/computer_sci_book_category.html')
 
 
 # knowrizon/knowrizonApp/views.py
