@@ -67,10 +67,6 @@ urlpatterns = [
     path('upload_journal_books/', views.journal_materials_upload, name='upload_journal_books'),
 
     # DRIVE BOOKS CATALOGUING
-    path('thematic-areas/', views.thematic_areas_view, name='thematic_areas'),
-
-    # DEPT BOOKS CATEGORIES
-    path('computer_sci_materials/', views.computer_sci_book_category, name='computer_science_category'),
 
     # ... other paths ...
     path('view_books/<str:category>/', views.view_books, name='view_books'),
