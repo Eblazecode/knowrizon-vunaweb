@@ -990,7 +990,6 @@ def journal_materials_upload(request):
     return render(request, 'books/journal_materials.html')
 
 
-
 # GOOGLE DRIVE CATALOGUING
 
 
@@ -1001,7 +1000,28 @@ import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+import os
+import json
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
+# Google Drive API setup
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
+# Load the service account JSON from the environment variable
+SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')  # Ensure this is set in your Heroku config
+
+if not SERVICE_ACCOUNT_FILE:
+    raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set.")
+
+# Parse the JSON string to a dictionary
+SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_FILE)
+
+# Create credentials using the loaded JSON
+credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+# Build the Drive API service
+drive_service = build('drive', 'v3', credentials=credentials)
 
 
 def computer_sci_book_category(request):
@@ -1048,15 +1068,6 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "computational_mathematics": "folder_id_computational_mathematics",
     "computer_vision": "folder_id_computer_vision",
 }
-
-# Google Drive API setup
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-# Load the service account JSON from the environment variable
-SERVICE_ACCOUNT_FILE = json.loads(os.getenv('GOOGLE_CREDENTIALS'))
-
-
-credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-drive_service = build('drive', 'v3', credentials=credentials)
 
 
 def view_comp_sci_books(request, category):
