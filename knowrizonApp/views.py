@@ -1000,8 +1000,7 @@ import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-# Define the SCOPES you need
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
 
 
 def authenticate_google_drive():
@@ -1108,7 +1107,7 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
 
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-SERVICE_ACCOUNT_FILE = 'media/config/service_acc.json'
+SERVICE_ACCOUNT_FILE = 'knowrizon/media/config/service_acc.json'
 
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
