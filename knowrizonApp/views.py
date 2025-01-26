@@ -989,6 +989,21 @@ def journal_materials_upload(request):
     return render(request, 'books/journal_materials.html')
 
 
+
+# GOOGLE DRIVE CATALOGUING
+
+
+# Define the scope for read-only access
+
+import os
+import pickle
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+# Define the SCOPES you need
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
+
 def authenticate_google_drive():
     """Authenticate Google Drive API and return credentials."""
     creds = None
@@ -1063,67 +1078,6 @@ def view_books(request, category):
 
 # COMPUTER SCIENCE BOOKS CATEGORIES FUNCTION FROM drivefolders_API.py
 # COMPUTER SCIENCE CATEGORY MAPPING TO DRIVE FOLDERS; BOOKS CATEGORIES: folder ids
-
-
-# GOOGLE DRIVE CATALOGUING
-import os
-import base64
-import json
-from google.oauth2 import service_account
-from google.auth.transport.requests import Request
-from googleapiclient.discovery import build
-from django.shortcuts import render  # Assuming you're using Django
-
-# Define the scope for read-only access to Google Drive
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-
-try:
-    # Read the base64 encoded service account JSON from the environment variable
-    encoded_service_account = os.getenv('GOOGLE_CREDENTIALS')
-
-    if not encoded_service_account:
-        raise ValueError("The 'GOOGLE_CREDENTIALS' environment variable is not set or is empty.")
-
-    # Decode the base64 string
-    decoded_service_account = base64.b64decode(encoded_service_account).decode('utf-8')
-
-    # Load the decoded JSON into a dictionary
-    service_account_info = json.loads(decoded_service_account)
-
-    # Create credentials object using the service account info
-    credentials = service_account.Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
-
-    # Initialize the Google Drive API service
-    drive_service = build('drive', 'v3', credentials=credentials)
-
-except Exception as e:
-    print(f"Error initializing Google Drive service: {e}")
-    drive_service = None  # Set to None if initialization fails
-
-
-# Function to generate a JWT token using the service account credentials
-def generate_jwt_token(credentials: service_account.Credentials) -> str | None:
-    try:
-        # Refresh the credentials to ensure they are valid and up-to-date
-        credentials.refresh(Request())
-        jwt_token = credentials.token  # Access the token property after refreshing
-        return jwt_token
-    except Exception as e:
-        print(f"Error generating JWT token: {e}")
-        return None
-
-
-# Example: Generate a JWT token
-if credentials:
-    jwt_token = generate_jwt_token(credentials)
-    if jwt_token:
-        print("Generated JWT token successfully!")
-    else:
-        print("Failed to generate JWT token.")
-else:
-    print("Credentials are not initialized.")
-
-# Map categories to folder IDs
 COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "algorithms": "1V7NViMHyErE0DHnVkupfMYkEAGzmIZND",
     "artificial_intelligence": "folder_id_ai",
@@ -1152,23 +1106,37 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "computer_vision": "folder_id_computer_vision",
 }
 
+# Google Drive API setup
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+SERVICE_ACCOUNT_FILE = 'media/config/service_acc.json'
 
-# Function to fetch and render books in a category
-def view_comp_sci_books(request, category: str):
+credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+drive_service = build('drive', 'v3', credentials=credentials)
+
+
+def view_comp_sci_books(request, category):
+    # Get the folder ID for the category
     folder_id = COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER.get(category)
+
+    # Debugging: Print category and folder ID
+    print("Requested Category:", category)
+    print("Mapped Folder ID:", folder_id)
+
+    # Check if folder ID exists
     if not folder_id:
-        return render(request, 'error.html', {"message": f"Category '{category}' not found."})
+        return render(request, 'error.html', {"message": "Category not found"})
 
-    try:
-        # Fetch files from the folder
-        results = drive_service.files().list(
-            q=f"'{folder_id}' in parents and mimeType='application/pdf'",
-            fields="files(id, name, webViewLink, thumbnailLink)"
-        ).execute()
+    # Fetch files from the folder
+    results = drive_service.files().list(
+        q=f"'{folder_id}' in parents and mimeType='application/pdf'",
+        fields="files(id, name, webViewLink, thumbnailLink)"
+    ).execute()
 
-        books = results.get('files', [])
-        return render(request, 'books/comp_sci_books.html', {"books": books, "category": category})
+    # Get the list of books
+    books = results.get('files', [])
 
-    except Exception as e:
-        print(f"Error fetching books for category '{category}': {e}")
-        return render(request, 'error.html', {"message": "Failed to fetch books. Please try again later."})
+    # Debugging: Print the fetched books
+    print("Fetched Books:", books)
+
+    # Render the template
+    return render(request, 'books/comp_sci_books.html', {"books": books, "category": category})
