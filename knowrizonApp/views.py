@@ -1,3 +1,4 @@
+import json
 import logging
 import uuid
 from datetime import datetime
@@ -1003,63 +1004,6 @@ from google.auth.transport.requests import Request
 
 
 
-def authenticate_google_drive():
-    """Authenticate Google Drive API and return credentials."""
-    creds = None
-
-    # Check if the token.pickle file exists
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-
-    # If there are no valid credentials, let the user log in
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())  # Refresh expired credentials
-        else:
-            # Initiate OAuth flow and save credentials
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'media/config/client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=8081)  # Use a fixed port for consistency
-
-        # Save the credentials to a token.pickle file for future use
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
-    return creds
-
-
-def get_folder_contents(folder_id):
-    """Fetch contents of a Google Drive folder."""
-    creds = authenticate_google_drive()
-    service = build('drive', 'v3', credentials=creds)
-
-    # Fetch folder contents
-    results = service.files().list(
-        q=f"'{folder_id}' in parents",
-        pageSize=100,
-        fields="files(id, name, mimeType)"
-    ).execute()
-
-    return results.get('files', [])
-
-
-def thematic_areas_view(request):
-    """View to display folders and their contents."""
-    # Example thematic areas with folder IDs
-    thematic_areas = [
-        {'name': 'Programming', 'folder_id': '1ABcdEFGHIJK123456789'},
-        {'name': 'Artificial Intelligence', 'folder_id': '2LMnoPQRS987654321'},
-        {'name': 'Data Science', 'folder_id': '3UVWxyZ123987654321'}
-    ]
-
-    # Fetch contents for each thematic area
-    for area in thematic_areas:
-        area['contents'] = get_folder_contents(area['folder_id'])
-
-    return render(request, 'thematic_areas.html', {'thematic_areas': thematic_areas})
-
-
 def computer_sci_book_category(request):
     return render(request, 'books/computer_sci_book_category.html')
 
@@ -1075,7 +1019,7 @@ def view_books(request, category):
     return render(request, 'books/comp_sci_books.html', context)
 
 
-# COMPUTER SCIENCE BOOKS CATEGORIES FUNCTION FROM drivefolders_API.py
+# COMPUTER SCIENCE BOOKS CATEGORIES FUNCTION FROM drive-folders_API.py
 # COMPUTER SCIENCE CATEGORY MAPPING TO DRIVE FOLDERS; BOOKS CATEGORIES: folder ids
 COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
     "algorithms": "1V7NViMHyErE0DHnVkupfMYkEAGzmIZND",
@@ -1107,7 +1051,9 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
 
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-SERVICE_ACCOUNT_FILE = 'knowrizon/media/config/service_acc.json'
+# Load the service account JSON from the environment variable
+SERVICE_ACCOUNT_FILE = json.loads(os.getenv('GOOGLE_CREDENTIALS'))
+
 
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)

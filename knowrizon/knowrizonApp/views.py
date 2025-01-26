@@ -1104,7 +1104,8 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
 
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-SERVICE_ACCOUNT_FILE = 'media/config/service_acc.json'
+SERVICE_ACCOUNT_FILE = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON'))
+
 
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
