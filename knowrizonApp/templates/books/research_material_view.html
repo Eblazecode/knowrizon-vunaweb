@@ -1,0 +1,68 @@
+{% extends "staff_base.html" %}
+{% load static %}
+{% block title %}Research Repository{% endblock %}
+
+{% block content %}
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="fs-1">Research Materials</h1>
+            </div>
+            <div class="card-body">
+                <div class="media">
+                    <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h5 class="mt-0 text-info">About</h5>
+                        <p class="mb-0">
+                            The eLibrary organizes its book collection into various categories based on the faculties they belong to. This categorization helps users easily find books related to their field of study or interest. Below are the faculties and their associated book categories:
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Research Materials</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table-1">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Title</th>
+                                <th>Author(s)</th>
+                                <th>Research Type</th>
+                                <th>Pub Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for material in research_materials %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ material.journal_material_title }}</td>
+                                <td>{{ material.journal_material_author }}</td>
+                                <td>{{ material.journal_material_type }}</td>
+                                <td>{{ material.journal_pub_date }}</td>
+                                <td>
+                                    <div class="badge badge-success badge-shadow">Completed</div>
+                                </td>
+                                <td><a href="#" class="btn btn-primary">Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

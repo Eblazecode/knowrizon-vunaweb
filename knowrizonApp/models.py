@@ -86,22 +86,24 @@ class content_managers(models.Model):
 
 # academic staff models
 
+# models.py
 class academic_staff(models.Model):
     academic_staff_id = models.AutoField(primary_key=True)
-    academic_staff_fname = models.CharField(max_length=50)
-    academic_staff_lname = models.CharField(max_length=50)
-    academic_staff_gender = models.CharField(max_length=50, default='Not specified')  # Add default value
-    academic_staff_email = models.EmailField(max_length=50)
-    academic_staff_password = models.CharField(max_length=50)
+    academic_staff_fname = models.CharField(max_length=250)
+    academic_staff_lname = models.CharField(max_length=250)
+    academic_staff_gender = models.CharField(max_length=250, default='Not specified')
+    academic_staff_email = models.EmailField(max_length=250)
+    academic_staff_password = models.CharField(max_length=250)
     academic_staff_upload_approval = models.IntegerField(default=0)
-    academic_staff_dept = models.CharField(max_length=50)
-    academic_staff_position = models.CharField(max_length=50)
-    academic_staff_phone = models.CharField(max_length=15, default='')
+    academic_staff_dept = models.CharField(max_length=250)
+    academic_staff_position = models.CharField(max_length=250)
+    academic_staff_phone = models.CharField(max_length=75, default='')
     academic_staff_prefix = models.CharField(max_length=10, default='')
     academic_staff_identity = models.CharField(max_length=50, default='')
     academic_staff_interest = models.CharField(max_length=50, default='interest')
     academic_staff_created_at = models.DateTimeField(auto_now_add=True)
     academic_staff_updated_at = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(null=True, blank=True)  # Add this field
 
     def __str__(self):
         return self.academic_staff_fname
@@ -163,7 +165,8 @@ class PDF_materials(models.Model):
     pdf_for_level = models.CharField(max_length=50)
     pdf_material_description = models.CharField(max_length=255)
     pdf_material_file = models.FileField(upload_to='materials/pdf/', blank=True, null=True)  # For digital files
-    pdf_material_cover_image = models.ImageField(upload_to='materials/pdf/cover/', blank=True, null=True)  # Optional cover image
+    pdf_material_cover_image = models.ImageField(upload_to='materials/pdf/cover/', blank=True,
+                                                 null=True)  # Optional cover image
     pdf_material_created_at = models.DateTimeField(auto_now_add=True)
     pdf_material_updated_at = models.DateTimeField(auto_now=True)
 
@@ -173,17 +176,25 @@ class PDF_materials(models.Model):
 
 class Journal_materials(models.Model):
     journal_material_id = models.AutoField(primary_key=True)
-    journal_material_title = models.CharField(max_length=50)
-    journal_material_author = models.CharField(max_length=50)
-    journal_material_category = models.CharField(max_length=50)
-    journal_upload_date = models.CharField(max_length=50)
-    journal_material_tags = models.CharField(max_length=50)
-    journal_for_department = models.CharField(max_length=50)
-    journal_for_faculty = models.CharField(max_length=50)
-    journal_for_level = models.CharField(max_length=50)
-    journal_material_description = models.CharField(max_length=255)
-    journal_material_file = models.FileField(upload_to='materials/journals/', blank=True, null=True)  # For digital files
-    journal_material_cover_image = models.ImageField(upload_to='materials/journals/cover/', blank=True, null=True)  # Optional cover image
+    staff_ID = models.CharField(max_length=250, default='not specified')
+    journal_material_ref_id = models.CharField(max_length=100, default='not specified')
+    journal_material_title = models.CharField(max_length=250)
+    journal_material_author = models.CharField(max_length=250)
+    journal_material_category = models.CharField(max_length=250)
+    journal_pub_date = models.CharField(max_length=250)
+    journal_material_tags = models.CharField(max_length=250)
+    journal_for_department = models.CharField(max_length=250)
+    journal_for_faculty = models.CharField(max_length=250)
+    journal_material_type = models.CharField(max_length=200, default='not specified')
+    journal_for_level = models.CharField(max_length=250)
+    journal_thematic_area1 = models.CharField(max_length=250, default='not specified')
+    journal_thematic_area2 = models.CharField(max_length=250, default='not specified')
+    journal_thematic_area3 = models.CharField(max_length=250, default='not specified')
+    journal_material_abstract = models.TextField(max_length=555, default='ABSTRACT NOT AVAILABLE')
+    journal_material_file = models.FileField(upload_to='materials/journals/', blank=True,
+                                             null=True)  # For digital files
+    journal_material_cover_image = models.ImageField(upload_to='materials/journals/cover/', blank=True,
+                                                     null=True)  # Optional cover image
     journal_material_created_at = models.DateTimeField(auto_now_add=True)
     journal_material_updated_at = models.DateTimeField(auto_now=True)
 

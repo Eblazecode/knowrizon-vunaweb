@@ -75,5 +75,34 @@ urlpatterns = [
     path('view_books/<str:category>/', views.view_books, name='view_books'),
 
     # COMPUTER SCI DEPT BOOKS
-    path('books/<str:category>/', views.view_comp_sci_books, name='view_comp_sci_books')
+    path('books/<str:category>/', views.view_comp_sci_books, name='view_comp_sci_books'),
+
+    # ... other paths ...
+    path('protect_materials', views.view_protected_materials, name='protected_materials'),
+    path('protected_cs_cat_materials', views.view_protected_comp_sci_materials, name='protected_comp_category'),
+    path('protected_books/<str:category>/', views.view_protected_comp_sci_books, name='view_protected_cs_materials'),
+    path('protected_books_details/<str:category>/<path:book_id>/', views.view_protected_book_details, name='view_mat_details'),
+
+    # STAFF SECTION OF THE APP
+    path('staff_login/', views.staff_login, name='staff_login'),
+
+    # STAFF pasword update
+    path('staff_password_update/', views.staff_update_password, name='staff_password_update'),
+    path('staff_dashboard/', views.staff_dashboard, name='staff_dashboard'),
+
+    # RESEARCHER SECTION OF THE APP
+
+    path('researcher_login/', views.researcher_login, name='researcher_login'),
+    path('researcher_dashboard/', views.researcher_dashboard, name='researcher_dashboard'),
+
+    #RESEARCH MATERIALS SECTION
+    #UPLOAD RESEARCH MATERIALS
+    path('upload_research_materials/', views.research_materials_upload, name='upload_research_materials'),
+    # RESEARCH REPOSITORY
+    path('research_repository/', views.research_repository, name='research_repository'),
+    path('research_material_view', views.view_research_materials, name='research_material_view')
+
+
+
+
 ]

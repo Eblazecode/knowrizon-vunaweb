@@ -1,0 +1,84 @@
+{% load static %}
+
+<!-- ADMIN LEFT SIDE NAVBAR -->
+
+      <div class="main-sidebar sidebar-style-2">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+          <a href="admin_dashboard.html">
+  <img alt="image" src="{% static 'assets/img/logo.png' %}" class="header-logo" />
+  <span class="logo-name">vunaweb  </span>
+</a>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="menu-header">Main</li>
+            <li class="dropdown active">
+           <a href="{% url 'staff_dashboard' %}" class="nav-link">
+  <i data-feather="monitor"></i>
+  <span>Dashboard</span>
+</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="briefcase"></i><span>Books </span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'book_category' %}">book open license book drive  </a></li>
+                <li><a class="nav-link" href="{% url 'protected_materials' %}">protected licensed  books  </a></li>
+                <li><a class="nav-link" href="{% url 'upload_research_materials' %}">upload a book </a></li>
+
+
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command">
+
+              </i><span>Research & Collaboration</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'research_repository' %}">Research Repository </a></li>
+                <li><a class="nav-link" href="{% url 'library_materials_category' %}">Databases </a></li>
+                <li><a class="nav-link" href="{% url 'library_materials_category' %}">Veritas publishing </a></li>
+                   <li><a class="nav-link" href="{% url 'library_materials_category' %}"> Collaboration Tools </a></li>
+                   <li><a class="nav-link" href="{% url 'library_materials_category' %}">  Citation Tools </a></li>
+              </ul>
+            </li>
+
+            <li class="menu-header">SECONDARY </li>
+            <li class="dropdown">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                    data-feather="command"></i><span>journals </span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{% url 'upload_research_materials' %}">upload  </a></li>
+                    <li><a class="nav-link" href="{% url 'library_materials_category' %}">updated </a></li>
+                    <li><a class="nav-link" href="{% url 'library_materials_category' %}">search </a></li>
+                </ul>
+            </li>
+
+              <li class="dropdown">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                    data-feather="command"></i><span>   Book stores</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{% url 'upload_research_materials' %}">upload  </a></li>
+                    <li><a class="nav-link" href="{% url 'library_materials_category' %}">ecommerce </a></li>
+
+                </ul>
+
+
+              <!-- AI SECTION-->
+                <li class="menu-header">AI FEATURES </li>
+                <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                  data-feather="monitor"></i><span>AI Assistant</span></a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="avatar.html">summarizer</a></li>
+                <li><a class="nav-link" href="card.html">Virtual Study Assistant</a></li>
+                <li><a class="nav-link" href="modal.html"> Smart Search Engine</a></li>
+                <li><a class="nav-link" href="modal.html"> Plagiarism Detector </a></li>
+                <li><a class="nav-link" href="modal.html"> Accessibility Tools</a></li>
+
+              </ul>
+            </li>
+
+          </ul>
+        </aside>
+      </div>
+<!--ADMIN LEFT NAVBAR ENDS-->

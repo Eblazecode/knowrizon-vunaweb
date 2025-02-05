@@ -32,8 +32,8 @@
     <p class="text-center font-15 font-italic text-secondary-all ">AI powered e-library  </p>
 
             </div>
-        <div class="row mt-lg-5">
-            <div class="col-lg-4 col-sm-8">
+        <div class="row mt-lg-3">
+            <div class="col-lg-6 col-sm-6">
 
             <div class="card card-primary">
                  {% if messages %}
@@ -60,7 +60,7 @@
                 </div>
               <div class="card-body">
             <form method="POST" action="{% url 'student_login' %}" class="needs-validation" novalidate="">
-    {% csrf_token %}
+                 {% csrf_token %}
     <div class="form-group">
         <label for="email">Matric number or Email</label>
         <input id="email" type="mat_no" class="form-control" name="mat_no" tabindex="1" required autofocus>
@@ -71,11 +71,11 @@
                    <div class="form-group">
         <div class="d-block">
             <label for="password" class="control-label">Password</label>
-            <div class="float-right">
+            <!--<div class="float-right">
                 <a href="" class="text-small">
                     Forgot Password?
                 </a>
-            </div>
+            </div>-->
         </div>
 
         <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
@@ -105,7 +105,7 @@
             </div>
 
           </div>
-        <div class="col-8 col-sm-8 col-xs-6">
+        <div class="col-lg-6 col-sm-6 col-xs-12 col-md-auto">
 
                 <div class="card">
 

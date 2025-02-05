@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from django.db.models.functions import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from googleapiclient.http import MediaIoBaseDownload
 
 from .forms import BulkStudentUploadForm, BulkStaffUploadForm
 from .models import Admin, content_managers, researchers, PDF_materials, Journal_materials
@@ -853,6 +854,14 @@ def audio_materials_upload(request):
     return render(request, 'books/audio_materials.html')
 
 
+import os
+import uuid
+from django.conf import settings
+from django.shortcuts import render
+from django.contrib import messages
+from .models import PDF_materials  # Ensure your model is imported
+
+
 def PDF_materials_upload(request):
     if request.method == 'POST':
         # Handle PDF file upload logic
@@ -868,37 +877,40 @@ def PDF_materials_upload(request):
         pdf_for_level = request.POST.get('pdf_level')
         pdf_for_faculty = request.POST.get('pdf_faculty')
 
+        # Generate a unique BOOK ID NUMBER
+        pdf_id = uuid.uuid4().hex[:6].upper()
+        book_id = f"VUNAWEB-{pdf_id}"
+
         # Validate the form fields
         if not all([pdf_title, pdf_file, pdf_cover_image, pdf_author, pdf_description, pdf_category, pdf_tags,
                     pdf_upload_date, pdf_for_department, pdf_for_level, pdf_for_faculty]):
             messages.error(request, 'All fields are required')
             return render(request, 'books/PDF_materials.html')
 
-        # Save the PDF file to the media folder
-        pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf', pdf_file.name)
+        # Determine the file extensions
+        pdf_extension = os.path.splitext(pdf_file.name)[1]  # Get original file extension
+        cover_extension = os.path.splitext(pdf_cover_image.name)[1]  # Get cover image extension
 
-        # Ensure the directory exists
+        # Define paths for saving files
+        pdf_file_name = f"{book_id}{pdf_extension}"
+        pdf_cover_name = f"{book_id}{cover_extension}"
+
+        pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf', pdf_file_name)
+        pdf_cover_image_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf/cover', pdf_cover_name)
+
+        # Ensure directories exist
         os.makedirs(os.path.dirname(pdf_file_path), exist_ok=True)
+        os.makedirs(os.path.dirname(pdf_cover_image_path), exist_ok=True)
 
+        # Save the PDF file to disk
         with open(pdf_file_path, 'wb') as f:
             for chunk in pdf_file.chunks():
                 f.write(chunk)
 
-        # Save the PDF cover image to the media folder
-        pdf_cover_image_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf/cover', pdf_cover_image.name)
-
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(pdf_cover_image_file_path), exist_ok=True)
-
-        with open(pdf_cover_image_file_path, 'wb') as f:
+        # Save the PDF cover image to disk
+        with open(pdf_cover_image_path, 'wb') as f:
             for chunk in pdf_cover_image.chunks():
                 f.write(chunk)
-
-        # Give the pdf file a unique BOOK ID NUMBER
-        pdf_id = uuid.uuid4().hex[:6].upper()
-
-        # BOOK ID IN THIS FORMAT VUAELIBRARY-DEPARTMENT-LEVEL-BOOKID
-        book_id = f"VUAELIBRARY-{pdf_for_department}-{pdf_for_level}-{pdf_id}"
 
         # Save the PDF details to the database
         pdf = PDF_materials.objects.create(
@@ -911,8 +923,8 @@ def PDF_materials_upload(request):
             pdf_for_faculty=pdf_for_faculty,
             pdf_for_level=pdf_for_level,
             pdf_material_description=pdf_description,
-            pdf_material_file=pdf_file,
-            pdf_material_cover_image=pdf_cover_image,
+            pdf_material_file=f"materials/pdf/{pdf_file_name}",  # Store relative path
+            pdf_material_cover_image=f"materials/pdf/cover/{pdf_cover_name}",  # Store relative path
             pdf_upload_date=pdf_upload_date
         )
 
@@ -928,75 +940,93 @@ def journal_materials_upload(request):
         journal_file = request.FILES.get('journal_file')
         journal_cover_image = request.FILES.get('journal_cover_image')
         journal_author = request.POST.get('journal_author')
-        journal_description = request.POST.get('journal_description')
-        journal_category = request.POST.get('journal_category')
+        staff_ID = request.POST.get('staff_id')
+        journal_abstract = request.POST.get('journal_description')
+        journal_type = request.POST.get('journal_type')
         journal_tags = request.POST.get('journal_tags')
-        journal_upload_date = request.POST.get('journal_upload_date')
+        journal_thematic_area1 = request.POST.get('journal_thematic_area1')
+        journal_thematic_area2 = request.POST.get('journal_thematic_area2')
+        journal_thematic_area3 = request.POST.get('journal_thematic_area3')
+        journal_pub_date = request.POST.get('journal_pub_date')
         journal_for_department = request.POST.get('journal_department')
         journal_for_level = request.POST.get('journal_level')
         journal_for_faculty = request.POST.get('journal_faculty')
 
         # Validate the form fields
-        if not all([journal_title, journal_file, journal_cover_image, journal_author, journal_description,
-                    journal_category, journal_tags, journal_upload_date, journal_for_department, journal_for_level,
+        if not all([journal_title, journal_file, journal_cover_image, journal_author, journal_abstract,
+                    journal_type, journal_tags, journal_pub_date, journal_for_department, journal_for_level,
+                    journal_thematic_area1, journal_thematic_area2, journal_thematic_area3,
                     journal_for_faculty]):
             messages.error(request, 'All fields are required')
             return render(request, 'books/journal_materials.html')
 
-        # Save the journal file to the media folder
-        journal_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/journals', journal_file.name)
-
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(journal_file_path), exist_ok=True)
-
-        with open(journal_file_path, 'wb') as f:
-            for chunk in journal_file.chunks():
-                f.write(chunk)
-
-        # Save the journal cover image to the media folder
-        journal_cover_image_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/journals/cover',
-                                                     journal_cover_image.name)
-
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(journal_cover_image_file_path), exist_ok=True)
-
-        with open(journal_cover_image_file_path, 'wb') as f:
-            for chunk in journal_cover_image.chunks():
-                f.write(chunk)
+            # Determine the file extensions
+        journal_extension = os.path.splitext(journal_file.name)[1]  # Get original file extension
+        journal_cover_extension = os.path.splitext(journal_cover_image.name)[1]  # Get cover image extension
 
         # Give the journal file a unique BOOK ID NUMBER
         journal_id = uuid.uuid4().hex[:6].upper()
 
-        # BOOK ID IN THIS FORMAT VUAELIBRARY-DEPARTMENT-LEVEL-BOOKID
-        book_id = f"VUAELIBRARY-{journal_for_department}-{journal_for_level}-{journal_id}"
+        # BOOK ID IN THIS FORMAT VUA-ELIBRARY-DEPARTMENT-LEVEL-BOOK-ID
+        journal_ref_id = f"VUNAWEB-J-{journal_id}"
+
+        # Define paths for saving files
+        journal_file_name = f"{journal_ref_id}{journal_extension}"
+        journal_cover_name = f"{journal_ref_id}{journal_cover_extension}"
 
         # Save the journal details to the database
         journal = Journal_materials.objects.create(
             journal_material_title=journal_title,
-            journal_material_ref_id=journal_id,
+            journal_material_ref_id=journal_ref_id,
             journal_material_author=journal_author,
-            journal_material_category=journal_category,
+            staff_ID=staff_ID,
+            journal_material_type=journal_type,
             journal_material_tags=journal_tags,
             journal_for_department=journal_for_department,
             journal_for_faculty=journal_for_faculty,
+            journal_thematic_area1=journal_thematic_area1,
+            journal_thematic_area2=journal_thematic_area2,
+            journal_thematic_area3=journal_thematic_area3,
             journal_for_level=journal_for_level,
-            journal_material_description=journal_description,
-            journal_material_file=journal_file,
-            journal_material_cover_image=journal_cover_image,
-            journal_upload_date=journal_upload_date
+            journal_material_abstract=journal_abstract,
+            journal_material_file=f"materials/journals/{journal_file_name}",
+            journal_material_cover_image=f"materials/journals/cover/{journal_cover_name}",
+            journal_pub_date=journal_pub_date
         )
-        messages.success(request, 'Journal uploaded successfully')
 
-    return render(request, 'books/journal_materials.html')
+        if journal:
+            journal_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/journal', journal_file_name)
+            journal_cover_image_path = os.path.join(settings.MEDIA_ROOT, 'materials/journal/cover', journal_cover_name)
+            # Save the journal file to the media folder
+
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(journal_file_path), exist_ok=True)
+
+            with open(journal_file_path, 'wb') as f:
+                for chunk in journal_file.chunks():
+                    f.write(chunk)
+
+            # Save the journal cover image to the media folder
+            journal_cover_image_file_path = os.path.join(settings.MEDIA_ROOT, 'materials/journals/cover',
+                                                         journal_cover_image_path)
+
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(journal_cover_image_file_path), exist_ok=True)
+
+            with open(journal_cover_image_file_path, 'wb') as f:
+                for chunk in journal_cover_image.chunks():
+                    f.write(chunk)
+                    messages.success(request, 'Journal uploaded successfully')
+
+        else:
+            messages.error(request, 'Journal upload failed')
+
+    return render(request, 'books/research_upload.html')
 
 
 # GOOGLE DRIVE CATALOGUING
 def computer_sci_book_category(request):
     return render(request, 'books/computer_sci_book_category.html')
-
-
-
-# Define the scope for read-only access
 
 
 import os
@@ -1007,24 +1037,28 @@ from googleapiclient.discovery import build
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-# Load the service account JSON from the environment variable
-SERVICE_ACCOUNT_JSON = os.getenv('GOOGLE_CREDENTIALS')  # Ensure this is set in your Heroku config
+# Load the service account JSON from the environment variable or file
+SERVICE_ACCOUNT_JSON = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
 
 if not SERVICE_ACCOUNT_JSON:
-    raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set or empty.")
-
-try:
-    # Parse the JSON string to a dictionary
-    SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
-except json.JSONDecodeError as e:
-    raise ValueError(f"Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON: {e}")
+    # If the environment variable is not set, load from a file
+    SERVICE_ACCOUNT_FILE = 'knowrizon/media/config/service_account_api.json'
+    if not os.path.exists(SERVICE_ACCOUNT_FILE):
+        raise ValueError("The service account JSON file does not exist.")
+    with open(SERVICE_ACCOUNT_FILE, 'r') as f:
+        SERVICE_ACCOUNT_INFO = json.load(f)
+else:
+    try:
+        # Parse the JSON string to a dictionary
+        SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON: {e}")
 
 # Create credentials using the loaded JSON
 credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 
 # Build the Drive API service
 drive_service = build('drive', 'v3', credentials=credentials)
-
 
 
 # knowrizon/knowrizonApp/views.py
@@ -1069,6 +1103,7 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
 }
 
 
+# LICENSED COPYRIGHT MATERIAL CATEGORIES
 def view_comp_sci_books(request, category):
     # Get the folder ID for the category
     folder_id = COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER.get(category)
@@ -1095,3 +1130,326 @@ def view_comp_sci_books(request, category):
 
     # Render the template
     return render(request, 'books/comp_sci_books.html', {"books": books, "category": category})
+
+
+# copyright protected materials
+def view_protected_materials(request):
+    return render(request, 'books/protected_materials.html')
+
+
+# copyright protected computer science materials
+def view_protected_comp_sci_materials(request):
+    return render(request, 'books/protected_comp_sci_materials.html')
+
+
+import os
+import requests
+from django.conf import settings
+from .models import PDF_materials
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import PDF_materials  # Ensure your model is imported
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import PDF_materials  # Ensure the model is imported
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import PDF_materials  # Ensure the model is imported
+
+
+def view_protected_comp_sci_books(request, category):
+    """Fetch books from local storage based on category."""
+    books_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf')
+
+    if not os.path.exists(books_path):
+        return render(request, 'error.html', {"message": "Category not found"})
+
+    books = []
+
+    # Fetch PDF records from the database
+    pdfs = PDF_materials.objects.filter(pdf_material_category=category).values(
+        'pdf_material_title', 'pdf_material_file', 'pdf_material_cover_image',
+        'pdf_material_author', 'pdf_upload_date', 'pdf_material_tags',
+        'pdf_material_description', 'pdf_material_ref_id',
+    )
+
+    for pdf in pdfs:
+        ref_id = pdf.get('pdf_material_ref_id')
+
+        if not ref_id:  # Skip books with empty book_id
+            continue
+
+        book_name = pdf.get('pdf_material_title', 'Unknown Title')
+        author = pdf.get('pdf_material_author', 'Unknown')
+        upload_date = pdf.get('pdf_upload_date', 'Unknown')
+        tags = pdf.get('pdf_material_tags', '')
+        description = pdf.get('pdf_material_description', '')
+
+        # Construct the correct book file URL
+        book_path = f"{settings.MEDIA_URL}materials/pdf/{ref_id}.pdf" if pdf.get('pdf_material_file') else ""
+
+        # Determine valid cover image extension
+        valid_extensions = ['.jpg', '.png', '.jpeg']
+        cover_full_path = "/static/images/default-cover.png"  # Default cover
+
+        for ext in valid_extensions:
+            cover_candidate = os.path.join(settings.MEDIA_ROOT, "materials/pdf/cover", f"{ref_id}{ext}")
+            if os.path.exists(cover_candidate):
+                cover_full_path = f"{settings.MEDIA_URL}materials/pdf/cover/{ref_id}{ext}"
+                break
+
+        # Append book details
+        books.append({
+            "book_id": ref_id,  # Ensure book_id is always set
+            "name": book_name,
+            "file_url": book_path,
+            "cover_url": cover_full_path,
+            "author": author,
+            "year": upload_date,
+            "tags": tags,
+            "description": description,
+        })
+
+    return render(request, 'books/comp_sci_books.html', {"books": books, "category": category})
+
+
+import os
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404
+from datetime import datetime
+
+import os
+from datetime import datetime
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404
+from .models import PDF_materials  # Ensure correct import
+
+from urllib.parse import unquote
+
+
+def view_protected_book_details(request, category, book_id):
+    # Fetch the book from the database using book_id and category
+    book_id = unquote(book_id)  # Decode URL (e.g., convert "%20" to " ")
+    book = get_object_or_404(PDF_materials, pdf_material_ref_id=book_id, pdf_material_category=category)
+
+    # Construct the correct book file URL
+    book_path = f"{settings.MEDIA_URL}materials/pdf/{book_id}.pdf" if book.pdf_material_file else ""
+
+    valid_extensions = ['.jpg', '.png', '.jpeg']
+    cover_full_path = None
+
+    for ext in valid_extensions:
+        cover_candidate = os.path.join(settings.MEDIA_ROOT, "materials/pdf/cover", f"{book_id}{ext}")
+        if os.path.exists(cover_candidate):
+            cover_full_path = f"{settings.MEDIA_URL}materials/pdf/cover/{book_id}{ext}"
+            break
+
+    if cover_full_path is None:
+        cover_full_path = "/static/images/default-cover.png"  # Default cover image
+
+    # Ensure `pdf_upload_date` is a valid datetime object
+    if isinstance(book.pdf_upload_date, str):
+        try:
+            book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+        except ValueError:
+            book.pdf_upload_date = None
+
+        # Ensure `pdf_upload_date` is a valid datetime object
+        if isinstance(book.pdf_upload_date, str):
+            try:
+                book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+            except ValueError:
+                book.pdf_upload_date = None
+
+        upload_date = book.pdf_upload_date.strftime("%B %d, %Y") if book.pdf_upload_date else "Unknown"
+
+    # Pass book details to the template
+
+    return render(request, 'books/protected_material_details.html', {
+        "book": {
+            "name": book.pdf_material_title,
+            "file_url": book_path,
+            "cover_url": cover_full_path,
+            "author": book.pdf_material_author or "Unknown",
+            "year": upload_date,
+            "tags": book.pdf_material_tags or "No tags available",
+            "description": book.pdf_material_description or "No description available",
+            "book_id": book.pdf_material_ref_id
+        }
+    })
+
+
+# STAFF SECTION OF THE LIBRARY MANAGEMENT SYSTEM
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+import logging
+from .models import academic_staff  # Import your staff model
+
+logger = logging.getLogger(__name__)
+
+
+def staff_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if not email or not password:
+            messages.error(request, 'Email and password are required.')
+            logger.warning('Login attempt with missing credentials.')
+            return render(request, 'users/staff/staff_login.html')
+
+        # Fetch staff by email
+        staff = academic_staff.objects.filter(academic_staff_email=email).first()
+
+        if not staff:
+            messages.error(request, 'Account not found. Please register with the admin.')
+            logger.error('No staff found for email: %s', email)
+            return render(request, 'users/staff/staff_login.html')
+
+        # Force password update if using default password
+        if password == "password":
+            messages.warning(request, 'Please update your password.')
+            logger.info('Prompting staff to update password for email: %s', email)
+            return redirect('staff_update_password')  # Redirect to password update page
+
+        # Validate password
+        if check_password(password, staff.academic_staff_password):
+            # Simulate Django authentication (academic_staff isn't a User model)
+            request.session['staff_id'] = staff.academic_staff_id
+            request.session['staff_name'] = f"{staff.academic_staff_fname} {staff.academic_staff_lname}"
+            request.session['staff_email'] = staff.academic_staff_email
+
+            messages.success(request, 'Login successful.')
+            logger.info('Login successful for email: %s', email)
+            return redirect('staff_dashboard')  # Redirect to the dashboard
+
+        # Invalid credentials
+        messages.error(request, 'Invalid email or password.')
+        logger.error('Invalid password for email: %s', email)
+
+    return render(request, 'users/staff/staff_login.html')
+
+
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import academic_staff
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def staff_update_password(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirmpassword')
+        email = request.POST.get('email')
+
+        # Validate that the passwords match
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Validate password length
+        elif len(password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Check for at least one digit
+        elif not any(char.isdigit() for char in password):
+            messages.error(request, 'Password must contain at least one digit.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Check for at least one uppercase letter
+        elif not any(char.isupper() for char in password):
+            messages.error(request, 'Password must contain at least one uppercase letter.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Check for at least one lowercase letter
+        elif not any(char.islower() for char in password):
+            messages.error(request, 'Password must contain at least one lowercase letter.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Check for at least one special character
+        elif not any(char in ['$', '@', '#', '%', '!', '&', '*'] for char in password):
+            messages.error(request, 'Password must contain at least one special character.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Ensure password is not set as the default "password"
+        elif password == "password":
+            messages.error(request, 'Password cannot be "password".')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Fetch the staff using email
+        staff = academic_staff.objects.filter(academic_staff_email=email).first()
+        if not staff:
+            messages.error(request, 'Account not found.')
+            return render(request, 'users/staff/staff_update_password.html')
+
+        # Update the staff's password
+        staff.academic_staff_password = make_password(password)
+        staff.save()
+
+        messages.success(request, 'Password updated successfully. Please log in with your new password.')
+        logger.info('Password updated successfully for email: %s', email)
+        return redirect('staff_login')
+
+    return render(request, 'users/staff/staff_update_password.html')
+
+
+def staff_dashboard(request):
+    return render(request, 'users/staff/staff_dashboard.html')
+
+
+# researcher section of the library management system
+def researcher_login(request):
+    return render(request, 'users/researcher/researcher_login.html')
+
+
+def researcher_dashboard(request):
+    return render(request, 'users/researcher/researcher_dashboard.html')
+
+
+# guest section of the library management system
+def guest_login(request):
+    return render(request, 'users/guest/guest_login.html')
+
+
+def guest_dashboard(request):
+    return render(request, 'users/guest/guest_dashboard.html')
+
+
+# TOP VERITAS STAFF ACADEMIC RESEARCHERS COLLABORATION SECTION
+def top_researchers(request):
+    # ALL ACADEMIC STAFF RECORDS FOR A TABLE
+    all_academic_staff = academic_staff.objects.all()
+
+    return render(request, 'researchers/top_researchers.html', {'all_academic_staff': all_academic_staff})
+
+
+# JOURNAL MATERIALS CATALOGUE
+#JOURNAL MATERIALS UPLOAD
+def research_materials_upload(request):
+    return render(request, 'books/research_upload.html')
+
+
+# RESEARRCH REPOSITORY CATALOGUE
+def research_repository(request):
+    return render(request, 'books/research_repository.html')
+
+
+# research materials view
+def view_research_materials(request):
+    # Fetch all research materials from the database and render them to the template
+    research_materials = Journal_materials.objects.all()
+    return render(request, 'books/research_material_view.html', {'research_materials': research_materials})
+
+

@@ -1,0 +1,280 @@
+
+
+{% load static %}
+
+<!--- COUNTER VIZ.  -->
+
+<!--- welcome message for admin-->
+
+<!--- welcome message for admin-->
+
+  <div class="col-12 col-sm-6 col-lg-6">
+                <div class="card" id="mycard-dimiss">
+                  <div class="card-header">
+                    <h4>Hi, welcome back!</h4>
+                    <div class="card-header-action">
+                      <a data-dismiss="#mycard-dimiss" class="btn btn-icon btn-secondary" href="#"><i
+                          class="fas fa-times"></i></a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                     <div class="welcome-message">
+              <h2> {{ student_name }}</h2>
+              <p>Here's what's happening with your Vunaweb plus today.</p>
+            </div>
+                  </div>
+                </div>
+
+            </div>
+<!--- welcome message for admin ends-->
+<div class="row">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">TOTAL MATERIALS </h5>
+                    <h2 class="mb-3 font-18">258</h2>
+                    <p class="mb-0"><span class="col-green">10%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/banner/1.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> H-INDEX </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                    <p class="mb-0"><span class="col-orange">09%</span> Decrease</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/banner/2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> JOURNALS & ARTICLES</h5>
+                    <h2 class="mb-3 font-18">128</h2>
+                    <p class="mb-0"><span class="col-green">18%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/banner/3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOWNLOADS </h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                    <p class="mb-0"><span class="col-green">42%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/banner/4.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   <div class="row">
+       <div class="col-lg-8">
+
+  <div class="card">
+    <div class="card-header">
+      <h4>Top Veritas Researcher  </h4>
+        <!-- ADD A MODAL TO ADD A TASK -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"> create a research collaboration </button>
+
+
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped" id="table-1">
+          <thead>
+            <tr>
+              <th class="text-center">#</th>
+              <th>Task Name</th>
+              <th>Progress</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Create a mobile app</td>
+              <td class="align-middle">
+                <div class="progress progress-xs">
+                  <div class="progress-bar bg-success width-per-40"></div>
+                </div>
+              </td>
+              <td>
+                <div class="badge badge-success badge-shadow">Completed</div>
+              </td>
+              <td><a href="#" class="btn btn-primary">Detail</a></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Redesign homepage</td>
+              <td class="align-middle">
+                <div class="progress progress-xs">
+                  <div class="progress-bar width-per-60"></div>
+                </div>
+              </td>
+              <td>
+                <div class="badge badge-info badge-shadow">Todo</div>
+              </td>
+              <td><a href="#" class="btn btn-primary">Detail</a></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Backup database</td>
+              <td class="align-middle">
+                <div class="progress progress-xs">
+                  <div class="progress-bar bg-warning width-per-70"></div>
+                </div>
+              </td>
+              <td>
+                <div class="badge badge-warning badge-shadow">In Progress</div>
+              </td>
+              <td><a href="#" class="btn btn-primary">Detail</a></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Input data</td>
+              <td class="align-middle">
+                <div class="progress progress-xs">
+                  <div class="progress-bar bg-success width-per-90"></div>
+                </div>
+              </td>
+              <td>
+                <div class="badge badge-success badge-shadow">Completed</div>
+              </td>
+              <td><a href="#" class="btn btn-primary">Detail</a></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Create a mobile app</td>
+              <td class="align-middle">
+                <div class="progress progress-xs">
+                  <div class="progress-bar bg-success width-per-40"></div>
+                </div>
+              </td>
+              <td>
+                <div class="badge badge-success badge-shadow">Completed</div>
+              </td>
+              <td><a href="#" class="btn btn-primary">Detail</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+           <!-- TRENDING BOOKS AND JOURNALS -->
+              <div class="col-4 col-sm-4 col-xs-6">
+
+                <div class="card">
+
+              <div class="card-body ">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackmanreader.avif' %}" alt="First slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>First Slide</h5>
+            <p>Description for the first slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackreader.jpg' %}" alt="Second slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Second Slide</h5>
+            <p>Description for the second slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackreaader3.avif' %}" alt="Second slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Third Slide</h5>
+            <p>Description for the third slide.</p>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+
+              </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+<!--COUNTER VIZ. END   -->
+
+<!--- RECOMMENDED BOOKS AND JOURNALS  -->
+{% include 'ai_features/recommended_books.html' %}
+<!--- RECOMMENDED BOOKS ADDED AND JOURNALS  -->
+
+<!-- RECENT  BOOKS READ.  -->
+
+
