@@ -1037,22 +1037,17 @@ from googleapiclient.discovery import build
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-# Load the service account JSON from the environment variable or file
-SERVICE_ACCOUNT_JSON = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
+# Load the service account JSON from the environment variable
+SERVICE_ACCOUNT_JSON = os.getenv('GOOGLE_CREDENTIALS')  # Ensure this is set in your Heroku config
 
 if not SERVICE_ACCOUNT_JSON:
-    # If the environment variable is not set, load from a file
-    SERVICE_ACCOUNT_FILE = 'knowrizon/media/config/service_account_api.json'
-    if not os.path.exists(SERVICE_ACCOUNT_FILE):
-        raise ValueError("The service account JSON file does not exist.")
-    with open(SERVICE_ACCOUNT_FILE, 'r') as f:
-        SERVICE_ACCOUNT_INFO = json.load(f)
-else:
-    try:
-        # Parse the JSON string to a dictionary
-        SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON: {e}")
+    raise ValueError("The GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set or empty.")
+
+try:
+    # Parse the JSON string to a dictionary
+    SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
+except json.JSONDecodeError as e:
+    raise ValueError(f"Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON: {e}")
 
 # Create credentials using the loaded JSON
 credentials = service_account.Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
