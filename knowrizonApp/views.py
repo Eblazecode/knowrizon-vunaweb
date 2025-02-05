@@ -1313,7 +1313,7 @@ def staff_login(request):
         if password == "password":
             messages.warning(request, 'Please update your password.')
             logger.info('Prompting staff to update password for email: %s', email)
-            return redirect('staff_update_password')  # Redirect to password update page
+            return redirect('staff_password_update')  # Redirect to password update page
 
         # Validate password
         if check_password(password, staff.academic_staff_password):
