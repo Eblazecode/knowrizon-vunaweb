@@ -75,7 +75,7 @@ urlpatterns = [
     path('view_books/<str:category>/', views.view_books, name='view_books'),
 
     # COMPUTER SCI DEPT BOOKS
-    path('books/<str:category>/', views.view_comp_sci_books, name='view_comp_sci_books'),
+    path('books/<str:category>/', views.view_open_license_comp_sci_books, name='view_comp_sci_books'),
 
     # ... other paths ...
     path('protect_materials', views.view_protected_materials, name='protected_materials'),

@@ -1099,7 +1099,7 @@ COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER = {
 
 
 # LICENSED COPYRIGHT MATERIAL CATEGORIES
-def view_comp_sci_books(request, category):
+def view_open_license_comp_sci_books(request, category):
     # Get the folder ID for the category
     folder_id = COMPUTER_SCI_DEPT_CATEGORY_TO_FOLDER.get(category)
 

@@ -63,29 +63,20 @@ areas and their associated book categories:
                 <div class="book-list row">
                     {% if books %}
                         {% for book in books %}
-                            <div class="book-item col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
+                            <div class="book-item col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                                 <div class="card h-100">
                                     <!-- Display book cover -->
                                     <img
-                                        src="{{ book.cover_url|default:'/static/images/default-cover.png' }}"
+                                        src="{{ book.thumbnailLink|default:'/static/images/default-cover.png' }}"
                                         alt="Book Cover"
                                         class="card-img-top"
                                         style="height: 200px; object-fit: cover;">
 
-                                    <div class="card-body text-start text-small text-info text-wrap">
+                                    <div class="card-body text-center">
                                         <!-- Book name -->
                                         <h5 class="card-title">{{ book.name }}</h5>
-                                        <!-- Author -->
-                                        <p class="card-text "> Author: {{ book.author }}</p>
-                                        <!-- Year -->
-                                        <p class="card-text"> published year:  {{ book.year }}</p>
-                                        <!-- Description -->
                                         <!-- View/Download button -->
-
-                                        <a href="{% url 'view_mat_details' category=category book_id=book.book_id %}" class="btn btn-sm btn-success">
-    View Details
-</a>
-
+                                        <a href="{{ book.webViewLink }}" target="_blank" class="btn btn-primary btn-sm">View/Download</a>
                                     </div>
                                 </div>
                             </div>
@@ -100,4 +91,7 @@ areas and their associated book categories:
 </div>
 
 </div>
+
+
+
 {% endblock %}
