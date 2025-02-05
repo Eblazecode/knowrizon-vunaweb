@@ -1,0 +1,109 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}books categories {% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">copyright protected materials details</h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+The eLibrary organizes its book collection into various categories
+
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+</div>
+<section class="section">
+  <div class="section-body">
+    <div class="row mt-3">
+          <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h4> </h4>
+                  </div>
+                  <div class="card-body">
+                  <img
+                    src="{{ book.cover_url|default:'/static/images/default-cover.png' }}"
+                    alt="Book Cover"
+                    class="card-img-top"
+                    style="height: 200px; object-fit: cover;">
+
+                        <h5 class="card-title">{{ book.name }}</h5>
+
+                          <a href="{{ book.file_url }}" class="btn btn-sm btn-success">
+        Download
+    </a> <a href="{{ book.file_url }}" class="btn btn-sm btn-success">
+    read online
+    </a>
+                  </div>
+                </div>
+              </div>
+
+         <div class="col-12 col-sm-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Book details</h4>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                          aria-controls="home" aria-selected="true">Descriptions</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                          aria-controls="profile" aria-selected="false">details</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                          aria-controls="contact" aria-selected="false">report</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                             <div class="card-body">
+                <h2>Books in {{ category|title }}</h2>
+                                  <p class="card-text"> Description: {{ book.description }}</p>
+
+            </div>
+
+                      </div>
+
+                      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                                        <!-- Author -->
+                                        <p class="card-text "> Author: {{ book.author }}</p>
+                                        <!-- Year -->
+                                        <p class="card-text"> published year:  {{ book.year }}</p>
+                                        <!-- Description -->
+
+                      </div>
+                      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <p class="card-text"> Tags: {{ book.tags }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

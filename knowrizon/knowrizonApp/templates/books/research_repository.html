@@ -1,0 +1,137 @@
+
+{% extends "staff_base.html" %}
+{% load static %}
+{% block title %}research repository {% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Veritas Uni, Research Repository </h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+The eLibrary organizes its book collection into various categories
+                          based on the faculties they belong to.
+                          This categorization helps users easily find books
+                          related to their field of study or interest. Below are the
+                          faculties and their associated book categories:
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+</div>
+
+    <div class="row">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">journals  </h5>
+                    <h2 class="mb-3 font-18">258</h2>
+                      <p>  contains articles written
+                          by researchers, academics, and other experts. </p>
+
+                      <a href="{% url 'research_material_view' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Audio visuals </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                      <p>  work done written
+                          by researchers, contain PPT slide and short videos </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Report and analysis </h5>
+                    <h2 class="mb-3 font-18">128</h2>
+
+                      <p> work done written by researchers, contain data analysis and short reports</p>
+                      <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Arts</h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                      <p> digital art library, contain short  and exciting arts </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
