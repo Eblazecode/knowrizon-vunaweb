@@ -1,0 +1,141 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+{% block title %}search index{% endblock %}
+
+{% block content %}
+  <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+               <div class="card-header">
+                    <h1 class="fs-1 ">Veritas University Repository  </h1>
+                  </div>
+                <div class="card-body">
+                                       <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/logo.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+           <p>Veritas University Repository is a digital archive that collects, preserves, and disseminates
+                       the intellectual output of Veritas University, including theses, dissertations, and research papers.</p>
+                        </div>
+                                       </div>
+
+
+
+                </div>
+            </div>
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+        </div>
+      </div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Research Repository</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- Search & Filters -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by title, author, or type...">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="typeFilter" class="form-control">
+                            <option value="">All Types</option>
+                            <option value="Journal">Journal</option>
+                            <option value="Thesis">Thesis</option>
+                            <option value="Conference Paper">Conference Paper</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" id="startDate" class="form-control" placeholder="Start Date">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" id="endDate" class="form-control" placeholder="End Date">
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table table-striped" id="researchTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th onclick="sortTable(1)">Title &#x25B2;&#x25BC;</th>
+                                <th onclick="sortTable(2)">Author(s) &#x25B2;&#x25BC;</th>
+                                <th>Research Type</th>
+                                <th onclick="sortTable(4)">Pub Date &#x25B2;&#x25BC;</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for material in research_materials %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ material.journal_material_title }}</td>
+                                <td>{{ material.journal_material_author }}</td>
+                                <td>{{ material.journal_material_type }}</td>
+                                <td>{{ material.journal_pub_date }}</td>
+                                <td>
+                                    <div class="badge badge-success badge-shadow">Published</div>
+                                </td>
+                                <td>
+                                    {% if material.journal_material_id %}
+                                        <a href="{% url 'journal_detail' material.journal_material_id %}" class="btn btn-primary">Detail</a>
+                                    {% else %}
+                                        <button class="btn btn-secondary" disabled>Detail</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        let searchValue = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#researchTable tbody tr");
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(searchValue) ? "" : "none";
+        });
+    });
+
+    document.getElementById("typeFilter").addEventListener("change", function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#researchTable tbody tr");
+        rows.forEach(row => {
+            let type = row.children[3].innerText.toLowerCase();
+            row.style.display = filter === "" || type.includes(filter) ? "" : "none";
+        });
+    });
+
+    function sortTable(n) {
+        let table = document.getElementById("researchTable");
+        let rows = Array.from(table.rows).slice(1);
+        let asc = table.dataset.sortDir === "asc";
+        rows.sort((row1, row2) => {
+            let cell1 = row1.cells[n].innerText.toLowerCase();
+            let cell2 = row2.cells[n].innerText.toLowerCase();
+            return asc ? cell1.localeCompare(cell2) : cell2.localeCompare(cell1);
+        });
+        table.dataset.sortDir = asc ? "desc" : "asc";
+        rows.forEach(row => table.appendChild(row));
+    }
+</script>
+
+
+
+
+
+{% endblock %}

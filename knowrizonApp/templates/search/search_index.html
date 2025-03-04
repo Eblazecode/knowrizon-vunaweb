@@ -1,0 +1,601 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+{% block title %}search index{% endblock %}
+
+{% block content %}
+      <div class="row">
+       <div class="col-12 col-md-6 col-lg-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 "> All resources  </h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">The library offers a wide range of resources to help you with your studies, research, and teaching. You can use the library to:</p>
+<ul>
+    <li>Search for books, articles, and other materials</li>
+    <li>Access online resources</li>
+    <li>Get help with research</li>
+    <li>Find out about library services and facilities</li>
+</ul>
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+      </div>
+
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+
+        </div>
+      <h4 class="fs-1 "> Book section  </h4>
+    <div class="row pb-5">
+
+    <!-- book section header  -->
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">Open Access BOOKS   </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p> </p>
+
+                      <a href="{% url 'books_public' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> library books  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>   </p>
+
+                        <a href="{% url 'books_private' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Book shop </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                      <p> </p>
+                      <a href="{% url 'book_store' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOAJ OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>  </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <h4 class="fs-1 "> OPAC  section  </h4>
+    <div class="row pb-5">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">CORE OPAC  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                     <p>CORE is the world’s largest aggregator of open access content with millions of full texts,
+                         deriving from thousands of repositories, journals, and other web resources. It provides
+                         a wealth of research materials.</p>
+
+                      <a href="{% url 'search_open_access'  %}" class="btn btn-success">search repository </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/core.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> ARXVI OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+              <p>ARXIV is a repository of e-prints in physics, math, computer science, biology,
+                  finance, and stats. It provides open access to a wealth of research papers, allowing
+                  researchers to share their findings with the global community.</p>
+
+                        <a href="{% url 'arxiv_search' %}" class="btn btn-success">search repository  </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/arxvi.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> VUA REPOSITORY  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                   <p>Veritas University Repository is a digital archive that collects, preserves, and disseminates
+                       the intellectual output of Veritas University, including theses, dissertations, and research papers.</p>
+                      <a href="{% url 'vua_repository' %}" class="btn btn-success">search repository </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/logo.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOAJ OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                <p>DOAJ is a community-curated online directory that indexes and provides access
+                    to high-quality, open access, peer-reviewed journals. it offers a vast
+                    collection of scholarly articles  ensuring wide
+                    accessibility and visibility for researchers.</p>
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/doaj.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     <div class="row pb-5">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">Elsevier  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                    <p>Elsevier is a leading provider of scientific, technical, and medical information.
+                        It offers a vast collection of journals, books, and other resources, supporting
+                        researchers and professionals worldwide.</p>
+
+                      <a href="{% url 'elsevier_search'  %}" class="btn btn-success">search repository </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/core.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> ARXVI OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+              <p>ARXIV is a repository of e-prints in physics, math, computer science, biology,
+                  finance, and stats. It provides open access to a wealth of research papers, allowing
+                  researchers to share their findings with the global community.</p>
+
+                        <a href="{% url 'arxiv_search' %}" class="btn btn-success">search repository  </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/arxvi.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> VUA REPOSITORY  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                   <p>Veritas University Repository is a digital archive that collects, preserves, and disseminates
+                       the intellectual output of Veritas University, including theses, dissertations, and research papers.</p>
+                      <a href="{% url 'vua_repository' %}" class="btn btn-success">search repository </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/logo.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOAJ OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                <p>DOAJ is a community-curated online directory that indexes and provides access
+                    to high-quality, open access, peer-reviewed journals. it offers a vast
+                    collection of scholarly articles  ensuring wide
+                    accessibility and visibility for researchers.</p>
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/doaj.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <h4 class="fs-1 "> Databases section  </h4>
+      <div class="row pb-5">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">curated collection  </h5>
+                    <h2 class="mb-3 font-18">28</h2>
+                      <p> </p>
+
+                      <a href="{% url 'research_material_view' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <!-- more click button -->
+          <a href="" class="btn btn-success">view more </a>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> library collection </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                      <p>   </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> journal search </h5>
+                    <h2 class="mb-3 font-18">128</h2>
+
+                      <p> </p>
+                      <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Newspaper</h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                      <p>  </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <h4 class="fs-1 "> New & multimedia  section  </h4>
+  <div class="row pb-5">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">open course wares  </h5>
+                    <h2 class="mb-3 font-18">28</h2>
+                      <p> </p>
+
+                      <a href="{% url 'research_material_view' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> conference presentations  </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                      <p>   </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> inuagural lectures  </h5>
+                    <h2 class="mb-3 font-18">128</h2>
+
+                      <p> </p>
+                      <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Newspaper</h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                      <p>  </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="card">
+                     <div class="card-header">
+                          <h1 class="fs-1 ">Ask a Librarian </h1>
+                     </div>
+                        <div class="card-body">
+                            <div class="media">
+                                <img class="mr-3" src="{% static 'assets/img/chatbot.jpeg' %}" width="100px" alt="Generic placeholder image">
+                                <div class="media-body">
+                                    <h5 class="mt-0 text-info">About </h5>
+                                    <p class="mb-0 ">
+                                        The Ask a Librarian chatbot is a virtual assistant that provides answers to frequently
+                                        asked questions about the library and its services. The chatbot is available 24/7 and can help
+                                        you with a wide range of queries, including finding books, accessing online resources, and getting help with research.
+
+                                    </p>
+                                    <a href="" class=" btn btn-success">begin </a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+ <div class="col-lg-8">
+            <div class="card">
+               <div class="card-header">
+                    <h1 class="fs-1 ">search Repository </h1>
+                  </div>
+                <div class="card-body">
+                    <form method="GET" action="{% url 'search_open_access' %}" >
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control h-100" placeholder="Search for everything..." style="height: 600px">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+{% endblock %}

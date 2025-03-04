@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                   <div class="banner-img">
-                    <img src="{% static 'assets/img/banner/1.png' %}" alt="">
+                    <img src="{% static 'assets/img/books.avif' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                   <div class="banner-img">
-                    <img src="{% static 'assets/img/banner/2.png' %}" alt="">
+                    <img src="{% static 'assets/img/hindex.png' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -79,14 +79,14 @@
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                   <div class="card-content">
-                    <h5 class="font-15"> JOURNALS & ARTICLES</h5>
+                    <h5 class="font-15"> JOURNALS </h5>
                     <h2 class="mb-3 font-18">128</h2>
                     <p class="mb-0"><span class="col-green">18%</span> Increase</p>
                   </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                   <div class="banner-img">
-                    <img src="{% static 'assets/img/banner/3.png' %}" alt="">
+                    <img src="{% static 'assets/img/journals.webp' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                   <div class="banner-img">
-                    <img src="{% static 'assets/img/banner/4.png' %}" alt="">
+                    <img src="{% static 'assets/img/downloads.jpg' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -134,78 +134,39 @@
           <thead>
             <tr>
               <th class="text-center">#</th>
-              <th>Task Name</th>
-              <th>Progress</th>
-              <th>Status</th>
-              <th>Action</th>
+
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Phone</th>
+                                <th>Prefix</th>
+
+                                <th>Interest</th>
+
+                                <!--- action to delete and update -->
+                                <th>Action </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Create a mobile app</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-40"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Redesign homepage</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar width-per-60"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-info badge-shadow">Todo</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Backup database</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-warning width-per-70"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-warning badge-shadow">In Progress</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Input data</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-90"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Create a mobile app</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-40"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
+           {% for row in academic_staff %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ row.academic_staff_fname }}</td>
+                        <td>{{ row.academic_staff_lname }}</td>
+                        <td>{{ row.academic_staff_email }}</td>
+                        <td>{{ row.academic_staff_dept }}</td>
+                        <td>{{ row.academic_staff_position }}</td>
+                        <td>{{ row.academic_staff_phone }}</td>
+                        <td>{{ row.academic_staff_prefix }}</td>
+                        <td>{{ row.academic_staff_interest }}</td>
+
+                        <td>
+                            <a href="{% url 'admin_manage_staff_update' row.academic_staff_id %}" class="btn btn-success">collaborate</a>
+
+                    </tr>
+                    {% endfor %}
           </tbody>
         </table>
       </div>
@@ -272,7 +233,7 @@
 <!--COUNTER VIZ. END   -->
 
 <!--- RECOMMENDED BOOKS AND JOURNALS  -->
-{% include 'ai_features/recommended_books.html' %}
+{% include 'includes/open_databases/openaccess.html' %}
 <!--- RECOMMENDED BOOKS ADDED AND JOURNALS  -->
 
 <!-- RECENT  BOOKS READ.  -->

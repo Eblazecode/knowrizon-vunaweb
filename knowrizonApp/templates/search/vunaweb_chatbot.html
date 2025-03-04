@@ -1,0 +1,47 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+{% block title %}book store {% endblock %}
+
+{% block content %}
+ <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Vunaweb chatbot   </h1>
+                  </div>
+                <div class="card-body">
+                         <div class="media">
+                    <img src="{% static 'assets/img/chatbot.jpeg' %}" width="200px" alt="avatar">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">
+                      <p>
+    Welcome to the Veritas University Book Shop! Our e-commerce platform offers a seamless experience for purchasing books, e-books, and other educational materials. Sign in to:
+    <ul>
+        <li>Browse and purchase a wide range of books and e-books</li>
+        <li>Access exclusive academic resources</li>
+        <li>Create and manage your wish lists</li>
+        <li>Track your orders and view purchase history</li>
+        <li>Receive personalized recommendations</li>
+    </ul>
+</p>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+
+        </div>
+
+      </div>
+
+    {% include "ai_features/../ai_features/chat_bot.html" %}
+
+
+{% endblock %}

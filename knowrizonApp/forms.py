@@ -63,3 +63,14 @@ class AcademicStaffForm(forms.ModelForm):
             'academic_staff_identity',
             'academic_staff_interest',
         ]
+
+# STAFF PROFILE MODELS
+from django import forms
+from .models import academic_staff
+
+
+class AcademicStaffProfile(forms.ModelForm):
+    class Meta:
+        model = academic_staff
+        fields = ['academic_staff_fname', 'academic_staff_lname', 'academic_staff_email', 'academic_staff_dept',
+                  'academic_staff_position', 'academic_staff_phone', 'academic_staff_prefix', 'academic_staff_identity',]

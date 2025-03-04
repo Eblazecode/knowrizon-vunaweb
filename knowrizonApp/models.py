@@ -87,26 +87,7 @@ class content_managers(models.Model):
 # academic staff models
 
 # models.py
-class academic_staff(models.Model):
-    academic_staff_id = models.AutoField(primary_key=True)
-    academic_staff_fname = models.CharField(max_length=250)
-    academic_staff_lname = models.CharField(max_length=250)
-    academic_staff_gender = models.CharField(max_length=250, default='Not specified')
-    academic_staff_email = models.EmailField(max_length=250)
-    academic_staff_password = models.CharField(max_length=250)
-    academic_staff_upload_approval = models.IntegerField(default=0)
-    academic_staff_dept = models.CharField(max_length=250)
-    academic_staff_position = models.CharField(max_length=250)
-    academic_staff_phone = models.CharField(max_length=75, default='')
-    academic_staff_prefix = models.CharField(max_length=10, default='')
-    academic_staff_identity = models.CharField(max_length=50, default='')
-    academic_staff_interest = models.CharField(max_length=50, default='interest')
-    academic_staff_created_at = models.DateTimeField(auto_now_add=True)
-    academic_staff_updated_at = models.DateTimeField(auto_now=True)
-    last_login = models.DateTimeField(null=True, blank=True)  # Add this field
 
-    def __str__(self):
-        return self.academic_staff_fname
 
 
 class researchers(models.Model):
@@ -200,3 +181,118 @@ class Journal_materials(models.Model):
 
     def __str__(self):
         return self.journal_material_title
+
+
+# open access databases  models
+class open_access_databases(models.Model):
+    database_id = models.AutoField(primary_key=True)
+    database_title = models.CharField(max_length=250)
+    database_description = models.CharField(max_length=800)
+    database_genre = models.CharField(max_length=250)
+    database_cover_image = models.ImageField(upload_to='materials/databases/cover/', blank=True,
+                                             null=True)  # Optional cover image
+    database_URL = models.CharField(max_length=250)
+    database_subscription = models.CharField(max_length=250)
+    database_created_at = models.DateTimeField(auto_now_add=True)
+    database_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.database_title
+
+
+# book store models
+class book_store(models.Model):
+    book_id = models.AutoField(primary_key=True)
+    book_title = models.CharField(max_length=250)
+    book_author = models.CharField(max_length=250)
+    book_publisher = models.CharField(max_length=250)
+    book_year = models.CharField(max_length=250)
+    book_department = models.CharField(max_length=250, default='not specified')
+    book_genre = models.CharField(max_length=250)
+    book_description = models.CharField(max_length=555)
+    book_quantity = models.IntegerField(default=0)
+    book_price = models.FloatField(default=0.0)
+    book_ISBN = models.CharField(max_length=50)
+    book_cover_image = models.ImageField(upload_to='materials/books/cover/', blank=True, null=True)
+    book_created_at = models.DateTimeField(auto_now_add=True)
+    book_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.book_title
+
+
+# physcial library materials models
+class physical_library_materials(models.Model):
+    physical_library_material_id = models.AutoField(primary_key=True)
+    physical_library_material_title = models.CharField(max_length=250)
+    physical_library_material_author = models.CharField(max_length=250)
+    physical_library_material_ref_id = models.CharField(max_length=250, default='not specified')
+    physical_library_material_publisher = models.CharField(max_length=250)
+    physical_library_material_year = models.CharField(max_length=250)
+    physical_library_material_type = models.CharField(max_length=250)
+    physical_library_material_description = models.CharField(max_length=555)
+    physical_library_material_genre = models.CharField(max_length=250)
+    physical_library_material_ISBN = models.CharField(max_length=50)
+    physical_library_material_department = models.CharField(max_length=50)
+    # QUANTITY OF THE MATERIAL
+    physical_library_material_quantity = models.IntegerField(default=0)
+    physical_library_material_created_at = models.DateTimeField(auto_now_add=True)
+    physical_library_material_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.physical_library_material_title
+
+
+
+class academic_staff(models.Model):
+    academic_staff_id = models.AutoField(primary_key=True)
+    academic_staff_fname = models.CharField(max_length=250)
+    academic_staff_lname = models.CharField(max_length=250)
+    academic_staff_gender = models.CharField(max_length=250, default='Not specified')
+    academic_staff_email = models.EmailField(max_length=250)
+    academic_staff_password = models.CharField(max_length=250)
+    academic_staff_upload_approval = models.IntegerField(default=0)
+    academic_staff_dept = models.CharField(max_length=250)
+    academic_staff_position = models.CharField(max_length=250)
+    academic_staff_phone = models.CharField(max_length=75, default='')
+    academic_staff_prefix = models.CharField(max_length=10, default='')
+    academic_staff_identity = models.CharField(max_length=50, default='')
+    academic_staff_interest = models.CharField(max_length=50, default='interest')
+    academic_staff_created_at = models.DateTimeField(auto_now_add=True)
+    academic_staff_updated_at = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(null=True, blank=True)  # Add this field
+
+    def __str__(self):
+        return self.academic_staff_fname
+# create staff public profile models
+class staff_public_profile(models.Model):
+    staff_profile_id = models.AutoField(primary_key=True)
+    staff_ID = models.CharField(max_length=250, default='not specified')
+    staff_fname = models.CharField(max_length=250)
+    staff_lname = models.CharField(max_length=250)
+    staff_interest = models.CharField(max_length=250)
+    staff_category =models.CharField(max_length=200, default='not specified')
+    staff_dept = models.CharField(max_length=250)
+    staff_email = models.EmailField(max_length=250)
+    staff_profile_picture = models.ImageField(upload_to='materials/staff/profile/', blank=True, null=True)
+    staff_position = models.CharField(max_length=250)
+    staff_publication = models.CharField(max_length=250)
+    staff_bio =models.TextField(max_length=555)
+    staff_hindex = models.CharField(max_length=50, default='0')
+    staff_profile_created_at = models.DateTimeField(auto_now_add=True)
+    staff_profile_updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.staff_fname
+
+
+# OPEN ACCESS DATABASES MODELS
+class OpenAccessResource(models.Model):
+    title = models.CharField(max_length=500)
+    source = models.CharField(max_length=50)
+    link = models.URLField()
+    indexed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

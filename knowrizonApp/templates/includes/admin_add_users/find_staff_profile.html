@@ -1,0 +1,107 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %}vunaweb plus{% endblock %}
+
+{% block content %}
+
+<!--modeal section-->
+
+ <h2 class="section-title">create staff academic profile  </h2>
+   <!--FEEBACK MODAL-->
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible col-5 mt-2 ml-2
+            {% if message.tags == 'error' %}
+                alert-danger
+            {% elif message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'info' %}
+                alert-info
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+                <p class="section-lead">
+             staff repository is a place where you can create and manage staff profiles.
+            </p>
+
+
+       <section class="section">
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+
+                  </div>
+                  <div class="card-body">
+
+                        <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+            <div class="login-brand">
+            vunaweb plus
+            </div>
+            <div class="card card-primary">
+              <div class="card-header">
+                <h4>find staff </h4>
+              </div>
+              <div class="card-body">
+        <form method="POST" action="{% url 'find_staff_profile' %}">
+                   {% csrf_token %}
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <i class="fas fa-user"></i>
+                        </div>
+                      </div>
+                      <input id="email" type="text" class="form-control" name="staff_id" autofocus placeholder="STAFF ID / email">
+                    </div>
+                  </div>
+                  <div class="form-group text-center">
+                    <button type="submit" class="btn btn-lg btn-round btn-primary">
+                     find
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="simple-footer">
+
+            </div>
+          </div>
+        </div>
+      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      {% endblock %}
+{% block scripts %}
+<!-- JS Libraries -->
+      <script src="{% static 'assets/js/app.min.js' %}"></script>
+<script src="{% static 'assets/bundles/summernote/summernote-bs4.js' %}"></script>
+<script src="{% static 'assets/bundles/jquery-selectric/jquery.selectric.min.js' %}"></script>
+<script src="{% static 'assets/bundles/upload-preview/assets/js/jquery.uploadPreview.min.js' %}"></script>
+<script src="{% static 'assets/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+      <!-- Page Specific JS File -->
+<script src="{% static 'assets/js/page/create-post.js' %}"></script>
+<!-- Template JS File -->
+<script src="{% static 'assets/js/scripts.js' %}"></script>
+<!-- Custom JS File -->
+<script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+
+{% endblock %}

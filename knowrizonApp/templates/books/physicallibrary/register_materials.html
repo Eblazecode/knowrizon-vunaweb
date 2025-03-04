@@ -1,0 +1,334 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %} upload book store materials {% endblock %}
+
+{% block content %}
+
+
+
+    <script>
+        function loadCourses() {
+            const department = document.getElementById('department').value;
+            const courseSelect = document.getElementById('course');
+            courseSelect.innerHTML = '';
+
+            fetch(`/get-courses/${department}/`)
+                .then(response => response.json())
+                .then(data => {
+                    data.courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course;
+                        option.text = course;
+                        courseSelect.add(option);
+                    });
+                });
+        }
+    </script>
+
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">physical library section  </h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+The eLibrary organizes its book collection into various categories
+                          based on the faculties they belong to.
+                          This categorization helps users easily find books
+                          related to their field of study or interest. Below are the
+                          faculties and their associated book categories:
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+</div>
+<div class="row">
+      <div class="card col-lg-3 ">
+  <div class="card-header">
+    <h4>  </h4>
+  </div>
+  <div class="card-body">
+    <ul class="list-unstyled">
+      <li class="media">
+        <img class="mr-3 w-25" src="{% static 'assets/img/books.avif' %}"  alt="Generic placeholder image">
+        <div class="media-body">
+          <h1 class="mt-0 ">Register material  </h1>
+          <p class="pt-3">Description: Digital versions of traditional books that can be read on devices like tablets, smartphones, or eReaders.
+Use Case: Useful for extended reading on various topics, ranging from academic
+            textbooks to fiction and non-fiction works.</p>
+
+            <!-- font awesome upload icon -->
+            <div class="text-center">
+              <i class="fas fa-upload fa-10x"></i>
+            </div>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+         <div class="col-sm-12  col-md-10  col-lg-6 col-xl-6 ">
+
+            <div class="card card-primary">
+              <div class="card-header">
+                  <!-- ALERT MESSAGE -->
+                  {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-dismissible col-5 mt-2 ml-2
+                        {% if message.tags == 'error' %}
+                            alert-danger
+                        {% elif message.tags == 'success' %}
+                            alert-success
+                        {% elif message.tags == 'info' %}
+                            alert-info
+                        {% elif message.tags == 'warning' %}
+                            alert-warning
+                        {% endif %}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+
+
+              </div>
+                    {% endfor %}
+                {% endif %}
+              </div>
+
+              <div class="card-body">
+        <form method="POST" id="pdf_upload_form" action="{% url 'physical_library_register_material' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="pdf_title">Title</label>
+        <input id="pdf_title" type="text" class="form-control" name="book_title" required>
+    </div>
+    <div class="form-group">
+        <label for="pdf_description">Description</label>
+        <textarea id="pdf_description" class="form-control" name="book_description" rows="3" required></textarea>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="pdf_author">Author</label>
+        <input id="pdf_author" type="text" class="form-control" name="book_author" required>
+    </div>
+               <div class="form-group">
+        <label for="pdf_author">publisher </label>
+        <input id="pdf_author" type="text" class="form-control" name="book_publisher" required>
+    </div>
+             <div class="form-group">
+        <label for="pdf_author">ISBN </label>
+        <input id="pdf_author" type="text" class="form-control" name="book_ISBN" required>
+    </div>
+    <div class="form-group">
+        <label for="pdf_upload_date">publication date </label>
+        <input id="pdf_upload_date" type="date" class="form-control" name="book_pub_date" required>
+    </div>
+            <div class="form-group">
+        <label for="pdf_description">quantity(Available copies) </label>
+         <input id="pdf_author" type="number" class="form-control" name="book_quantity" required>
+    </div>
+ <div class="form-group">
+        <label for="department"> material category </label>
+      <select class="form-control"  name="material_category">
+    <option value="">Select a category</option>
+    <option value="GENERAL">GENERAL</option>
+    <option value="FICTION">FICTION</option>
+    <option value="NON-FICTION">NON-FICTION</option>
+    <option value="SCIENCE">SCIENCE</option>
+    <option value="ENGINEERING">ENGINEERING</option>
+    <option value="MEDICINE">MEDICINE</option>
+    <option value="LAW">LAW</option>
+    <option value="ARTS">ARTS</option>
+    <option value="BUSINESS">BUSINESS</option>
+    <option value="EDUCATION">EDUCATION</option>
+    <option value="HISTORY">HISTORY</option>
+    <option value="PHILOSOPHY">PHILOSOPHY</option>
+    <option value="RELIGION">RELIGION</option>
+    <option value="TECHNOLOGY">TECHNOLOGY</option>
+</select>
+
+        </select>
+ </div><!--level-->
+             <div class="form-group">
+        <label for="department">Department</label>
+        <select id="department"  class="form-control" name="book_department" onchange="loadCourses()">
+            <option value="">Select a department</option>
+            <option value="Political Science and Diplomacy">Political Science and Diplomacy</option>
+            <option value="Economics">Economics</option>
+            <option value="Industrial Chemistry">Industrial Chemistry</option>
+            <option value="Physics with Electronics">Physics with Electronics</option>
+            <option value="Applied Microbiology">Applied Microbiology</option>
+            <option value="Philosophy">Philosophy</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Mass Communication">Mass Communication</option>
+            <option value="English and Literary Studies">English and Literary Studies</option>
+            <option value="History and International Relations">History and International Relations</option>
+            <option value="Marketing and Advertising">Marketing and Advertising</option>
+            <option value="Accounting">Accounting</option>
+            <option value="Theology">Theology</option>
+            <option value="English Education">English Education</option>
+            <option value="Economics Education">Economics Education</option>
+            <option value="Chemistry Education">Chemistry Education</option>
+            <option value="Physics Education">Physics Education</option>
+            <option value="Educational Management">Educational Management</option>
+            <option value="Business Administration">Business Administration</option>
+            <option value="Entrepreneurial Studies">Entrepreneurial Studies</option>
+            <option value="Peace And Conflict Studies">Peace And Conflict Studies</option>
+            <option value="B.Eng Computer Engineering">B.Eng Computer Engineering</option>
+            <option value="B.Eng Electrical and Electronic Engineering">B.Eng Electrical and Electronic Engineering</option>
+            <option value="Law">Law</option>
+            <option value="SOFTWARE ENGINEERING">SOFTWARE ENGINEERING</option>
+            <option value="Nursing">Nursing</option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Medical Laboratory Sciences">Medical Laboratory Sciences</option>
+            <option value="Sacred Theology">Sacred Theology</option>
+            <option value="Computer science Education">Computer science Education</option>
+            <option value="Medicine and Surgery">Medicine and Surgery</option>
+            <option value="Religious Education">Religious Education</option>
+            <option value="Public Administration">Public Administration</option>
+        </select>
+    </div>
+
+               <div class="form-group">
+                            <label for="course">Book category </label>
+                            <select  class="form-control" id="course" name="book_category">
+                                <option value="">Select a category</option>
+                                <option value="GENERAL">GENERAL</option>
+                            </select>
+
+                        </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lg w-25 btn-block">Upload </button>
+    </div>
+</form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="settingSidebar">
+    <a href="javascript:void(0)" class="settingPanelToggle">
+      <i class="fa fa-spin fa-cog"></i>
+    </a>
+    <div class="settingSidebar-body ps-container ps-theme-default">
+      <div class="fade show active">
+        <div class="setting-panel-header">Setting Panel</div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Select Layout</h6>
+          <div class="selectgroup layout-color w-50">
+            <label class="selectgroup-item">
+              <input type="radio" name="value" value="1" class="selectgroup-input-radio select-layout" checked>
+              <span class="selectgroup-button">Light</span>
+            </label>
+            <label class="selectgroup-item">
+              <input type="radio" name="value" value="2" class="selectgroup-input-radio select-layout">
+              <span class="selectgroup-button">Dark</span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Sidebar Color</h6>
+          <div class="selectgroup selectgroup-pills sidebar-color">
+            <label class="selectgroup-item">
+              <input type="radio" name="icon-input" value="1" class="selectgroup-input select-sidebar">
+              <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip" data-original-title="Light Sidebar">
+                <i class="fas fa-sun"></i>
+              </span>
+            </label>
+            <label class="selectgroup-item">
+              <input type="radio" name="icon-input" value="2" class="selectgroup-input select-sidebar" checked>
+              <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip" data-original-title="Dark Sidebar">
+                <i class="fas fa-moon"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <h6 class="font-medium m-b-10">Color Theme</h6>
+          <div class="theme-setting-options">
+            <ul class="choose-theme list-unstyled mb-0">
+              <li title="white" class="active">
+                <div class="white"></div>
+              </li>
+              <li title="cyan">
+                <div class="cyan"></div>
+              </li>
+              <li title="black">
+                <div class="black"></div>
+              </li>
+              <li title="purple">
+                <div class="purple"></div>
+              </li>
+              <li title="orange">
+                <div class="orange"></div>
+              </li>
+              <li title="green">
+                <div class="green"></div>
+              </li>
+              <li title="red">
+                <div class="red"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <div class="theme-setting-options">
+            <label class="m-b-0">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="mini_sidebar_setting">
+              <span class="custom-switch-indicator"></span>
+              <span class="control-label p-l-10">Mini Sidebar</span>
+            </label>
+          </div>
+        </div>
+        <div class="p-15 border-bottom">
+          <div class="theme-setting-options">
+            <label class="m-b-0">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="sticky_header_setting">
+              <span class="custom-switch-indicator"></span>
+              <span class="control-label p-l-10">Sticky Header</span>
+            </label>
+          </div>
+        </div>
+        <div class="mt-4 mb-4 p-3 align-center rt-sidebar-last-ele">
+          <a href="#" class="btn btn-icon icon-left btn-primary btn-restore-theme">
+            <i class="fas fa-undo"></i> Restore Default
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

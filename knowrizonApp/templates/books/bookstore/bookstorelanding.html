@@ -1,0 +1,46 @@
+{% extends "staff_base.html" %}
+{% load static %}
+{% block title %}research repository {% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="fs-1">bookstore e-shop</h1>
+            </div>
+            <div class="card-body">
+                <div class="media">
+                    <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h5 class="mt-0 text-info">About</h5>
+                        <p class="mb-0">
+                            The eLibrary organizes its book collection into various categories
+                            based on the faculties they belong to.
+                            This categorization helps users easily find books
+                            related to their field of study or interest. Below are the
+                            faculties and their associated book categories:
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="section-title">
+            <h2>Recommended</h2>
+        </div>
+    </div>
+
+    {% include 'books/bookstore/bookcommerce.html' %}
+
+    <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+        <!-- Content here -->
+    </div>
+</div>
+
+{% endblock %}

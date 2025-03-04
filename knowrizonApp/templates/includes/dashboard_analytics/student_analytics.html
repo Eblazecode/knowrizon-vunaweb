@@ -7,8 +7,6 @@
 <!--- welcome message for admin-->
 
 <!--- welcome message for admin-->
-
-
   <div class="col-12 col-sm-6 col-lg-6">
                 <div class="card" id="mycard-dimiss">
                   <div class="card-header">
@@ -22,11 +20,14 @@
                      <div class="welcome-message">
               <h2> {{ student_name }}</h2>
               <p>Here's what's happening with your Vunaweb plus today.</p>
+
+                        {% include 'ai_features/quotes_generator.html' %}
+
+</div>
             </div>
                   </div>
                 </div>
 
-            </div>
 <!--- welcome message for admin ends-->
 
    <div class="row">
@@ -34,93 +35,117 @@
 
   <div class="card">
     <div class="card-header">
-      <h4>Top Reader </h4>
+      <h4>Resources </h4>
         <!-- ADD A MODAL TO ADD A TASK -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"> create a challenge </button>
-
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"> Get library book </button>
 
     </div>
     <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-striped" id="table-1">
-          <thead>
-            <tr>
-              <th class="text-center">#</th>
-              <th>Task Name</th>
-              <th>Progress</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Create a mobile app</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-40"></div>
+            <div class="row pb-5">
+
+    <!-- book section header  -->
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">Open Access BOOKS   </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p> </p>
+
+                      <a href="{% url 'books_public' %}" class="btn btn-success">view </a>
+                  </div>
                 </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Redesign homepage</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar width-per-60"></div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
                 </div>
-              </td>
-              <td>
-                <div class="badge badge-info badge-shadow">Todo</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Backup database</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-warning width-per-70"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-warning badge-shadow">In Progress</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Input data</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-90"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Create a mobile app</td>
-              <td class="align-middle">
-                <div class="progress progress-xs">
-                  <div class="progress-bar bg-success width-per-40"></div>
-                </div>
-              </td>
-              <td>
-                <div class="badge badge-success badge-shadow">Completed</div>
-              </td>
-              <td><a href="#" class="btn btn-primary">Detail</a></td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> library books  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>   </p>
+
+                        <a href="{% url 'books_private' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Book shop </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                      <p> </p>
+                      <a href="{% url 'book_store' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOAJ OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>  </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+        
     </div>
   </div>
 </div>
@@ -183,8 +208,10 @@
 
 <!--COUNTER VIZ. END   -->
 
+
 <!--- RECOMMENDED BOOKS AND JOURNALS  -->
 {% include 'ai_features/recommended_books.html' %}
+
 <!--- RECOMMENDED BOOKS ADDED AND JOURNALS  -->
 
 <!-- RECENT  BOOKS READ.  -->

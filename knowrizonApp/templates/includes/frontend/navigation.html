@@ -2,10 +2,10 @@
    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
-                   <img src="{% static 'assets/img/logo.png' %}" class="logo img-fluid" alt="Kind Heart Charity">
+                   <img src="{% static 'assets/img/logo.png' %}" class="logo img-fluid" alt="vunaweb logo ">
                     <span>
-                        vuna web
-                        <small>AI knowrizon powered e-library </small>
+                        vunaweb
+                        <small>AI  powered resource e-library </small>
                     </span>
                 </a>
 
@@ -30,14 +30,33 @@
                         <li class="nav-item">
                             <a class="nav-link click-scroll" href="#section_4">Volunteer</a>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">News</a>
+                          <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_4">Databases</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_4">newspaper</a>
+                        </li>
+                             <li class="nav-item dropdown">
+                            <a class="nav-link click-scroll dropdown-toggle" href="{% url 'repository_routes' %}" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Repository</a>
 
                             <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">News Listing</a></li>
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">VUA repository</a></li>
 
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">News Detail</a></li>
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">CORE repository</a></li>
+                                   <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">Open Databases</a></li>
+
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Arxvi OPAC</a></li>
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Nigerian Nat.OPAC</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link click-scroll dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">  AI  </a>
+
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">Open Databases</a></li>
+
+                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Arxvi OPAC</a></li>
                             </ul>
                         </li>
 
@@ -47,6 +66,9 @@
 
                         <li class="nav-item ms-3">
                            <a class="nav-link custom-btn custom-border-btn btn" href="{% url 'login_decider' %}">login</a>
+                        </li>
+                          <li class="nav-item ms-3">
+                           <a class="nav-link custom-btn custom-border-btn btn" href="{% url 'search_index' %}">All resources</a>
                         </li>
                     </ul>
                 </div>

@@ -1,0 +1,20 @@
+<div id="quote-container">
+
+    <blockquote id="quote-text"></blockquote>
+    <p><strong>- <span id="quote-author"></span></strong></p>
+</div>
+
+<script>
+  function loadQuote() {
+    fetch("/open-source-quotes/")
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("quote-text").innerText = `"${data.quote}"`;
+        document.getElementById("quote-author").innerText = data.author;
+    })
+    .catch(error => console.error("Error fetching quote:", error));
+  }
+
+  // Load on page load
+  window.onload = loadQuote;
+</script>

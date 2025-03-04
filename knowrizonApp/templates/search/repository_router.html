@@ -1,0 +1,27 @@
+{% extends 'web/front_base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {% include 'includes/frontend/navigation.html' %}
+    {% include 'includes/frontend/repository_routes.html' %}
+
+    <section class="cta-section section-padding section-bg">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-5 col-12 ms-auto">
+                    <h2 class="mb-0">Make an impact. <br> Become library assistant.</h2>
+                </div>
+                <div class="col-lg-5 col-12">
+                    <a href="#" class="me-4"> >>>> </a>
+                    <a href="#section_4" class="custom-btn btn smoothscroll">Become a volunteer</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+        {% include 'includes/frontend/footer.html' %}
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="section-title">
+            <h2>Book Store</h2>
+        </div>
+    </div>
+
+    {% for book in books %}
+    <div class="col-4 col-sm-6 col-md-4 col-lg-2">
+        <article class="article">
+            <div class="article-header">
+                <div class="article-image" style="background-image: url('{{ MEDIA_URL }}{{ book.book_cover_image }}');"></div>
+                <div class="article-title">
+                    <h2><a href="">{{ book.book_title }}</a></h2>
+                </div>
+            </div>
+            <div class="article-details">
+                <div class="article-meta">
+                    <ul class="no-bullets ">
+                        <li class="no-bullets "><i class=" fas fa-user"></i> Author: {{ book.book_author }}</li>
+                        <li><i class="fas fa-calendar-alt"></i> Year Published: {{ book.book_year }}</li>
+                        <li><i class="fas fa-tags"></i> Genre: {{ book.book_genre }}</li>
+                        <li><i class="fas fa-dollar-sign"></i> Price: NG {{ book.book_price }}</li>
+                    </ul>
+                </div>
+                <p>{{ book.description|truncatechars:100 }}</p>
+                <div class="article-cta d-flex justify-content-between">
+                    <a href="" class="btn btn-primary">View Details</a>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="row mt-4">
+    <div class="col-12 d-flex justify-content-center">
+        {% if books.has_other_pages %}
+            <nav>
+                <ul class="pagination">
+                    {% if books.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ books.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ books.number }}</span></li>
+                    {% if books.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ books.next_page_number }}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ books.paginator.num_pages }}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Customer Reviews -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="section-title">
+            <h2>Customer Reviews</h2>
+        </div>
+    </div>
+    {% for review in reviews %}
+    <div class="col-12">
+        <div class="review">
+            <h5>{{ review.user_name }}</h5>
+            <p>{{ review.comment }}</p>
+            <p>Rating: {{ review.rating }} / 5</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>No reviews yet.</p>
+    {% endfor %}
+</div>
+<style>
+    .no-bullets {
+        list-style-type: none;
+        padding: 0;
+    }
+</style>

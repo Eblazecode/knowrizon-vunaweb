@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import journal_detail
 
 urlpatterns = [
     path('', views.index, name='home'),
@@ -58,7 +59,7 @@ urlpatterns = [
     # upload PDF books
     path('upload_pdf_books/', views.PDF_materials_upload, name='upload_pdf_books'),
     # upload video books
-    path('upload_video_books/', views.video_materials_upload, name='upload_video_books'),
+    path('add_databases/', views.add_materials_database, name='add_material_databases'),
     # upload audio books
     path('upload_audio_books/', views.audio_materials_upload, name='upload_audio_books'),
     # upload image books
@@ -89,6 +90,8 @@ urlpatterns = [
     # STAFF pasword update
     path('staff_password_update/', views.staff_update_password, name='staff_password_update'),
     path('staff_dashboard/', views.staff_dashboard, name='staff_dashboard'),
+    path('create_staff_profile/', views.create_staff_pub_profile, name='create_staff_profile'),
+    path('find_staff_profile/', views.find_staff, name='find_staff_profile'),
 
     # RESEARCHER SECTION OF THE APP
 
@@ -100,9 +103,45 @@ urlpatterns = [
     path('upload_research_materials/', views.research_materials_upload, name='upload_research_materials'),
     # RESEARCH REPOSITORY
     path('research_repository/', views.research_repository, name='research_repository'),
-    path('research_material_view', views.view_research_materials, name='research_material_view')
+    path('research_material_view', views.view_research_materials, name='research_material_view'),
+    path('open_databases',views.view_open_database, name='open_databases'),
 
 
+    # BOOK STORE SECTION
+    path('book_store/', views.book_store_view, name='book_store'),
+
+    path('book_store_upload/', views.bookstore_upload_books, name='book_store_upload'),
+
+    # physcial library section
+    path('physical_library/register_material', views.physical_library_register_materilas, name='physical_library_register_material'),\
+
+    # library search section
+    path('all_resources/', views.library_search, name='search_index'),
+
+    # open access library
+    path("search-open-access/", views.search_open_access, name="search_open_access"),
+    path("repository_routes/", views.repository_router, name="repository_routes"),
+    path("VUA_repository/", views.vau_repository, name="vua_repository"),
+    path("journal/<int:journal_material_id>/",views.journal_detail, name="journal_detail"),
+
+    # google scholar search
+    path("google_scholar_search/", views.google_scholar_search, name="google_scholar_search"),
+    path("google_scholar_results/", views.search_google_scholar_result, name="google_scholar_results"),
+
+    # Arxiv search
+    path("arxiv_search/", views.search_arxiv, name="arxiv_search"),
+    path("arxiv_results/", views.search_arxiv_result, name="arxiv_results"),
+    path("elsevier_search/", views.elsevier_search, name="elsevier_search"),
+
+    path("books_public/", views.books_public, name="books_public"),
+    path("books_private", views.books_private, name="books_private"),
+    path("books_shop", views.book_shop, name="books_shop"),
+
+    # AI FEATURES
+
+    path("ai_features/", views.vunaweb_chatbot, name="vunaweb_chatbot"),
+    path("library-chatbot/", views.library_chatbot, name="library_chatbot"),
+    path("open-source-quotes/", views.open_source_quotes, name="open_source_quotes"),
 
 
 ]

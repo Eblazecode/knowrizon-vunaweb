@@ -2,6 +2,9 @@ import json
 import logging
 import uuid
 from datetime import datetime
+
+from django.conf.locale import ka as requests
+from django.db.models import Q
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.shortcuts import render
@@ -16,11 +19,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.functions import datetime
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from googleapiclient.http import MediaIoBaseDownload
+from openai import OpenAIError
 
 from .forms import BulkStudentUploadForm, BulkStaffUploadForm
-from .models import Admin, content_managers, researchers, PDF_materials, Journal_materials
+from .models import Admin, content_managers, researchers, PDF_materials, Journal_materials, open_access_databases, \
+    physical_library_materials, staff_public_profile
 from .models import academic_staff  # Ensure you have the 'students' model imported
 
 logger = logging.getLogger(__name__)
@@ -501,6 +506,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import login as auth_login
 
 
+@csrf_protect
 def student_login(request):
     if request.method == 'POST':
         matric_no = request.POST.get('mat_no')
@@ -542,8 +548,8 @@ def student_login(request):
 
             messages.success(request, 'Login successful.')
             logger.info('Login successful for matric_no: %s', matric_no)
-            return render(request, 'users/students/students_dashboard.html',
-                          {'student_name': student_name, 'student_matric_no': student_matric_no})
+            return redirect("student_dashboard")
+
         # If password is incorrect
         messages.error(request, 'Invalid username or password.')
         logger.error('Invalid password for matric_no: %s', matric_no)
@@ -633,14 +639,72 @@ def students_password_update(request):
 
 
 # USERS DASHBOARD
+from django.shortcuts import render
+from django.views.decorators.cache import never_cache
+from django.http import HttpResponseRedirect
+
+
+# PREVENT CACHING
+def prevent_caching_students(request):
+    if not request.session.get("student_name"):  # Check if the user is logged in
+        return HttpResponseRedirect("/student_login/")  # Redirect to login if session is empty
+
+    student_name = request.session.get("student_name", "Guest")
+    student_matric_no = request.session.get("student_matric_no", "")
+
+    response = render(request, "users/students/students_dashboard.html", {
+        "student_name": student_name,
+        "student_matric_no": student_matric_no
+    })
+
+    # Prevent caching
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
+    return response
+
+
+@never_cache
 def student_dashboard(request):
-    return render(request, 'users/students/students_dashboard.html')
+    if not request.session.get("student_name"):  # Check if the user is logged in
+        return HttpResponseRedirect("/student_login/")  # Redirect to login if session is empty
+
+    student_name = request.session.get("student_name", "Guest")
+    student_matric_no = request.session.get("student_matric_no", "")
+
+    response = render(request, "users/students/students_dashboard.html", {
+        "student_name": student_name,
+        "student_matric_no": student_matric_no
+    })
+
+    # Prevent caching
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
+    return response
 
 
 # STUDENT LOGOUT
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from django.http import HttpResponse
+
+
 def student_logout(request):
-    logout(request)
-    return render(request, 'web/login_router.html')
+    request.session.flush()  # Clears session data
+    logout(request)  # Logs out the user
+
+    response = redirect("student_login")  # Redirects to login page
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'  # Prevents storing cache
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
+    return response
 
 
 # book category selector for departments book
@@ -837,6 +901,22 @@ def process_selection(request):
 
 # BOOK CATEGORY ; STUDENT SECTION
 def book_category(request):
+    if not request.session.get("student_name"):  # Check if the user is logged in
+        return HttpResponseRedirect("/student_login/")  # Redirect to login if session is empty
+
+    student_name = request.session.get("student_name", "Guest")
+    student_matric_no = request.session.get("student_matric_no", "")
+
+    response = render(request, "users/students/students_dashboard.html", {
+        "student_name": student_name,
+        "student_matric_no": student_matric_no
+    })
+
+    # Prevent caching
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
     return render(request, 'books/book_category.html')
 
 
@@ -846,20 +926,63 @@ def upload_materials(request):
 
 
 # library material catalogue
-def video_materials_upload(request):
-    return render(request, 'books/video_materials.html')
+def add_materials_database(request):
+    if request.method == 'POST':
+        # Handle DB file upload logic
+        database_title = request.POST.get('database_title')
+        database_description = request.POST.get('database_description')
+        database_genre = request.POST.get('database_focus')
+        database_cover_image = request.FILES.get('database_cover_image')
+        database_URL = request.POST.get('database_link')
+        database_subscription = request.POST.get('database_subscription')
+
+        # Generate a unique BOOK ID NUMBER
+        db_id = uuid.uuid4().hex[:6].upper()
+        book_id = f"VUNAWEB-{db_id}"
+
+        # Validate the form fields
+        if not all([database_title, database_description, database_genre, database_cover_image, database_URL,
+                    database_subscription, ]):
+            messages.error(request, 'All fields are required')
+            return render(request, 'books/add_mat_databases.html')
+
+        # Determine the file extensions
+        cover_extension = os.path.splitext(database_cover_image.name)[1]  # Get cover image extension
+
+        # Define paths for saving files
+        cover_file_name = f"{book_id}{cover_extension}"
+        cover_image_path = os.path.join(settings.MEDIA_ROOT, 'materials/database/cover', cover_file_name)
+
+        # Ensure directories exist
+        os.makedirs(os.path.dirname(cover_image_path), exist_ok=True)
+
+        # Save the cover image to disk
+        with open(cover_image_path, 'wb') as f:
+            for chunk in database_cover_image.chunks():
+                f.write(chunk)
+
+        # Save the database details to the database
+        database_entry = open_access_databases.objects.create(
+            database_title=database_title,
+            database_description=database_description,
+            database_genre=database_genre,
+            database_cover_image=f"materials/database/cover/{cover_file_name}",  # Store relative path
+            database_URL=database_URL,
+            database_subscription=database_subscription,
+
+        )
+
+        messages.success(request, 'Database entry uploaded successfully')
+        return render(request, 'books/add_mat_databases.html')
+
+    return render(request, 'books/add_mat_databases.html')
 
 
 def audio_materials_upload(request):
     return render(request, 'books/audio_materials.html')
 
 
-import os
 import uuid
-from django.conf import settings
-from django.shortcuts import render
-from django.contrib import messages
-from .models import PDF_materials  # Ensure your model is imported
 
 
 def PDF_materials_upload(request):
@@ -1142,27 +1265,6 @@ def view_protected_comp_sci_materials(request):
     return render(request, 'books/protected_comp_sci_materials.html')
 
 
-import os
-import requests
-from django.conf import settings
-from .models import PDF_materials
-
-import os
-from django.conf import settings
-from django.shortcuts import render
-from .models import PDF_materials  # Ensure your model is imported
-
-import os
-from django.conf import settings
-from django.shortcuts import render
-from .models import PDF_materials  # Ensure the model is imported
-
-import os
-from django.conf import settings
-from django.shortcuts import render
-from .models import PDF_materials  # Ensure the model is imported
-
-
 def view_protected_comp_sci_books(request, category):
     """Fetch books from local storage based on category."""
     books_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf')
@@ -1329,6 +1431,7 @@ def staff_login(request):
 
             messages.success(request, 'Login successful.')
             logger.info('Login successful for email: %s', email)
+
             return redirect('staff_dashboard')  # Redirect to the dashboard
 
         # Invalid credentials
@@ -1406,7 +1509,8 @@ def staff_update_password(request):
 
 
 def staff_dashboard(request):
-    return render(request, 'users/staff/staff_dashboard.html')
+    staff = academic_staff.objects.all()
+    return render(request, 'users/staff/staff_dashboard.html', {'academic_staff': staff})
 
 
 # researcher section of the library management system
@@ -1453,3 +1557,629 @@ def view_research_materials(request):
     return render(request, 'books/research_material_view.html', {'research_materials': research_materials})
 
 
+# open databas
+
+
+from django.conf import settings
+
+
+def view_open_database(request):
+    try:
+        databases = open_access_databases.objects.all()
+        return render(request, 'books/view_open_access_databases.html', {
+            'databases': databases,
+            'MEDIA_URL': settings.MEDIA_URL  # Add this
+        })
+    except Exception as e:
+        return render(request, 'books/view_open_access_databases.html', {
+            'databases': [],
+            'MEDIA_URL': settings.MEDIA_URL
+        })
+
+
+def staff_view_research_collaboration(request):
+    staff = academic_staff.objects.all()
+    return render(request, 'staff_dashboard.html', {'academic_staff': staff})
+
+
+# book store ecommerce section of the library management system for students and staff
+
+#book store upload section by admin for students and staff
+# Ensure the book_store model is imported at the top of the file
+from .models import book_store
+
+
+# Correct the model usage in the view function
+def bookstore_upload_books(request):
+    if request.method == 'POST':
+        # Handle book file upload logic
+        book_title = request.POST.get('book_title')
+        book_author = request.POST.get('book_author')
+        book_publisher = request.POST.get('book_publisher')
+        book_year = request.POST.get('book_pub_date')
+        book_genre = request.POST.get('book_category')
+        book_department = request.POST.get('book_department')
+        book_description = request.POST.get('book_description')
+        book_ISBN = request.POST.get('book_ISBN')
+        book_price = request.POST.get('book_price')
+        book_quantity = request.POST.get('book_quantity')
+        book_cover_image = request.FILES.get('book_cover_image')
+
+        # Generate a unique BOOK ID NUMBER
+        book_id = uuid.uuid4().hex[:6].upper()
+        book_ref_id = f"VUNAWEB-{book_id}"
+
+        # Validate the form fields
+        if not all([book_title, book_author, book_publisher, book_year, book_genre, book_description, book_ISBN,
+                    book_cover_image, book_department, book_price, book_quantity]):
+            messages.error(request, 'All fields are required')
+            return render(request, 'books/bookstore/upload_books.html')
+
+        # Determine the file extensions
+        cover_extension = os.path.splitext(book_cover_image.name)[1]  # Get cover image extension
+
+        # Define paths for saving files
+        book_cover_name = f"{book_ref_id}{cover_extension}"
+        book_cover_image_path = os.path.join(settings.MEDIA_ROOT, 'materials/bookstore/cover', book_cover_name)
+
+        # Ensure directories exist
+        os.makedirs(os.path.dirname(book_cover_image_path), exist_ok=True)
+
+        # Save the book cover image to disk
+        with open(book_cover_image_path, 'wb') as f:
+            for chunk in book_cover_image.chunks():
+                f.write(chunk)
+
+        # Save the book details to the database
+        book = book_store.objects.create(
+            book_title=book_title,
+            book_author=book_author,
+            book_publisher=book_publisher,
+            book_year=book_year,
+            book_genre=book_genre,
+            book_description=book_description,
+            book_department=book_department,
+            book_ISBN=book_ISBN,
+            book_price=book_price,
+            book_quantity=book_quantity,
+            book_cover_image=f"materials/bookstore/cover/{book_cover_name}",  # Store relative path
+        )
+
+        messages.success(request, 'Book uploaded successfully')
+
+    return render(request, 'books/bookstore/upload_books.html')
+
+
+# book store view section for students and staff
+def book_store_view(request):
+    books = book_store.objects.all()
+    return render(request, 'books/bookstore/bookstorelanding.html', {'books': books, 'MEDIA_URL': settings.MEDIA_URL})
+
+
+# physical library section of the library management system
+def physical_library_register_materilas(request):
+    if request.method == 'POST':
+        # Handle book file upload logic
+        book_title = request.POST.get('book_title')
+        book_author = request.POST.get('book_author')
+        book_publisher = request.POST.get('book_publisher')
+        book_year = request.POST.get('book_pub_date')
+        book_genre = request.POST.get('material_category')
+        book_type = request.POST.get('book_category')
+        book_department = request.POST.get('book_department')
+        book_description = request.POST.get('book_description')
+        book_ISBN = request.POST.get('book_ISBN')
+        book_quantity = request.POST.get('book_quantity')
+
+        # Check for all required fields
+        if not all([book_title, book_author, book_publisher, book_year, book_genre, book_department, book_description,
+                    book_ISBN, book_type, book_quantity]):
+            messages.error(request, 'All fields are required.')
+            return render(request, 'books/physicallibrary/register_materials.html')
+
+        # Generate a unique BOOK ID NUMBER
+        book_id = uuid.uuid4().hex[:6].upper()
+        book_ref_id = f"VUNAWEB-{book_id}"
+
+        # Save the book details to the database
+        book = physical_library_materials.objects.create(
+            physical_library_material_title=book_title,
+            physical_library_material_author=book_author,
+            physical_library_material_publisher=book_publisher,
+            physical_library_material_year=book_year,
+            physical_library_material_genre=book_genre,
+            physical_library_material_type=book_type,
+            physical_library_material_description=book_description,
+            physical_library_material_ISBN=book_ISBN,
+            physical_library_material_department=book_department,
+            physical_library_material_quantity=book_quantity,
+            physical_library_material_ref_id=book_ref_id,
+        )
+
+        messages.success(request, 'Book uploaded successfully')
+
+    return render(request, 'books/physicallibrary/register_materials.html')
+
+
+# book borrowing section of the library management system`
+def book_borrowing(request):
+    # student and staff details for borrowing books
+    # collect staff ID or student ID and fetch details for fill the borrowers form
+
+    person_details = academic_staff.objects.all()
+    return render(request, 'books/book_borrowing.html', {'person_details': person_details})
+    return render(request, 'books/book_borrowing.html')
+
+
+# CREATE STAFF PROFILE
+#CRSF
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from .forms import AcademicStaffForm  # Ensure you have a form for academic staff
+
+
+def find_staff(request):
+    if request.method == 'POST':
+        staff_id = request.POST.get('staff_id')
+        staff = academic_staff.objects.filter(
+            Q(academic_staff_email=staff_id) | Q(academic_staff_identity=staff_id)).first()
+
+        if not staff:
+            messages.error(request, 'Staff not found')
+            return render(request, 'includes/admin_add_users/find_staff_profile.html')
+
+        # Fetch staff details from the database
+        form = AcademicStaffForm(instance=staff)
+        messages.success(request, 'Staff found')
+        return render(request, 'includes/admin_add_users/create_staff_profile.html', {'form': form, 'staff': staff})
+
+    return render(request, 'includes/admin_add_users/find_staff_profile.html')
+
+
+import os
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from .models import academic_staff, staff_public_profile
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.conf import settings
+from .models import academic_staff, staff_public_profile
+import os
+
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
+
+def create_staff_pub_profile(request):
+    staff_identity = request.GET.get('staff_identity') or request.POST.get('staff_identity')
+
+    if not staff_identity:
+        messages.error(request, "Staff identity is required.")
+        return render(request, 'includes/admin_add_users/create_staff_profile.html')
+
+    try:
+        existing_staff = academic_staff.objects.get(academic_staff_identity=staff_identity)
+    except academic_staff.DoesNotExist:
+        messages.error(request, "No academic staff matches the given identity.")
+        return render(request, 'includes/admin_add_users/create_staff_profile.html')
+
+    if staff_public_profile.objects.filter(staff_ID=existing_staff.academic_staff_identity).exists():
+        messages.error(request, "A public profile for this staff already exists.")
+        return render(request, 'includes/admin_add_users/create_staff_profile.html')
+
+    if request.method == 'POST':
+        staff_department = request.POST.get('staff_department', '').strip()
+        staff_position = request.POST.get('staff_position', '').strip()
+        staff_bio = request.POST.get('staff_bio', '').strip()
+        staff_interest_tags = request.POST.get('staff_interests', '').strip()
+        staff_publications = request.POST.get('staff_publications', '').strip()
+        staff_category = request.POST.get('staff_category', '').strip()
+        staff_hindex = request.POST.get('staff_hindex', '0').strip()
+        staff_profile_pic = request.FILES.get('staff_profile_pic')
+
+        if not all(
+                [staff_department, staff_position, staff_bio, staff_interest_tags, staff_publications, staff_category]):
+            messages.error(request, 'All fields are required.')
+            return render(request, 'includes/admin_add_users/create_staff_profile.html', {'staff': existing_staff})
+
+        if staff_profile_pic:
+            # Save image using Django's storage
+            file_name = f"{existing_staff.academic_staff_fname}_{existing_staff.academic_staff_lname}{os.path.splitext(staff_profile_pic.name)[1]}"
+            file_path = default_storage.save(f"materials/staff/profile/{file_name}",
+                                             ContentFile(staff_profile_pic.read()))
+        else:
+            file_path = None
+            messages.error(request, 'Profile picture is required.')
+            return render(request, 'includes/admin_add_users/create_staff_profile.html', {'staff': existing_staff})
+
+        # Save staff profile
+        staff_public_profile.objects.create(
+            staff_ID=existing_staff.academic_staff_identity,
+            staff_fname=existing_staff.academic_staff_fname,
+            staff_lname=existing_staff.academic_staff_lname,
+            staff_email=existing_staff.academic_staff_email,
+            staff_dept=existing_staff.academic_staff_dept,
+            staff_position=existing_staff.academic_staff_position,
+            staff_bio=staff_bio,
+            staff_interest=staff_interest_tags,
+            staff_publication=staff_publications,
+            staff_category=staff_category,
+            staff_hindex=int(staff_hindex) if staff_hindex.isdigit() else 0,
+            staff_profile_picture=file_path
+        )
+
+        messages.success(request, 'New staff public profile created successfully!')
+        return render(request, 'includes/admin_add_users/create_staff_profile.html', {'staff': existing_staff})
+
+    return render(request, 'includes/admin_add_users/create_staff_profile.html', {'staff': existing_staff})
+
+
+# LIBRARY SEARCH FUNCTION FOR ALL USERS OF THE LIBRARY MANAGEMENT SYSTEM
+def library_search(request):
+    return render(request, 'search/search_index.html')
+
+
+# OPEN ACCESS DATABASE SEARCH FUNCTION
+from .models import OpenAccessResource
+from django.utils.timezone import now
+import requests
+from django.shortcuts import render
+
+# Open Access APIs
+CORE_API_URL = "https://api.core.ac.uk/v3/search/works"
+CORE_API_KEY = "BrG7pDuikKSHzWlMRAIPdmC1XOJyjoLb"  # CORE API key
+
+DOAJ_API_URL = "https://doaj.org/api/v2/search/articles"
+DOAJ_API_KEY = "faea2b3b9d1b474e8041191cbfb279e4"  # DOAJ may not require an API key
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+import requests
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+import requests
+
+
+def search_open_access(request):
+    query = request.GET.get("query", "")
+
+    results = []
+
+    # Fetch from CORE API
+    core_params = {"q": query, "apiKey": CORE_API_KEY, "page": 1, "pageSize": 20}
+    core_response = requests.get(CORE_API_URL, params=core_params)
+
+    if core_response.status_code == 200:
+        core_data = core_response.json()
+        for item in core_data.get("results", []):
+            results.append({
+                "title": item.get("title", "No Title"),
+                "link": item.get("link") or (
+                    item.get("urls")[0] if isinstance(item.get("urls"), list) and item.get("urls") else "#"),
+                "download_link": item.get("download_url", "#"),
+                "source": item.get("publisher", {}).get("name") if isinstance(item.get("publisher"),
+                                                                              dict) else item.get("publisher", "CORE"),
+                "abstract": item.get("abstract", "No abstract available."),
+                "year": item.get("year", "Unknown Year"),
+                "authors": [author.get("name", "Unknown Author") if isinstance(author, dict) else author for author in
+                            item.get("authors", [])],
+            })
+
+    # Paginate results (20 per page)
+    paginator = Paginator(results, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "search/core_search_results.html", {"results": page_obj, "query": query})
+
+
+def doaj_search(request):
+    query = request.GET.get("query", "")
+
+    results = []
+
+    # Fetch from DOAJ API
+    doaj_params = {"query": query}
+    doaj_response = requests.get(DOAJ_API_URL, params=doaj_params)
+
+    if doaj_response.status_code == 200:
+        doaj_data = doaj_response.json()
+        for article in doaj_data.get("results", []):
+            bibjson = article.get("bibjson", {})
+            results.append({
+                "title": bibjson.get("title", "No Title"),
+                "link": bibjson.get("link")[0]["url"] if isinstance(bibjson.get("link"), list) and bibjson.get(
+                    "link") else "#",
+                "source": "DOAJ",
+                "abstract": bibjson.get("abstract", "No abstract available."),
+                "year": bibjson.get("year", "Unknown Year"),
+                "authors": [author.get("name", "Unknown Author") if isinstance(author, dict) else author for author in
+                            bibjson.get("author", [])],
+            })
+
+    # Paginate results (20 per page)
+    paginator = Paginator(results, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "search/doaj_search_results.html", {"results": page_obj, "query": query})
+
+
+import requests
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
+# Define Elsevier API URL and API Key
+ELSEVIER_API_URL = "https://api.elsevier.com/content/search/sciencedirect"
+ELSEVIER_API_KEY = "9daca488bc97653d4d9eacb82fd185d6"  #  API key
+
+
+def elsevier_search(request):
+    query = request.GET.get("query", "").strip()
+
+    results = []
+
+    if query:
+        # Prepare API request
+        headers = {"X-ELS-APIKey": ELSEVIER_API_KEY}
+        params = {"query": query, "count": 20}  # Adjust count as needed
+
+        elsevier_response = requests.get(ELSEVIER_API_URL, headers=headers, params=params)
+
+        if elsevier_response.status_code == 200:
+            elsevier_data = elsevier_response.json()
+
+            for article in elsevier_data.get("search-results", {}).get("entry", []):
+                results.append({
+                    "title": article.get("dc:title", "No Title"),
+                    "link": article.get("link", [{}])[0].get("@href", "#"),
+                    "source": "Elsevier",
+                    "abstract": article.get("dc:description", "No abstract available."),
+                    "year": article.get("prism:coverDate", "Unknown Year")[:4],  # Extract year from date
+                    "authors": [author.get("$", "Unknown Author") for author in article.get("author", [])],
+                })
+
+    # Paginate results (20 per page)
+    paginator = Paginator(results, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "search/elsevier_search_results.html", {"results": page_obj, "query": query})
+
+
+def repository_router(request):
+    return render(request, 'search/repository_router.html')
+
+
+def vau_repository(request):
+    # fetch all records from the journal materials database
+    research_materials = Journal_materials.objects.all()
+    return render(request, 'search/vua_repository.html', {'research_materials': research_materials})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Journal_materials
+
+
+def journal_detail(request, journal_material_id):
+    material = get_object_or_404(Journal_materials, journal_material_id=journal_material_id)
+    return render(request, "search/vua_repo_detail.html", {"journal": material})
+
+
+# GOOGLE SCHOLAR API
+def google_scholar_search(request):
+    return render(request, 'search/google_scholar_search.html')
+
+
+from django.shortcuts import render
+from scholarly import scholarly
+
+
+def search_google_scholar_result(request):
+    query = request.GET.get("query", "")
+    results = []
+
+    if query:
+        search_query = scholarly.search_pubs(query)
+        for result in search_query:
+            bib = result.get("bib", {})
+            results.append({
+                "title": bib.get("title", "No Title"),
+                "link": result.get("pub_url", "#"),
+                "abstract": bib.get("abstract", "No abstract available."),
+                "year": bib.get("pub_year", "Unknown Year"),
+                "authors": ", ".join(bib.get("author", ["Unknown Author"]))
+            })
+
+    return render(request, "search/google_scholar_results.html", {"results": results, "query": query})
+
+
+import requests
+import xml.etree.ElementTree as ET
+from django.shortcuts import render
+
+ARXIV_API_URL = "http://export.arxiv.org/api/query"
+
+
+def search_arxiv(request):
+    return render(request, "search/arxiv_search.html", )
+
+
+import requests
+import xml.etree.ElementTree as ET
+from django.shortcuts import render
+
+ARXIV_API_URL = "http://export.arxiv.org/api/query"
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+import requests
+import xml.etree.ElementTree as ET
+
+ARXIV_API_URL = "http://export.arxiv.org/api/query"
+
+
+def search_arxiv_result(request):
+    query = request.GET.get("query", "")
+    results_list = []
+
+    if query:
+        params = {"search_query": f"all:{query}", "start": 0, "max_results": 100}
+        response = requests.get(ARXIV_API_URL, params=params)
+
+        if response.status_code == 200:
+            root = ET.fromstring(response.text)
+
+            for entry in root.findall("{http://www.w3.org/2005/Atom}entry"):
+                arxiv_id = entry.find("{http://www.w3.org/2005/Atom}id").text.split("/")[-1]
+
+                results_list.append({
+                    "title": entry.find("{http://www.w3.org/2005/Atom}title").text,
+                    "link": entry.find("{http://www.w3.org/2005/Atom}id").text,
+                    "abstract": entry.find("{http://www.w3.org/2005/Atom}summary").text,
+                    "source": "arXiv",
+                    "year": entry.find("{http://www.w3.org/2005/Atom}published").text[:4],
+                    "authors": [author.find("{http://www.w3.org/2005/Atom}name").text for author in
+                                entry.findall("{http://www.w3.org/2005/Atom}author")],
+                    "download_link": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
+                })
+
+    # Apply pagination
+    paginator = Paginator(results_list, 10)  # Show 10 results per page
+    page = request.GET.get("page")
+
+    try:
+        results = paginator.get_page(page)
+    except:
+        results = paginator.get_page(1)  # If an invalid page is requested, return page 1
+
+    return render(request, "search/arxiv_results.html", {"results": results, "query": query})
+
+
+from django import template
+
+register = template.Library()
+
+
+@register.filter
+def apa_citation(result):
+    """
+    Generates an APA citation for a journal article.
+    Expected `result` format:
+    {
+        "title": "Paper Title",
+        "authors": ["John Doe", "Jane Smith"],
+        "year": "2024",
+        "link": "https://example.com"
+    }
+    """
+    authors = result.get("authors", [])
+    year = result.get("year", "n.d.")
+    title = result.get("title", "No Title")
+    link = result.get("link", "#")
+
+    # Format authors: "Doe, J., & Smith, J."
+    formatted_authors = ""
+    if authors:
+        formatted_authors = ", ".join(
+            [f"{a.split()[-1]}, {a.split()[0][0]}." for a in authors if len(a.split()) > 1]
+        )
+        if len(authors) > 1:
+            formatted_authors = formatted_authors.replace(", " + formatted_authors.split(", ")[-1],
+                                                          " & " + formatted_authors.split(", ")[-1])
+
+    # Construct citation
+    citation = f"{formatted_authors} ({year}). {title}. Retrieved from {link}"
+
+    return citation
+
+
+# books in search
+def books_public(request):
+    return render(request, 'search/books_public.html')
+
+
+def books_private(request):
+    return render(request, 'search/books_protected.html')
+
+
+def book_shop(request):
+    books = book_store.objects.all()
+    return render(request, 'search/book_shop.html', {'books': books, 'MEDIA_URL': settings.MEDIA_URL})
+
+
+# AI FEATURES OF THE LIBRARY MANAGEMENT SYSTEM
+# VUNAWEB CHATBOT
+
+def vunaweb_chatbot(request):
+    return render(request, 'search/vunaweb_chatbot.html')
+
+
+import openai
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+import os
+
+# Use OpenRouter API key
+openai.api_key = os.getenv("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")
+openai.api_base = "https://openrouter.ai/api/v1"
+
+# Enable Django logging
+logger = logging.getLogger(__name__)
+
+import json
+import openai
+from django.http import JsonResponse
+from openai import OpenAI
+
+
+@csrf_exempt
+def library_chatbot(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user_message = data.get("message", "")
+
+        client = OpenAI(
+            api_key="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")  # Add your API key
+
+        try:
+            response = client.chat.completions.create(
+                model="google/gemini-2",
+                messages=[
+                    {"role": "system", "content": "You are an AI librarian for Knowrizon eLibrary."},
+                    {"role": "user", "content": user_message}
+                ]
+            )
+            bot_reply = response.choices[0].message.content
+            return JsonResponse({"reply": bot_reply})
+        except Exception as e:
+            return JsonResponse({"reply": "Sorry, an error occurred while processing your request."}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+# QUOTE GENERATOR API
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+def open_source_quotes(request):
+    if request.method == "GET":
+        # Fetch random education-related quote from Quotable API
+
+        response = requests.get("https://api.quotable.io/random?tags=education", verify=False)
+
+        if response.status_code == 200:
+            data = response.json()
+            return JsonResponse({"quote": data["content"], "author": data["author"]})
+        else:
+            return JsonResponse({"error": "Could not fetch quote"}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

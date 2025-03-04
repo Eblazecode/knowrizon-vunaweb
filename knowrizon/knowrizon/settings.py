@@ -128,7 +128,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+OPENAPI_API_KEY = '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'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 import os

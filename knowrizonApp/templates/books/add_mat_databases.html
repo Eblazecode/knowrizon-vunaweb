@@ -13,64 +13,85 @@
       <li class="media">
         <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
         <div class="media-body">
-          <h1 class="mt-0 mb-1">Upload video content  </h1>
-          <p class="pt-3">Description: Digital versions of traditional books that can be read on devices like tablets, smartphones, or eReaders.
-Use Case: Useful for extended reading on various topics, ranging from academic
-            textbooks to fiction and non-fiction works.</p>
+          <h1 class="mt-0 mb-1">Add open access database  </h1>
+        <p class="pt-3">Description: Open access book databases provide free digital versions of books that can be accessed on various devices such as tablets, smartphones, or eReaders.
+Use Case: Ideal for extensive reading on a wide range of subjects, including academic textbooks, fiction, and non-fiction works.</p>
 
         </div>
       </li>
     </ul>
 
-
-          <div class="col-sm-12  col-md-10  col-lg-10 col-xl-10 ">
+</div>
+  </div>
+          <div class="col-sm-12  col-md-10  col-lg-6 col-xl-8 ">
 
             <div class="card card-primary">
               <div class="card-header">
+                  <!-- error message -->
+                 {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
               </div>
 
               <div class="card-body">
-             <form method="POST" id="video_upload_form" action="/upload_video/" enctype="multipart/form-data">
+             <form method="POST" id="video_upload_form" action="/add_databases/" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group">
-        <label for="video_title">Video Title</label>
-        <input id="video_title" type="text" class="form-control" name="video_title" required>
+        <label for="title"> Title</label>
+        <input id="title" type="text" class="form-control" name="database_title" required>
     </div>
     <div class="form-group">
-        <label for="video_description">Description</label>
-        <textarea id="video_description" class="form-control" name="video_description" rows="3" required></textarea>
+        <label for="database_description">Description and features </label>
+        <textarea id="video_description" class="form-control" name="database_description" rows="3" required></textarea>
     </div>
+                   <div class="form-group">
+        <label for="video_title"> Link/URL</label>
+        <input id="video_title" type="text" class="form-control" name="database_link" required>
+    </div>
+
     <div class="form-group">
-        <label for="video_file">Upload Video</label>
-        <input id="video_file" type="file" class="form-control" name="video_file" accept="video/*" required>
+        <label for="video_file">database image or logo</label>
+        <input id="video_file" type="file" class="form-control" name="database_cover_image" required>
     </div>
+       <div class="form-group">
+    <label for="pdf_faculty">focus </label>
+    <select id="pdf_faculty" class="form-control" name="database_focus" required>
+        <option value="Natural and Applied Sciences">Natural and Applied Sciences</option>
+        <option value="Social Sciences">Social Sciences</option>
+        <option value="Humanities">Humanities</option>
+        <option value="Management Sciences">Management Sciences</option>
+        <option value="Education">Education</option>
+        <option value="Law">Law</option>
+        <option value="medicine">medicine </option>
+        <option value="engineering">Engineering </option>
+        <option value="multi-disciplinary">multi-disciplinary</option>
+
+
+    </select>
+           <div class="form-group">
+    <label for="subscription">subscription mode  </label>
+    <select id="subscription" class="form-control" name="database_subscription" required>
+        <option value="paid">paid</option>
+        <option value="free">free </option>
+
+    </select>
+</div>
+
     <div class="form-group">
-        <label for="video_tags">Tags</label>
-        <select id="video_tags" class="form-control h-75" name="video_tags" multiple required>
-            <option value="Science">Science</option>
-            <option value="Technology">Technology</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Education">Education</option>
-            <option value="Business">Business</option>
-            <option value="Arts">Arts</option>
-            <option value="Humanities">Humanities</option>
-        </select>
+       <button type="submit" class="btn btn-primary btn btn-md">Upload </button>
     </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Upload Video</button>
-    </div>
-</form>
+       </div>
+             </form>
               </div>
-              <div class="mb-4 text-muted text-center">
-                ADD MULTIPLE STAFF ? <a href="{% url 'upload_students_records' %}">UPLOAD STAFF FILE </a>
-              </div>
+
             </div>
           </div>
-        </div>
 
-</div>
 
 
 

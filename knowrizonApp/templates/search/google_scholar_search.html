@@ -1,0 +1,181 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+{% block title %}search index{% endblock %}
+
+{% block content %}
+      <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Google scholar search Repository </h1>
+                  </div>
+
+
+
+                <div class="card-body">
+                         <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">
+                         This repo provides simple, one-stop searching for books and e-books, videos, articles, digital media, and more.
+
+it  also helps you manage your research. Sign-in in order to:
+<ul>
+    <li>Find (any) resources available to you</li>
+    <li>Renew physical books</li>
+    <li>Create favorite lists</li>
+    <li>Export citations to Refworks and Endnote Web</li>
+    <li>View full search results. (Some databases, only show results when you are signed in.)</li>
+</ul>
+
+.</p>
+                      </div>
+                    </div>
+                    <form method="GET" action="{% url 'google_scholar_results' %}" >
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control h-100" placeholder="Search for everything..." style="height: 600px">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+
+        </div>
+
+      </div>
+
+    <div class="row">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">curated collection  </h5>
+                    <h2 class="mb-3 font-18">28</h2>
+                      <p> </p>
+
+                      <a href="{% url 'research_material_view' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> library collection </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                      <p>   </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo2.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> journal search </h5>
+                    <h2 class="mb-3 font-18">128</h2>
+
+                      <p> </p>
+                      <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo3.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Newspaper</h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                      <p>  </p>
+
+                        <a href="{% url 'upload_research_materials' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo4.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+            <div class="card">
+                     <div class="card-header">
+                          <h1 class="fs-1 ">Ask a Librarian </h1>
+                     </div>
+                        <div class="card-body">
+                            <div class="media">
+                                <img class="mr-3" src="{% static 'assets/img/chatbot.jpeg' %}" width="100px" alt="Generic placeholder image">
+                                <div class="media-body">
+                                    <h5 class="mt-0 text-info">About </h5>
+                                    <p class="mb-0 ">
+                                        The Ask a Librarian chatbot is a virtual assistant that provides answers to frequently
+                                        asked questions about the library and its services. The chatbot is available 24/7 and can help
+                                        you with a wide range of queries, including finding books, accessing online resources, and getting help with research.
+
+                                    </p>
+                                    <a href="" class=" btn btn-success">begin </a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+
+
+
+
+{% endblock %}

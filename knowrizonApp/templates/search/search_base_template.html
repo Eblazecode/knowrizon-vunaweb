@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>{% block title %}Repository Search{% endblock %}</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="{% static 'assets/css/app.min.css' %}">
+ <link rel="stylesheet" href="{% static 'assets/bundles/datatables/datatables.min.css' %}">
+    <link rel="stylesheet"href="{% static 'assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css' %}">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+  <link rel='shortcut icon' type='image/x-icon' href='{% static 'assets/img/logo.png' %}' />
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <!--TOP NAVIGATION -->
+      {% block top_navigation %}
+      {% include 'includes/navigations/repository_search/top_navigation.html' %}
+      {% endblock %}
+      <!-- END TOP NAVIGATION -->
+      <!-- LEFT SIDEBAR -->
+      {% block left_sidebar %}
+      {% include 'includes/navigations/repository_search/left_navigation.html' %}
+      {% endblock %}
+      <!-- END LEFT SIDEBAR -->
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-body">
+            {% block content %}
+            <!-- add content here -->
+            {% endblock %}
+          </div>
+        </section>
+        <!--SETTING BAR -->
+        {% block setting_bar %}
+        {% include 'includes/navigations/repository_search/setting_bar.html' %}
+        {% endblock %}
+        <!-- END SETTING BAR -->
+      </div>
+      <footer class="main-footer">
+        <div class="footer-left">
+          <a href="">VUNAWEB</a>
+        </div>
+        <div class="footer-right">
+        </div>
+      </footer>
+    </div>
+  </div>
+  <!-- General JS Scripts -->
+  <script src="{% static 'assets/js/app.min.js' %}"></script>
+    <script src="{% static 'assets/bundles/datatables/datatables.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/dataTables.buttons.min.js'%}"></script>
+
+  <script src="{% static 'assets/bundles/datatables/datatables.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/dataTables.buttons.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/buttons.flash.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/jszip.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/pdfmake.min.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/vfs_fonts.js'%}"></script>
+    <script src="{% static 'assets/bundles/datatables/export-tables/buttons.print.min.js'%}"></script>
+    <script src="{% static 'assets/js/page/datatables.js'%}"></script>
+  <!-- JS Libraries -->
+  <!-- Page Specific JS File -->
+  <!-- Template JS File -->
+  <script src="{% static 'assets/js/scripts.js' %}"></script>
+  <!-- Custom JS File -->
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+</body>
+
+</html>
