@@ -23,9 +23,10 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from googleapiclient.http import MediaIoBaseDownload
 from openai import OpenAIError
 
-from .forms import BulkStudentUploadForm, BulkStaffUploadForm
-from .models import Admin, content_managers, researchers, PDF_materials, Journal_materials, open_access_databases, \
-    physical_library_materials, staff_public_profile
+from .forms import BulkStudentUploadForm, BulkStaffUploadForm, StudentsForm
+from .models import Admin, content_managers, researchers, library_digital_materials, Journal_materials, \
+    open_access_databases, \
+    physical_library_materials, staff_public_profile, staff_book_borrowers, student_book_borrowers
 from .models import academic_staff  # Ensure you have the 'students' model imported
 
 logger = logging.getLogger(__name__)
@@ -72,6 +73,7 @@ def admin_dasahboard(request):
     return render(request, 'admin_dashboard.html')
 
 
+@csrf_protect
 def admin_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -191,7 +193,8 @@ def add_student(request):
                 student_password=generic_password,  # Encrypt if storing
                 student_gender=gender,
                 student_dept=department,
-                student_matric_no=matric_no
+                student_matric_no=matric_no,
+                role='student'
             )
 
             messages.success(request, 'Student registered successfully')
@@ -235,7 +238,8 @@ def bulk_upload_students(request):
                         student_password="password",
                         student_gender=row.get('student_gender', ''),
                         student_dept=row.get('student_dept', ''),  # Corrected field name
-                        student_matric_no=row.get('student_matric_number', '')  # Corrected field name
+                        student_matric_no=row.get('student_matric_number', ''),  # Corrected field name
+                        role='student'
                     )
 
                 # Display success message after processing
@@ -289,7 +293,8 @@ def add_academic_staff(request):
                 academic_staff_position=position,
                 academic_staff_phone=phone,
                 academic_staff_prefix=prefix,
-                academic_staff_gender=gender
+                academic_staff_gender=gender,
+                role='staff'
             )
             messages.success(request, 'Academic staff registered successfully')
             logger.info('Academic staff registered successfully')
@@ -336,6 +341,7 @@ def process_bulk_staff_upload(request):
                         academic_staff_lname=row.get('academic_staff_lname', ''),
                         academic_staff_email=row.get('academic_staff_email', ''),
                         academic_staff_password="password",
+                        role='staff'
                     )
                 messages.success(request, 'Staff uploaded successfully!')
             except Exception as e:
@@ -376,7 +382,8 @@ def add_content_manager(request):
                 content_manager_prefix=prefix,
                 content_manager_password=password_generic,
                 content_manager_dept=department,
-                contet_manager_phone=phone
+                contet_manager_phone=phone,
+                role='library_admin'
             )
             messages.success(request, 'Content manager registered successfully')
             logger.info('Content manager registered successfully')
@@ -414,7 +421,8 @@ def add_researcher(request):
                 researcher_password=password_generic,
                 researcher_dept=department,
                 researcher_phone=phone,
-                researcher_interest=interest
+                researcher_interest=interest,
+                role='researcher'
             )
             messages.success(request, 'Researcher registered successfully')
             logger.info('Researcher registered successfully')
@@ -545,6 +553,7 @@ def student_login(request):
             student_matric_no = student.student_matric_no
             request.session['student_name'] = student_name
             request.session['student_matric_no'] = student_matric_no
+            request.session['user_role'] = student.role  # Store role in session
 
             messages.success(request, 'Login successful.')
             logger.info('Login successful for matric_no: %s', matric_no)
@@ -557,9 +566,6 @@ def student_login(request):
     return render(request, 'users/students/students_login.html')
 
 
-from django.contrib.auth.hashers import make_password
-from django.contrib import messages
-from django.shortcuts import render
 from .models import students  # Ensure you have imported the students model
 import logging
 
@@ -665,25 +671,39 @@ def prevent_caching_students(request):
     return response
 
 
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.cache import never_cache
+import logging
+
+logger = logging.getLogger(__name__)  # Setup logging
+
+
 @never_cache
 def student_dashboard(request):
-    if not request.session.get("student_name"):  # Check if the user is logged in
-        return HttpResponseRedirect("/student_login/")  # Redirect to login if session is empty
+    try:
+        # Check if student is logged in
+        if not request.session.get("student_name"):
+            return HttpResponseRedirect("/student_login/")
 
-    student_name = request.session.get("student_name", "Guest")
-    student_matric_no = request.session.get("student_matric_no", "")
+        # Retrieve session details
+        student_name = request.session["student_name"]
+        student_matric_no = request.session.get("student_matric_no", "")
 
-    response = render(request, "users/students/students_dashboard.html", {
-        "student_name": student_name,
-        "student_matric_no": student_matric_no
-    })
+        # Fetch database list
+        databases = open_access_databases.objects.all()
 
-    # Prevent caching
-    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    response['Pragma'] = 'no-cache'
-    response['Expires'] = '0'
+        return render(request, "users/students/students_dashboard.html", {
+            "student_name": student_name,
+            "student_matric_no": student_matric_no,
+            "databases": databases,
+            "MEDIA_URL": settings.MEDIA_URL,
+        })
 
-    return response
+    except Exception as e:
+        logger.error(f"Error in student_dashboard: {e}")  # Log the error
+        return HttpResponseRedirect("/student_login/")  # Redirect to login if error occurs
 
 
 # STUDENT LOGOUT
@@ -1036,7 +1056,7 @@ def PDF_materials_upload(request):
                 f.write(chunk)
 
         # Save the PDF details to the database
-        pdf = PDF_materials.objects.create(
+        pdf = library_digital_materials.objects.create(
             pdf_material_title=pdf_title,
             pdf_material_ref_id=book_id,
             pdf_material_author=pdf_author,
@@ -1275,7 +1295,7 @@ def view_protected_comp_sci_books(request, category):
     books = []
 
     # Fetch PDF records from the database
-    pdfs = PDF_materials.objects.filter(pdf_material_category=category).values(
+    pdfs = library_digital_materials.objects.filter(pdf_material_category=category).values(
         'pdf_material_title', 'pdf_material_file', 'pdf_material_cover_image',
         'pdf_material_author', 'pdf_upload_date', 'pdf_material_tags',
         'pdf_material_description', 'pdf_material_ref_id',
@@ -1330,7 +1350,7 @@ import os
 from datetime import datetime
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
-from .models import PDF_materials  # Ensure correct import
+from .models import library_digital_materials  # Ensure correct import
 
 from urllib.parse import unquote
 
@@ -1338,7 +1358,7 @@ from urllib.parse import unquote
 def view_protected_book_details(request, category, book_id):
     # Fetch the book from the database using book_id and category
     book_id = unquote(book_id)  # Decode URL (e.g., convert "%20" to " ")
-    book = get_object_or_404(PDF_materials, pdf_material_ref_id=book_id, pdf_material_category=category)
+    book = get_object_or_404(library_digital_materials, pdf_material_ref_id=book_id, pdf_material_category=category)
 
     # Construct the correct book file URL
     book_path = f"{settings.MEDIA_URL}materials/pdf/{book_id}.pdf" if book.pdf_material_file else ""
@@ -1428,6 +1448,7 @@ def staff_login(request):
             request.session['staff_id'] = staff.academic_staff_id
             request.session['staff_name'] = f"{staff.academic_staff_fname} {staff.academic_staff_lname}"
             request.session['staff_email'] = staff.academic_staff_email
+            request.session['user_role'] = staff.role  # Store role in session
 
             messages.success(request, 'Login successful.')
             logger.info('Login successful for email: %s', email)
@@ -1508,9 +1529,43 @@ def staff_update_password(request):
     return render(request, 'users/staff/staff_update_password.html')
 
 
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.views.decorators.cache import never_cache
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+@never_cache
 def staff_dashboard(request):
-    staff = academic_staff.objects.all()
-    return render(request, 'users/staff/staff_dashboard.html', {'academic_staff': staff})
+    # Check if staff is logged in
+    staff_name = request.session.get("staff_name")
+    staff_no = request.session.get("staff_id")
+
+    if not staff_name:
+        return redirect("staff_login")  # Use named URL patterns
+
+    try:
+        # Fetch open access databases
+        databases = open_access_databases.objects.all()
+
+        # Fetch all academic staff (if needed)
+        staff = academic_staff.objects.all()
+
+        return render(request, "users/staff/staff_dashboard.html", {
+            "staff_name": staff_name,
+            "staff_no": staff_no,
+            "databases": databases,
+            "academic_staff": staff,  # Include staff if needed
+            "MEDIA_URL": settings.MEDIA_URL,
+        })
+
+    except Exception as e:
+        logger.error(f"Error in staff_dashboard: {e}")  # Log the error
+        messages.error(request, "An error occurred while loading your dashboard.")
+        return redirect("staff_login")  # Redirect to login page
 
 
 # researcher section of the library management system
@@ -1820,7 +1875,11 @@ def create_staff_pub_profile(request):
 
 # LIBRARY SEARCH FUNCTION FOR ALL USERS OF THE LIBRARY MANAGEMENT SYSTEM
 def library_search(request):
-    return render(request, 'search/search_index.html')
+    databases = open_access_databases.objects.all()
+
+    return render(request, 'search/search_index.html',
+                  {"databases": databases,
+                   "MEDIA_URL": settings.MEDIA_URL, })
 
 
 # OPEN ACCESS DATABASE SEARCH FUNCTION
@@ -2183,3 +2242,665 @@ def open_source_quotes(request):
             return JsonResponse({"error": "Could not fetch quote"}, status=500)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+# STUDENT SEARCH FUNCTION
+def student_search_arxvi_index(request):
+    return render(request, 'users/students/student_search/arxvi_index.html', )
+
+
+def student_search_arxvi_result(request):
+    query = request.GET.get("query1", "")
+    results_list = []
+
+    if query:
+        params = {"search_query": f"all:{query}", "start": 0, "max_results": 100}
+        response = requests.get(ARXIV_API_URL, params=params)
+
+        if response.status_code == 200:
+            root = ET.fromstring(response.text)
+
+            for entry in root.findall("{http://www.w3.org/2005/Atom}entry"):
+                arxiv_id = entry.find("{http://www.w3.org/2005/Atom}id").text.split("/")[-1]
+
+                results_list.append({
+                    "title": entry.find("{http://www.w3.org/2005/Atom}title").text,
+                    "link": entry.find("{http://www.w3.org/2005/Atom}id").text,
+                    "abstract": entry.find("{http://www.w3.org/2005/Atom}summary").text,
+                    "source": "arXiv",
+                    "year": entry.find("{http://www.w3.org/2005/Atom}published").text[:4],
+                    "authors": [author.find("{http://www.w3.org/2005/Atom}name").text for author in
+                                entry.findall("{http://www.w3.org/2005/Atom}author")],
+                    "download_link": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
+                })
+
+    # Apply pagination
+    paginator = Paginator(results_list, 10)  # Show 10 results per page
+    page = request.GET.get("page")
+
+    try:
+        results = paginator.get_page(page)
+    except:
+        results = paginator.get_page(1)  # If an invalid page is requested, return page 1
+
+    return render(request, "users/students/student_search/arxvi_result.html", {"results": results, "query": query})
+
+
+def student_search_google_veritas(request):
+    return render(request, 'search/veritas_result.ht')
+
+
+# core
+
+
+from django.core.paginator import Paginator
+import requests
+
+import requests
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
+
+def student_search_core(request):
+    query = request.GET.get("query", "")
+
+    results = []
+
+    # Fetch from CORE API
+    core_params = {"q": query, "apiKey": CORE_API_KEY, "page": 1, "pageSize": 20}
+    core_response = requests.get(CORE_API_URL, params=core_params)
+
+    if core_response.status_code == 200:
+        core_data = core_response.json()
+
+        for item in core_data.get("results", []):
+            # Print debug info
+            print("Download URL:", item.get("download_url"))
+            print("Fulltext URL:", item.get("fulltext_url"))
+            print("URLs List:", item.get("urls"))
+
+            # Find the best available download link
+            download_link = (
+                item.get("source_fulltext_urls")  # Redirect user to the main article page
+                if item.get("link") and item.get("link") != "#"
+                else "https://core.ac.uk/"  # Fallback to CORE homepage
+            )
+
+            results.append({
+                "title": item.get("title", "No Title"),
+                "link": item.get("url"),
+                "download_link": download_link,
+                "source": item.get("publisher", {}).get("name") if isinstance(item.get("publisher"),
+                                                                              dict) else item.get("publisher", "CORE"),
+                "abstract": item.get("abstract", "No abstract available."),
+                "year": str(item.get("year")) if isinstance(item.get("year"), int) else "Unknown Year",
+                "authors": [
+                    author.get("name", "Unknown Author") if isinstance(author, dict) else author
+                    for author in item.get("authors", [])
+                ],
+            })
+
+    # Paginate results (20 per page)
+    paginator = Paginator(results, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "users/students/student_search/core_result.html", {"results": page_obj, "query": query})
+
+
+# student search  veritas repo
+def student_search_veritas_result(request):
+    # fetch all records from the journal materials database
+    research_materials = Journal_materials.objects.all()
+    return render(request, 'users/students/student_search/veritas_result.html',
+                  {'research_materials': research_materials})
+
+
+def student_search_veritas_detail(request, journal_material_id):
+    material = get_object_or_404(Journal_materials, journal_material_id=journal_material_id)
+    return render(request, "users/students/student_search/veritas_repo_details.html", {"journal": material})
+
+
+def students_private_books(request):
+    return render(request, 'users/students/private_student_books.html')
+
+
+def students_public_books(request):
+    return render(request, 'users/students/public_student_books.html')
+
+
+def comp_sci_books_public_category(request):
+    return render(request, 'users/students/computer_sci_book_public_category.html')
+
+
+def comp_sci_books_private_category(request):
+    return render(request, 'users/students/computer_sci_book_private_category.html')
+
+
+def student_view_allbook_comp_sci_books(request, book_id=None):
+    """Fetch and display Computer Science books with caching and improved logic."""
+
+    # Attempt to fetch cached data first
+    books = cache.get('view_private_comp_sci_materials')
+
+    if not books:
+        # Fetch only Computer Science books
+        pdfs = library_digital_materials.objects.filter(
+            pdf_for_department='Computer Science'
+        ).values(
+            'pdf_material_title', 'pdf_material_file', 'pdf_material_cover_image',
+            'pdf_material_author', 'pdf_upload_date', 'pdf_material_tags',
+            'pdf_material_description', 'pdf_material_ref_id',
+        )
+
+        books = []
+
+        for pdf in pdfs:
+            ref_id = pdf.get('pdf_material_ref_id')
+            if not ref_id:
+                continue
+
+            # Book details
+            books.append({
+                "book_id": ref_id,
+                "name": pdf.get('pdf_material_title', 'Unknown Title'),
+                "file_url": f"{settings.MEDIA_URL}{pdf.get('pdf_material_file')}" if pdf.get(
+                    'pdf_material_file') else "",
+                "cover_url": f"{settings.MEDIA_URL}{pdf.get('pdf_material_cover_image')}" if pdf.get(
+                    'pdf_material_cover_image') else "/static/images/default-cover.png",
+                "author": pdf.get('pdf_material_author', 'Unknown'),
+                "year": pdf.get('pdf_upload_date', 'Unknown'),
+                "tags": pdf.get('pdf_material_tags', ''),
+                "description": pdf.get('pdf_material_description', ''),
+            })
+
+        # Cache books for improved performance (5 minutes)
+        cache.set('view_private_comp_sci_materials', books, timeout=300)
+
+    return render(request, 'users/students/computer_sci_book_private_category.html', {"books": books})
+
+
+def comp_sci_book_details_view(request, category, book_id):
+    # Fetch the book from the database using book_id and category
+    book_id = unquote(book_id)  # Decode URL (e.g., convert "%20" to " ")
+    book = get_object_or_404(library_digital_materials, pdf_material_ref_id=book_id, pdf_material_category=category)
+
+    # Construct the correct book file URL
+    book_path = f"{settings.MEDIA_URL}materials/pdf/{book_id}.pdf" if book.pdf_material_file else ""
+
+    valid_extensions = ['.jpg', '.png', '.jpeg']
+    cover_full_path = None
+
+    for ext in valid_extensions:
+        cover_candidate = os.path.join(settings.MEDIA_ROOT, "materials/pdf/cover", f"{book_id}{ext}")
+        if os.path.exists(cover_candidate):
+            cover_full_path = f"{settings.MEDIA_URL}materials/pdf/cover/{book_id}{ext}"
+            break
+
+    if cover_full_path is None:
+        cover_full_path = "/static/images/default-cover.png"  # Default cover image
+
+    # Ensure `pdf_upload_date` is a valid datetime object
+    if isinstance(book.pdf_upload_date, str):
+        try:
+            book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+        except ValueError:
+            book.pdf_upload_date = None
+
+        # Ensure `pdf_upload_date` is a valid datetime object
+        if isinstance(book.pdf_upload_date, str):
+            try:
+                book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+            except ValueError:
+                book.pdf_upload_date = None
+
+        upload_date = book.pdf_upload_date.strftime("%B %d, %Y") if book.pdf_upload_date else "Unknown"
+
+    # Pass book details to the template
+
+    return render(request, 'users/students/comp_sci_private_book_details.html', {
+        "book": {
+            "name": book.pdf_material_title,
+            "file_url": book_path,
+            "cover_url": cover_full_path,
+            "author": book.pdf_material_author or "Unknown",
+            "year": upload_date,
+            "tags": book.pdf_material_tags or "No tags available",
+            "description": book.pdf_material_description or "No description available",
+            "book_id": book.pdf_material_ref_id
+        }
+    })
+
+
+def view_protected_private_comp_sci_books(request, category):
+    """Fetch books from local storage based on category."""
+    books_path = os.path.join(settings.MEDIA_ROOT, 'materials/pdf')
+
+    if not os.path.exists(books_path):
+        return render(request, 'error.html', {"message": "Category not found"})
+
+    books = []
+
+    # Fetch PDF records from the database
+    pdfs = library_digital_materials.objects.filter(pdf_material_category=category).values(
+        'pdf_material_title', 'pdf_material_file', 'pdf_material_cover_image',
+        'pdf_material_author', 'pdf_upload_date', 'pdf_material_tags',
+        'pdf_material_description', 'pdf_material_ref_id',
+    )
+
+    for pdf in pdfs:
+        ref_id = pdf.get('pdf_material_ref_id')
+
+        if not ref_id:  # Skip books with empty book_id
+            continue
+
+        book_name = pdf.get('pdf_material_title', 'Unknown Title')
+        author = pdf.get('pdf_material_author', 'Unknown')
+        upload_date = pdf.get('pdf_upload_date', 'Unknown')
+        tags = pdf.get('pdf_material_tags', '')
+        description = pdf.get('pdf_material_description', '')
+
+        # Construct the correct book file URL
+        book_path = f"{settings.MEDIA_URL}materials/pdf/{ref_id}.pdf" if pdf.get('pdf_material_file') else ""
+
+        # Determine valid cover image extension
+        valid_extensions = ['.jpg', '.png', '.jpeg']
+        cover_full_path = "/static/images/default-cover.png"  # Default cover
+
+        for ext in valid_extensions:
+            cover_candidate = os.path.join(settings.MEDIA_ROOT, "materials/pdf/cover", f"{ref_id}{ext}")
+            if os.path.exists(cover_candidate):
+                cover_full_path = f"{settings.MEDIA_URL}materials/pdf/cover/{ref_id}{ext}"
+                break
+
+        # Append book details
+        books.append({
+            "book_id": ref_id,  # Ensure book_id is always set
+            "name": book_name,
+            "file_url": book_path,
+            "cover_url": cover_full_path,
+            "author": author,
+            "year": upload_date,
+            "tags": tags,
+            "description": description,
+        })
+
+    return render(request, 'users/students/computer_sci_private_books_list.html',
+                  {"books": books, "category": category})
+
+
+# STAFF SECTION
+
+def staff_private_books(request):
+    return render(request, 'users/staff/private_staff_books.html')
+
+
+def staff_public_books(request):
+    return render(request, 'users/staff/public_staff_books.html')
+
+
+def comp_sci_books_staff_public_category(request):
+    return render(request, 'users/staff/computer_sci_book_public_category.html')
+
+
+def comp_sci_books_staff_private_category(request):
+    return render(request, 'users/staff/computer_sci_book_private_category.html')
+
+
+def comp_sci_staff_book_details_view(request, category, book_id):
+    # Fetch the book from the database using book_id and category
+    book_id = unquote(book_id)  # Decode URL (e.g., convert "%20" to " ")
+    book = get_object_or_404(library_digital_materials, pdf_material_ref_id=book_id, pdf_material_category=category)
+
+    # Construct the correct book file URL
+    book_path = f"{settings.MEDIA_URL}materials/pdf/{book_id}.pdf" if book.pdf_material_file else ""
+
+    valid_extensions = ['.jpg', '.png', '.jpeg']
+    cover_full_path = None
+
+    for ext in valid_extensions:
+        cover_candidate = os.path.join(settings.MEDIA_ROOT, "materials/pdf/cover", f"{book_id}{ext}")
+        if os.path.exists(cover_candidate):
+            cover_full_path = f"{settings.MEDIA_URL}materials/pdf/cover/{book_id}{ext}"
+            break
+
+    if cover_full_path is None:
+        cover_full_path = "/static/images/default-cover.png"  # Default cover image
+
+    # Ensure `pdf_upload_date` is a valid datetime object
+    if isinstance(book.pdf_upload_date, str):
+        try:
+            book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+        except ValueError:
+            book.pdf_upload_date = None
+
+        # Ensure `pdf_upload_date` is a valid datetime object
+        if isinstance(book.pdf_upload_date, str):
+            try:
+                book.pdf_upload_date = datetime.strptime(book.pdf_upload_date, "%Y-%m-%d")
+            except ValueError:
+                book.pdf_upload_date = None
+
+        upload_date = book.pdf_upload_date.strftime("%B %d, %Y") if book.pdf_upload_date else "Unknown"
+
+    # Pass book details to the template
+
+    return render(request, 'users/students/comp_sci_private_book_details.html', {
+        "book": {
+            "name": book.pdf_material_title,
+            "file_url": book_path,
+            "cover_url": cover_full_path,
+            "author": book.pdf_material_author or "Unknown",
+            "year": upload_date,
+            "tags": book.pdf_material_tags or "No tags available",
+            "description": book.pdf_material_description or "No description available",
+            "book_id": book.pdf_material_ref_id
+        }
+    })
+
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import library_digital_materials
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import library_digital_materials
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import library_digital_materials
+
+import os
+from django.conf import settings
+from django.shortcuts import render
+from django.core.cache import cache
+from .models import library_digital_materials
+
+
+def view_protected_private_comp_sci_books(request, book_id=None):
+    """Fetch and display Computer Science books with caching and improved logic."""
+
+    # Attempt to fetch cached data first
+    books = cache.get('view_private_comp_sci_materials')
+
+    if not books:
+        # Fetch only Computer Science books
+        pdfs = library_digital_materials.objects.filter(
+            pdf_for_department='Computer Science'
+        ).values(
+            'pdf_material_title', 'pdf_material_file', 'pdf_material_cover_image',
+            'pdf_material_author', 'pdf_upload_date', 'pdf_material_tags',
+            'pdf_material_description', 'pdf_material_ref_id',
+        )
+
+        books = []
+
+        for pdf in pdfs:
+            ref_id = pdf.get('pdf_material_ref_id')
+            if not ref_id:
+                continue
+
+            # Book details
+            books.append({
+                "book_id": ref_id,
+                "name": pdf.get('pdf_material_title', 'Unknown Title'),
+                "file_url": f"{settings.MEDIA_URL}{pdf.get('pdf_material_file')}" if pdf.get(
+                    'pdf_material_file') else "",
+                "cover_url": f"{settings.MEDIA_URL}{pdf.get('pdf_material_cover_image')}" if pdf.get(
+                    'pdf_material_cover_image') else "/static/images/default-cover.png",
+                "author": pdf.get('pdf_material_author', 'Unknown'),
+                "year": pdf.get('pdf_upload_date', 'Unknown'),
+                "tags": pdf.get('pdf_material_tags', ''),
+                "description": pdf.get('pdf_material_description', ''),
+            })
+
+        # Cache books for improved performance (5 minutes)
+        cache.set('view_private_comp_sci_materials', books, timeout=300)
+
+    return render(request, 'books_cate/computer_sci/comp_sci_dept_private_books.html', {"books": books})
+
+
+import requests
+from django.shortcuts import render
+
+#NEWSPAPER
+# Replace with your actual API key
+NEWS_API_KEY = "43ebf58827d948efb7d179aa47e819e8"
+
+import requests
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.conf import settings
+
+
+def fetch_nigerian_news():
+    url = f"https://newsapi.org/v2/everything?q=nigeria&language=en&apiKey={NEWS_API_KEY}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        news_data = response.json()
+        return news_data.get('articles', [])
+
+    return []  # Return empty list if API call fails
+
+
+def news_view(request):
+    news_articles = fetch_nigerian_news()
+
+    # Paginate results
+    page = request.GET.get('page', 1)  # Get page number from request
+    paginator = Paginator(news_articles, 5)  # 5 news articles per page
+
+    try:
+        news_articles = paginator.page(page)
+    except:
+        news_articles = paginator.page(1)  # Default to first page if error occurs
+
+    return render(request, 'users/staff/staff_newspaper.html', {'news_articles': news_articles})
+
+
+# OPEN COURSE WARE
+from django.shortcuts import render
+
+
+# Define Open Courseware Platforms
+def open_courseware_home(request):
+    courseware_list = [
+        {"name": "MIT OpenCourseWare", "logo": "mit.png", "url": "https://ocw.mit.edu/"},
+        {"name": "Harvard Online Learning", "logo": "harvard.png", "url": "https://online-learning.harvard.edu/"},
+        {"name": "Stanford Online", "logo": "stanford.png", "url": "https://online.stanford.edu/"},
+        {"name": "OpenLearn (Open University)", "logo": "openlearn.png", "url": "https://www.open.edu/openlearn/"},
+        {"name": "Carnegie Mellon OLI", "logo": "cmu.png", "url": "https://oli.cmu.edu/"},
+        {"name": "FutureLearn", "logo": "futurelearn.png", "url": "https://www.futurelearn.com/"},
+        {"name": "Coursera", "logo": "coursera.png", "url": "https://www.coursera.org/"},
+        {"name": "EdX", "logo": "edx.png", "url": "https://www.edx.org/"},
+        {"name": "Khan Academy", "logo": "khan.png", "url": "https://www.khanacademy.org/"},
+        {"name": "Google Digital Garage", "logo": "google.png", "url": "https://learndigital.withgoogle.com/"},
+    ]
+
+    return render(request, 'users/staff/open_course_ware.html', {"courseware_list": courseware_list})
+
+
+# physical book borrowers
+def physical_book_borrowers_home(request):
+    return render(request, 'books/physicallibrary/borrowers_record.html')
+
+
+def physical_book_student_borrowers(request):
+    return render(request, 'books/physicallibrary/student_borrowers_record.html')
+
+
+def physical_book_staff_borrowers(request):
+    if request.method == 'POST':
+        staff_id = request.POST.get('staff_id')
+        staff = academic_staff.objects.filter(
+            Q(academic_staff_email=staff_id) | Q(academic_staff_identity=staff_id)).first()
+
+        if not staff:
+            messages.error(request, 'Staff not found')
+            return render(request, 'books/physicallibrary/staff_borrower_record.html')
+
+        # Fetch staff details from the database
+        form = AcademicStaffForm(instance=staff)
+        messages.success(request, 'Staff found')
+    return render(request, 'books/physicallibrary/staff_borrower_record.html', {'form': form, 'staff': staff})
+
+
+def create_staff_borrow_record(request):
+    staff_identity = request.GET.get('staff_identity') or request.POST.get('staff_identity')
+
+    if not staff_identity:
+        messages.error(request, "Staff identity is required.")
+        return render(request, 'books/physicallibrary/staff_borrower_record.html')
+
+    try:
+        existing_staff = academic_staff.objects.get(academic_staff_identity=staff_identity)
+    except academic_staff.DoesNotExist:
+        messages.error(request, "No academic staff matches the given identity.")
+        return render(request, 'books/physicallibrary/staff_borrower_record.html')
+
+    if request.method == 'POST':
+        staff_identity = request.POST.get('staff_identity')
+        staff_fname = request.POST.get('staff_fname')
+        staff_lname = request.POST.get('staff_lname')
+        staff_email = request.POST.get('staff_email')
+        staff_position = request.POST.get('staff_position')
+        staff_department = request.POST.get('staff_department')
+        staff_category = request.POST.get('staff_category')
+        book_title = request.POST.get('book_title')
+        book_author = request.POST.get('book_author')
+        book_number = request.POST.get('book_number')
+        borrow_date = request.POST.get('borrow_date')
+        return_date = request.POST.get('return_date')
+
+        if not all(
+                [staff_department, staff_position, staff_fname, staff_lname, staff_email, staff_category, book_title,
+                 book_author, book_number, borrow_date, return_date]):
+            messages.error(request, 'All fields are required.')
+            return render(request, 'books/physicallibrary/staff_borrower_record.html', {'staff': existing_staff})
+
+        # check if record already exists to avoid duplicate
+        if staff_book_borrowers.objects.filter(staff_ID=staff_identity, book_title=book_title).exists():
+            messages.error(request, 'Staff borrower record already exists.')
+            return render(request, 'books/physicallibrary/staff_borrower_record.html', {'staff': existing_staff})
+
+        # Save staff profile
+        staff_book_borrowers.objects.create(
+            staff_ID=staff_identity,
+            staff_borrower_name=f"{staff_fname} {staff_lname}",
+            staff_borrower_email=staff_email,
+            staff_borrower_dept=staff_department,
+            staff_category=staff_category,
+            book_title=book_title,
+            book_author=book_author,
+            book_number=book_number,
+            book_borrow_date=borrow_date,
+            book_return_date=return_date,
+            book_return_status='not returned',
+            staff_borrower_status='active',
+
+        )
+
+        messages.success(request, 'BORROWERS DETAIL  created successfully!')
+        return render(request, 'books/physicallibrary/borrowers_record.html', {'staff': existing_staff})
+
+    return render(request, 'books/physicallibrary/staff_borrower_record.html', {'staff': existing_staff})
+
+
+def physical_book_student_borrowers(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        student = students.objects.filter(
+            Q(student_email=student_id) | Q(student_matric_no=student_id)).first()
+
+        if not student:
+            messages.error(request, 'Student not found')
+            return render(request, 'books/physicallibrary/student_borrower_record.html')
+
+        # Fetch student details from the database
+        form = StudentsForm(instance=student)
+        messages.success(request, 'Student found')
+        return render(request, 'books/physicallibrary/student_borrower_record.html', {'form': form, 'student': student})
+
+    return render(request, 'books/physicallibrary/student_borrower_record.html')
+
+
+def create_student_borrower_record(request):
+    if request.method == 'POST':
+        student_identity = request.POST.get('student_identity')
+        student_name = request.POST.get('student_name')
+        student_email = request.POST.get('student_email')
+        student_department = request.POST.get('student_department')
+        book_title = request.POST.get('book_title')
+        book_author = request.POST.get('book_author')
+        book_number = request.POST.get('book_number')
+        borrow_date = request.POST.get('borrow_date')
+        return_date = request.POST.get('return_date')
+
+        # check if record already exists to avoid duplicate
+        if student_book_borrowers.objects.filter(student_mat_no=student_identity, book_title=book_title).exists():
+            messages.error(request, 'Student borrower record already exists.')
+            return render(request, 'books/physicallibrary/student_borrower_record.html')
+
+        student_borrower = student_book_borrowers(
+            student_mat_no=student_identity,
+            student_borrower_name=student_name,
+            student_borrower_email=student_email,
+            student_borrower_dept=student_department,
+            book_title=book_title,
+            book_author=book_author,
+            book_number=book_number,
+            book_borrow_date=borrow_date,
+            book_return_date=return_date,
+            book_return_status='not returned',
+            student_borrower_status='active'
+        )
+        student_borrower.save()
+        messages.success(request, 'Student borrower record created successfully.')
+        return redirect('success_page')  # Replace 'success_page' with the actual success page URL name
+
+    return render(request, 'books/physicallibrary/student_borrower_record.html')
+
+
+# success page and error page
+def success_page(request):
+    return render(request, 'books/physicallibrary/success_page.html')
+
+
+def error_page(request):
+    return render(request, 'books/physicallibrary/error_page.html')
+
+
+# manage staff and student and staff borrowers records
+def manage_staff_borrowers(request):
+    staff_borrowers = staff_book_borrowers.objects.all()
+    return render(request, 'books/physicallibrary/manage_staff_borrowers.html', {'staff_borrowers': staff_borrowers})
+
+
+def manage_student_borrowers(request):
+    student_borrowers = student_book_borrowers.objects.all()
+    return render(request, 'books/physicallibrary/manage_student_borrowers.html',
+                  {'student_borrowers': student_borrowers})
+
+
+def full_research_databases(request):
+    databases = open_access_databases.objects.all()
+
+    return render(request, "search/research_databases.html", {
+        "databases": databases,
+        "MEDIA_URL": settings.MEDIA_URL,
+    })
+
+
+def national_repository(request):
+    return render(request, 'search/national_repository.html')
+
+
+#fectrching all records from the pdf materials database
+def view_library_digital_materials(request):
+    pdf_materials = library_digital_materials.objects.all()
+    return render(request, 'books_cate/computer_sci/comp_sci_dept_private_books.html', {'books': pdf_materials})

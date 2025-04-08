@@ -1,0 +1,318 @@
+{% load static %}
+<div class="section-header">
+   <div class="row">
+      <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">licensed library digital books  </h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">private hosted books </h5>
+                        <p class="mb-0 ">
+
+ Below are the
+areas and their associated book categories:
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+  <!-- SEARCH FILTER FORM FOR BOOKS-->
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+        <div class="card-header">
+            <h4>Search Books</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="GET">
+            <div class="form-group">
+                <label for="search">Search by title or author</label>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Enter search term">
+</div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            </div>
+        </div>
+    </div>
+   </div>
+</div>
+
+   <div class="card">
+    <div class="card-header">
+        <h4>Computer Science Private Books</h4>
+    </div>
+
+   <div class="card-body">
+    {% if books %}
+        <ul class="list-unstyled">
+            {% for book in books %}
+            <li class="media my-4">
+                <img class="mr-3" src="{{ book.cover_url }}" alt="Book Cover" width="200">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ book.name }}</h5>
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Year:</strong> {{ book.year }}</p>
+                    <p>{{ book.description }}</p>
+                    {% if book.file_url %}
+                        <a href="{{ book.file_url }}" target="_blank" class="btn btn-primary btn-sm">Read PDF</a>
+                    {% else %}
+                        <span class="badge badge-danger">PDF Not Available</span>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-danger text-center">No books found in this category.</p>
+    {% endif %}
+</div>
+
+</div>
+
+<section class="section mt-4">
+  <div class="section-body">
+      <!-- COMPUTER SCI BOOKS CATEGORIES -->
+      <!-- COMPUTER SCI BOOKS CATEGORIES -->
+<div class="row sortable-card">
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h4>Algorithms</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on algorithms and data structures.</p>
+        <a href="" class="btn btn-primary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h4>Artificial Intelligence</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on AI and machine learning.</p>
+        <a href="" class="btn btn-secondary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h4>Computer Networks</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on networking and communication.</p>
+        <a href="" class="btn btn-danger">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-warning">
+      <div class="card-header">
+        <h4>Databases</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on database systems and management.</p>
+        <a href="" class="btn btn-warning">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h4>Operating Systems</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on operating system concepts and design.</p>
+        <a href="" class="btn btn-primary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h4>Programming Languages</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on various programming languages.</p>
+        <a href="" class="btn btn-secondary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h4>Software Engineering</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on software development and engineering.</p>
+        <a href="" class="btn btn-danger">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-warning">
+      <div class="card-header">
+        <h4>Web Development</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on web technologies and development.</p>
+        <a href="" class="btn btn-warning">View Books</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+   <div class="row sortable-card">
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h4>Cybersecurity</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on cybersecurity and information security.</p>
+        <a href="" class="btn btn-primary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h4>Data Science</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on data science and analytics.</p>
+        <a href="" class="btn btn-secondary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h4>Human-Computer Interaction</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on HCI and user experience design.</p>
+        <a href="" class="btn btn-danger">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-warning">
+      <div class="card-header">
+        <h4>Quantum Computing</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on quantum computing and quantum algorithms.</p>
+        <a href="" class="btn btn-warning">View Books</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="row sortable-card">
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h4>Robotics</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on robotics and automation.</p>
+        <a href="" class="btn btn-primary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h4>Optimization</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on optimization techniques and algorithms.</p>
+        <a href="" class="btn btn-secondary">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h4>Embedded Systems & IOTs</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on embedded systems and IoT.</p>
+        <a href="" class="btn btn-danger">View Books</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card card-warning">
+      <div class="card-header">
+        <h4>Computational Maths</h4>
+      </div>
+      <div class="card-body">
+        <p>Books on computational mathematics and numerical methods.</p>
+        <a href="" class="btn btn-warning">View Books</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <section class="section mt-4">
+  <div class="section-header">
+    <h2>Media Categories</h2>
+  </div>
+  <div class="section-body">
+    <div class="row sortable-card">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-secondary">
+          <div class="card-header">
+            <h4>Video Books</h4>
+          </div>
+          <div class="card-body">
+            <p>Books available in video format.</p>
+            <a href="" class="btn btn-secondary">
+              <i class="fas fa-video"></i> View Books
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-danger">
+          <div class="card-header">
+            <h4>Audio Books</h4>
+          </div>
+          <div class="card-body">
+            <p>Books available in audio format.</p>
+            <a href="" class="btn btn-danger">
+              <i class="fas fa-headphones"></i> View Books
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-warning">
+          <div class="card-header">
+            <h4>Journal Books</h4>
+          </div>
+          <div class="card-body">
+            <p>Books available in journal format.</p>
+            <a href="" class="btn btn-warning">
+              <i class="fas fa-book"></i> View Books
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  </div>
+
+</section>

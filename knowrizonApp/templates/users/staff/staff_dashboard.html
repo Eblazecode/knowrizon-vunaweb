@@ -5,7 +5,490 @@
 
 {% block content %}
 <section class="section">
- {% include 'includes/dashboard_analytics/staff_analytics.html' %}
+ <div class="col-12 col-sm-6 col-lg-6">
+                <div class="card" id="mycard-dimiss">
+                  <div class="card-header">
+                    <h4>Hi, welcome back!</h4>
+                    <div class="card-header-action">
+                      <a data-dismiss="#mycard-dimiss" class="btn btn-icon btn-secondary" href="#"><i
+                          class="fas fa-times"></i></a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                     <div class="welcome-message">
+              <h2> {{ staff_name }}</h2>
+              <p>Here's what's happening with your Vunaweb plus today.</p>
+            </div>
+                  </div>
+                </div>
+
+            </div>
+
+<!--<div class="row">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">TOTAL MATERIALS </h5>
+                    <h2 class="mb-3 font-18">258</h2>
+                    <p class="mb-0"><span class="col-green">10%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/books.avif' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> H-INDEX </h5>
+                    <h2 class="mb-3 font-18">10</h2>
+                    <p class="mb-0"><span class="col-orange">09%</span> Decrease</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/hindex.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> JOURNALS </h5>
+                    <h2 class="mb-3 font-18">128</h2>
+                    <p class="mb-0"><span class="col-green">18%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/journals.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> DOWNLOADS </h5>
+                    <h2 class="mb-3 font-18">400</h2>
+                    <p class="mb-0"><span class="col-green">42%</span> Increase</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/downloads.jpg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+    <div class="col-lg-12">
+
+  <div class="card">
+    <div class="card-header">
+      <h4>Resources </h4>
+        <!-- ADD A MODAL TO ADD A TASK -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"> Get library book </button>
+
+    </div>
+    <div class="card-body">
+            <div class="row pb-5">
+
+    <!-- book section header  -->
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">Open public books   </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p> </p>
+
+                      <a href="{% url 'staff_public_books' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/repo1.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> library books  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>   </p>
+
+                        <a href="{% url 'staff_private_books' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/books.avif' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Book shop </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                      <p> </p>
+                      <a href="{% url 'book_store' %}" class="btn btn-success">view </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/journals.webp' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> Newspaper </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                      <p>  </p>
+
+                        <a href="{% url 'news' %}" class="btn btn-success">view </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/newspaper.jpeg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+            <h4 class="fs-1 "> OPAC  section  </h4>
+    <div class="row pb-5">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">CORE OPAC  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                     <p>CORE is the world’s largest aggregator of open access </p>
+
+                      <a href="{% url 'search_student_core_result'  %}" class="btn btn-success">search repository </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/core.png' %}" width="100px" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> ARXVI OPAC </h5>
+                    <h2 class="mb-3 font-18"></h2>
+              <p>provides e-prints in sciences,
+                  finance, and stats. </p>
+
+                        <a href="{% url 'search_student_arxvi_index' %}" class="btn btn-success">search repository  </a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/arxvi.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15"> VUA REPOSITORY  </h5>
+                    <h2 class="mb-3 font-18"></h2>
+
+                   <p>A  digital archive  of Veritas University,.</p>
+                      <a href="{% url 'search_student_veritas_result' %}" class="btn btn-success">search repository </a>
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/logo.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+          <div class="card-statistic-4">
+            <div class="align-items-center justify-content-between">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                  <div class="card-content">
+                    <h5 class="font-15">Nigeria National Repository of Nigeria </h5>
+                    <h2 class="mb-3 font-18"></h2>
+                <p> Apex repository of fed. republic of nigerian content. </p>
+                    <a href="https://nigeriareposit.nln.gov.ng/home" class="btn btn-success">search repository</a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 pl-0">
+                  <div class="banner-img">
+                    <img src="{% static 'assets/img/nln-logo.jpg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- see more button end of row -->
+        <div class="col-12 offset-lg-5 ">
+          <a href="{% url 'search_index' %}" class="btn btn-primary">see more </a>
+        </div>
+    </div>
+
+        <div class="row">
+    <div class="col-12">
+
+        <h4 class="fs-1 "> Databases </h4>
+
+    </div>
+
+  {% if databases %}
+    {% for database in databases %}
+        <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+            <article class="article">
+                <div class="article-header">
+                    <div class="article-image" style="background-image: url('{{ MEDIA_URL }}{{ database.database_cover_image }}');"></div>
+                    <div class="article-title">
+                        <h2><a href="#">{{ database.database_title }}</a></h2>
+                    </div>
+                </div>
+                <div class="article-details">
+                    <div class="article-meta">
+                        <ul class="no-bullets">
+                            <li><i class="fas fa-tags"></i> : {{ database.database_genre }}</li>
+                        </ul>
+                    </div>
+                    <p>{{ database.database_description|truncatewords:0 }}</p>
+                    <div class="article-cta">
+                        <a href="{{ database.database_URL }}" class="btn btn-success" target="_blank">View</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center">No open access databases available.</p>
+{% endif %}
+
+</div>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<!--- welcome message for admin ends-->
+
+   <div class="row">
+       <div class="col-lg-8">
+
+  <div class="card">
+    <div class="card-header">
+      <h4>Top Veritas Researcher  </h4>
+        <!-- ADD A MODAL TO ADD A TASK -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"> create a research collaboration </button>
+
+
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped" id="table-1">
+          <thead>
+            <tr>
+              <th class="text-center">#</th>
+
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Phone</th>
+                                <th>Prefix</th>
+
+                                <th>Interest</th>
+
+                                <!--- action to delete and update -->
+                                <th>Action </th>
+            </tr>
+          </thead>
+          <tbody>
+           {% for row in academic_staff %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ row.academic_staff_fname }}</td>
+                        <td>{{ row.academic_staff_lname }}</td>
+                        <td>{{ row.academic_staff_email }}</td>
+                        <td>{{ row.academic_staff_dept }}</td>
+                        <td>{{ row.academic_staff_position }}</td>
+                        <td>{{ row.academic_staff_phone }}</td>
+                        <td>{{ row.academic_staff_prefix }}</td>
+                        <td>{{ row.academic_staff_interest }}</td>
+
+                        <td>
+                            <a href="{% url 'admin_manage_staff_update' row.academic_staff_id %}" class="btn btn-success">collaborate</a>
+
+                    </tr>
+                    {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+           <!-- TRENDING BOOKS AND JOURNALS -->
+              <div class="col-4 col-sm-4 col-xs-6">
+
+                <div class="card">
+
+              <div class="card-body ">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackmanreader.avif' %}" alt="First slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>First Slide</h5>
+            <p>Description for the first slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackreader.jpg' %}" alt="Second slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Second Slide</h5>
+            <p>Description for the second slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          {% load static %}
+          <img class="d-block w-100" src="{% static 'assets/img/blackreaader3.avif' %}" alt="Second slide">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Third Slide</h5>
+            <p>Description for the third slide.</p>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+
+              </div>
+
+
+        </div>
+
+
+
+    </div>
 
 
     <div class="row">

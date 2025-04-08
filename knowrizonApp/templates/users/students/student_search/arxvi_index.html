@@ -1,0 +1,60 @@
+{% extends "student_base.html" %}
+{% load static %}
+{% block title %}search index{% endblock %}
+
+{% block content %}
+      <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Arxiv search Repository </h1>
+                  </div>
+
+
+
+                <div class="card-body">
+                         <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">
+                         This repo provides simple, one-stop searching for books and e-books, videos, articles, digital media, and more.
+
+it  also helps you manage your research. Sign-in in order to:
+<ul>
+    <li>Find (any) resources available to you</li>
+    <li>Renew physical books</li>
+    <li>Create favorite lists</li>
+    <li>Export citations to Refworks and Endnote Web</li>
+    <li>View full search results. (Some databases, only show results when you are signed in.)</li>
+</ul>
+
+.</p>
+                      </div>
+                    </div>
+                    <form method="GET" action="{% url 'search_student_arxvi_result' %}" >
+                        <div class="input-group">
+                            <input type="text" name="query1" class="form-control h-100" placeholder="Search for everything..." style="height: 600px">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+
+        </div>
+
+      </div>
+
+
+
+
+
+{% endblock %}

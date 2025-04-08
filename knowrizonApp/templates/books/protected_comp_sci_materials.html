@@ -7,290 +7,80 @@
 
 <div class="section-header">
    <div class="row">
-      <div class="col-12 col-md-6 col-lg-6">
-                <div class="card">
+      <div class="col-12 col-md-4">
+         <div class="card sticky-top">
+            <div class="card-header bg-primary text-white">
+               <h4>Search & Filter</h4>
+            </div>
+            <div class="card-body">
+               <form action="" method="GET">
+                  <div class="form-group">
+                     <input type="text" name="search" id="search" class="form-control"
+                            placeholder="Search by title, author, or category"
+                            onkeyup="filterBooks()">
+                  </div>
+                  <div class="form-group">
+                     <label for="category">Filter by Category</label>
+                     <select name="category" id="category" class="form-control" onchange="filterBooks()">
+                        <option value="">All Categories</option>
+                        <option value="algorithms">Algorithms</option>
+                        <option value="artificial_intelligence">Artificial Intelligence</option>
+                        <option value="data_science">Data Science</option>
+                        <option value="web_development">Web Development</option>
+                        <!-- Add other categories dynamically -->
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="media">Filter by Media Type</label>
+                     <select name="media" id="media" class="form-control" onchange="filterBooks()">
+                        <option value="">All Media Types</option>
+                        <option value="video_books">Video Books</option>
+                        <option value="audio_books">Audio Books</option>
+                        <option value="journal_books">Journal Books</option>
+                     </select>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+
+      <div class="col-12 col-md-8">
+         <div class="row" id="book-list">
+            {% for category in book_categories %}
+            <div class="col-12 col-md-6 col-lg-4">
+               <div class="card card-primary">
                   <div class="card-header">
-                    <h1 class="fs-1 ">licensed Computer Science Catalogue</h1>
+                     <h5>{{ category.name }}</h5>
                   </div>
                   <div class="card-body">
-                    <div class="media">
-                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
-                      <div class="media-body">
-                        <h5 class="mt-0 text-info">About </h5>
-                        <p class="mb-0 ">
-
-The eLibrary organizes its book collection into various categories
-based on the different areas within Computer Science.
-This categorization helps users easily find books
-related to their specific field of study or interest. Below are the
-areas and their associated book categories:
-
-.</p>
-                      </div>
-                    </div>
+                     <p>{{ category.description }}</p>
+                     <a href="{% url 'view_books' category.slug %}" class="btn btn-primary">
+                        <i class="fas fa-book"></i> View Books
+                     </a>
                   </div>
-                </div>
-
-              </div>
-
-  <!-- SEARCH FILTER FORM FOR BOOKS-->
-    <div class="col-12 col-md-6 col-lg-6">
-        <div class="card">
-        <div class="card-header">
-            <h4>Search Books</h4>
-        </div>
-        <div class="card-body">
-            <form action="" method="GET">
-            <div class="form-group">
-                <label for="search">Search by title or author</label>
-                <input type="text" name="search" id="search" class="form-control" placeholder="Enter search term">
-</div>
-              <button type="submit" class="btn btn-primary">Search</button>
-            </form>
+               </div>
             </div>
-        </div>
-    </div>
+            {% endfor %}
+         </div>
+      </div>
    </div>
 </div>
 
-<section class="section mt-4">
-  <div class="section-body">
-      <!-- COMPUTER SCI BOOKS CATEGORIES -->
-      <!-- COMPUTER SCI BOOKS CATEGORIES -->
-<div class="row sortable-card">
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-primary">
-      <div class="card-header">
-        <h4>Algorithms</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on algorithms and data structures.</p>
-        <a href="{% url 'view_protected_cs_materials' 'algorithms' %}" class="btn btn-primary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-secondary">
-      <div class="card-header">
-        <h4>Artificial Intelligence</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on AI and machine learning.</p>
-        <a href="{% url 'view_protected_cs_materials' 'artificial_intelligence' %}" class="btn btn-secondary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h4>Computer Networks</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on networking and communication.</p>
-        <a href="{% url 'view_protected_cs_materials' 'computer_networks' %}" class="btn btn-danger">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-warning">
-      <div class="card-header">
-        <h4>Databases</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on database systems and management.</p>
-        <a href="{% url 'view_books' 'databases' %}" class="btn btn-warning">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-primary">
-      <div class="card-header">
-        <h4>Operating Systems</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on operating system concepts and design.</p>
-        <a href="{% url 'view_books' 'operating_systems' %}" class="btn btn-primary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-secondary">
-      <div class="card-header">
-        <h4>Programming Languages</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on various programming languages.</p>
-        <a href="{% url 'view_books' 'programming_languages' %}" class="btn btn-secondary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h4>Software Engineering</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on software development and engineering.</p>
-        <a href="{% url 'view_books' 'software_engineering' %}" class="btn btn-danger">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-warning">
-      <div class="card-header">
-        <h4>Web Development</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on web technologies and development.</p>
-        <a href="{% url 'view_books' 'web_development' %}" class="btn btn-warning">View Books</a>
-      </div>
-    </div>
-  </div>
-</div>
+<script>
+   function filterBooks() {
+      const searchTerm = document.getElementById('search').value.toLowerCase();
+      const categoryFilter = document.getElementById('category').value;
+      const mediaFilter = document.getElementById('media').value;
 
-   <div class="row sortable-card">
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-primary">
-      <div class="card-header">
-        <h4>Cybersecurity</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on cybersecurity and information security.</p>
-        <a href="{% url 'view_books' 'cybersecurity' %}" class="btn btn-primary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-secondary">
-      <div class="card-header">
-        <h4>Data Science</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on data science and analytics.</p>
-        <a href="{% url 'view_books' 'data_science' %}" class="btn btn-secondary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h4>Human-Computer Interaction</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on HCI and user experience design.</p>
-        <a href="{% url 'view_books' 'human_computer_interaction' %}" class="btn btn-danger">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-warning">
-      <div class="card-header">
-        <h4>Quantum Computing</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on quantum computing and quantum algorithms.</p>
-        <a href="{% url 'view_books' 'quantum_computing' %}" class="btn btn-warning">View Books</a>
-      </div>
-    </div>
-  </div>
-</div>
+      document.querySelectorAll('#book-list .card').forEach(card => {
+         const title = card.querySelector('.card-header h5').textContent.toLowerCase();
+         const matchesSearch = title.includes(searchTerm);
+         const matchesCategory = categoryFilter === "" || title.includes(categoryFilter);
+         const matchesMedia = mediaFilter === "" || card.querySelector('a').getAttribute('href').includes(mediaFilter);
 
-      <div class="row sortable-card">
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-primary">
-      <div class="card-header">
-        <h4>Robotics</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on robotics and automation.</p>
-        <a href="{% url 'view_books' 'robotics' %}" class="btn btn-primary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-secondary">
-      <div class="card-header">
-        <h4>Optimization</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on optimization techniques and algorithms.</p>
-        <a href="{% url 'view_books' 'optimization' %}" class="btn btn-secondary">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h4>Embedded Systems & IOTs</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on embedded systems and IoT.</p>
-        <a href="{% url 'view_books' 'embedded_systems' %}" class="btn btn-danger">View Books</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <div class="card card-warning">
-      <div class="card-header">
-        <h4>Computational Maths</h4>
-      </div>
-      <div class="card-body">
-        <p>Books on computational mathematics and numerical methods.</p>
-        <a href="{% url 'view_books' 'computational_maths' %}" class="btn btn-warning">View Books</a>
-      </div>
-    </div>
-  </div>
-</div>
+         card.style.display = matchesSearch && matchesCategory && matchesMedia ? '' : 'none';
+      });
+   }
+</script>
 
-    <section class="section mt-4">
-  <div class="section-header">
-    <h2>Media Categories</h2>
-  </div>
-  <div class="section-body">
-    <div class="row sortable-card">
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card card-secondary">
-          <div class="card-header">
-            <h4>Video Books</h4>
-          </div>
-          <div class="card-body">
-            <p>Books available in video format.</p>
-            <a href="{% url 'view_books' 'video_books' %}" class="btn btn-secondary">
-              <i class="fas fa-video"></i> View Books
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card card-danger">
-          <div class="card-header">
-            <h4>Audio Books</h4>
-          </div>
-          <div class="card-body">
-            <p>Books available in audio format.</p>
-            <a href="{% url 'view_books' 'audio_books' %}" class="btn btn-danger">
-              <i class="fas fa-headphones"></i> View Books
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card card-warning">
-          <div class="card-header">
-            <h4>Journal Books</h4>
-          </div>
-          <div class="card-body">
-            <p>Books available in journal format.</p>
-            <a href="{% url 'view_books' 'journal_books' %}" class="btn btn-warning">
-              <i class="fas fa-book"></i> View Books
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-  </div>
-
-</section>
 {% endblock %}

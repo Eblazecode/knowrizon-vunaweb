@@ -23,7 +23,7 @@
                   data-feather="briefcase"></i><span>User management </span></a>
               <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{% url 'add_users' %}">Add users(students, faculty, staff)</a></li>
-                        <li><a class="nav-link" href="{% url 'approve_requests' %}">Approve requests</a></li>
+
                         <li><a class="nav-link" href="{% url 'manage_staff_users' %}">Manage user roles</a></li>
                         <li><a class="nav-link" href="{% url 'find_staff_profile' %}">create staff profile</a></li>
 
@@ -34,8 +34,7 @@
               <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{% url 'upload_materials' %}">Upload Digital Resources</a></li>
                 <li><a class="nav-link" href="{% url 'upload_materials' %}">manage Resources</a></li>
-                <li><a class="nav-link" href="portfolio.html">Review Content Submissions</a></li>
-                <li><a class="nav-link" href="blog.html">Create and Manage Content Categories</a></li>
+
 
               </ul>
             </li>
@@ -45,8 +44,6 @@
               <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{% url 'book_store_upload' %}">Upload new books</a></li>
                 <li><a class="nav-link" href="{% url 'upload_materials' %}">orders</a></li>
-                   <li><a class="nav-link" href="{% url 'book_store' %}">view books</a></li>
-                <li><a class="nav-link" href="portfolio.html">inventory</a></li>
 
 
               </ul>
@@ -57,7 +54,7 @@
                   data-feather="monitor"></i><span>Book Borrow </span></a>
               <ul class="dropdown-menu">
               <li><a class="nav-link" href="{% url 'physical_library_register_material' %}">register new books</a></li>
-                <li><a class="nav-link" href="card.html"> borrow records</a> </li>
+             <li><a class="nav-link" href="{% url 'borrowers_home' %}">register borrow records</a></li>
                 <li><a class="nav-link" href="modal.html"> analysis </a></li>
 
 

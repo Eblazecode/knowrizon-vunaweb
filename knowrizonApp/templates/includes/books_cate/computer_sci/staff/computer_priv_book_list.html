@@ -1,0 +1,80 @@
+
+{% load static %}
+
+
+
+<div class="section-header">
+   <div class="row">
+
+  <!-- SEARCH FILTER FORM FOR BOOKS-->
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+        <div class="card-header">
+            <h4>Search Books</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="GET">
+            <div class="form-group">
+                <label for="search">Search by title or author</label>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Enter search term">
+</div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            </div>
+        </div>
+    </div>
+   </div>
+
+    <div class="row sortable-card">
+    <div class="col-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Computer Science</h4>
+            </div>
+            <div class="card-body">
+                <h2>Books in {{ category|title }}</h2>
+                <div class="book-list row">
+                    {% if books %}
+                        {% for book in books %}
+                            <div class="book-item col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
+                                <div class="card h-100">
+                                    <!-- Display book cover -->
+                                    <img
+                                        src="{{ book.cover_url|default:'/static/images/default-cover.png' }}"
+                                        alt="Book Cover"
+                                        class="card-img-top"
+                                        style="height: 200px; object-fit: cover;">
+
+                                    <div class="card-body text-start text-small text-info text-wrap">
+                                        <!-- Book name -->
+                                        <h5 class="card-title">{{ book.name }}</h5>
+                                        <!-- Author -->
+                                        <p class="card-text "> Author: {{ book.author }}</p>
+                                        <!-- Year -->
+                                        <p class="card-text"> published year:  {{ book.year }}</p>
+                                        <!-- Description -->
+                                        <!-- View/Download button -->
+
+                                        <a href="{% url 'comp_sci_private_books_details' category=category book_id=book.book_id %}" class="btn btn-sm btn-success">
+    View Details
+</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No books available for this category.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+    <script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>

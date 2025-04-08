@@ -1,0 +1,83 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+{% block title %}search index{% endblock %}
+
+{% block content %}
+      <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">Databases </h1>
+                  </div>
+
+
+
+                <div class="card-body">
+                         <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">
+                         These databases provides simple, one-stop searching for books and e-books, videos, articles, digital media, and more.
+
+it  also helps you manage your research.
+
+.</p>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+         <div class="row">
+    <div class="col-12">
+
+        <h4 class="fs-1 "> Databases </h4>
+
+    </div>
+
+  {% if databases %}
+    {% for database in databases %}
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <article class="article">
+                <div class="article-header">
+                    <div class="article-image" style="background-image: url('{{ MEDIA_URL }}{{ database.database_cover_image }}');"></div>
+                    <div class="article-title">
+                        <h2><a href="#">{{ database.database_title }}</a></h2>
+                    </div>
+                </div>
+                <div class="article-details">
+                    <div class="article-meta">
+                        <ul class="no-bullets">
+                            <li><i class="fas fa-tags"></i> : {{ database.database_genre }}</li>
+                        </ul>
+                    </div>
+                    <p>{{ database.database_description|truncatewords:0 }}</p>
+                    <div class="article-cta">
+                        <a href="{{ database.database_URL }}" class="btn btn-success" target="_blank">View</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center">No open access databases available.</p>
+{% endif %}
+
+</div>
+
+
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+{% endblock %}

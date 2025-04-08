@@ -1,0 +1,60 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %} borrowers  records  materials {% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+<div class="section-header">
+    <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h1 class="fs-1 ">physical library book borrowers   </h1>
+                  </div>
+                  <div class="card-body">
+                    <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info">About </h5>
+                        <p class="mb-0 ">
+
+.
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible col-5 mt-2 ml-2
+            {% if message.tags == 'error' %}
+                alert-danger
+            {% elif message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'info' %}
+                alert-info
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+                      <a class="btn btn-primary" href="{% url 'borrowers_home' %}">Add new record</a>
+
+
+.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+</div>
+
+
+{% endblock %}

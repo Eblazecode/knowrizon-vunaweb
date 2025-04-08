@@ -1,5 +1,7 @@
 
 from django import forms
+from django import forms
+from .models import students
 
 from .models import academic_staff
 
@@ -64,10 +66,19 @@ class AcademicStaffForm(forms.ModelForm):
             'academic_staff_interest',
         ]
 
-# STAFF PROFILE MODELS
-from django import forms
-from .models import academic_staff
-
+class StudentsForm(forms.ModelForm):
+    class Meta:
+        model = students
+        fields = [
+            'student_name',
+            'student_gender',
+            'student_email',
+            'student_matric_no',
+            'student_password',
+            'student_dept',
+            'student_id',
+            'student_gender',
+        ]
 
 class AcademicStaffProfile(forms.ModelForm):
     class Meta:

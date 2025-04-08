@@ -1,0 +1,136 @@
+
+{% extends "admin_base.html" %}
+{% load static %}
+{% block title %}vunaweb plus{% endblock %}
+
+{% block content %}
+
+<!--modeal section-->
+
+ <h2 class="section-title"> student borrower record  </h2>
+   <!--FEEBACK MODAL-->
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible col-5 mt-2 ml-2
+            {% if message.tags == 'error' %}
+                alert-danger
+            {% elif message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'info' %}
+                alert-info
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+                <p class="section-lead">
+            ENTER CAREFULLY BORROWERS DETAILS. THE GRAYED OUT FIELDS ARE READ-ONLY
+            </p>
+
+
+
+
+       <section class="section">
+          <div class="section-body">
+
+
+       <div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+
+      </div>
+      <div class="card-body">
+      <form method="POST" action="{% url 'create_student_borrower' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Student ID</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="student_identity" value="{{ form.student_matric_no.value }}" >
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"> Name</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="student_name" value="{{ form.student_name.value }}" readonly>
+    </div>
+  </div>
+
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Email</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="email" class="form-control" name="student_email" value="{{ form.student_email.value }}" readonly>
+    </div>
+  </div>
+
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Department</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="student_department" value="{{ form.student_dept.value }}" readonly>
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Book Title</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="book_title">
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Book Author</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="book_author">
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Book Number</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="text" class="form-control" name="book_number">
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Borrow Date</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="date" class="form-control" name="borrow_date">
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Return Date</label>
+    <div class="col-sm-12 col-md-7">
+      <input type="date" class="form-control" name="return_date">
+    </div>
+  </div>
+  <div class="form-group row mb-4">
+    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+    <div class="col-sm-12 col-md-7">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+          </div>
+        </section>
+
+      {% endblock %}
+{% block scripts %}
+<!-- JS Libraries -->
+      <script src="{% static 'assets/js/app.min.js' %}"></script>
+<script src="{% static 'assets/bundles/summernote/summernote-bs4.js' %}"></script>
+<script src="{% static 'assets/bundles/jquery-selectric/jquery.selectric.min.js' %}"></script>
+<script src="{% static 'assets/bundles/upload-preview/assets/js/jquery.uploadPreview.min.js' %}"></script>
+<script src="{% static 'assets/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+      <!-- Page Specific JS File -->
+<script src="{% static 'assets/js/page/create-post.js' %}"></script>
+<!-- Template JS File -->
+<script src="{% static 'assets/js/scripts.js' %}"></script>
+<!-- Custom JS File -->
+<script src="{% static 'assets/js/custom.js' %}"></script>
+
+{% endblock %}

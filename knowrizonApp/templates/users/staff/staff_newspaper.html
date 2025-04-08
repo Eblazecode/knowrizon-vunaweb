@@ -1,0 +1,57 @@
+
+{% extends "staff_base.html" %}
+{% load static %}
+{% block title %}public books categories {% endblock %}
+
+{% block content %}
+<!-- a roww with to col 4 and 8 -->
+<div class="row">
+    <!-- col 4 -->
+
+    <!-- col 8 -->
+    <div class="col-md-8">
+        <!-- include the newspaper.html file -->
+        {% include 'includes/books_cate/newspaper.html' %}
+    </div>
+ <div class="col-md-4">
+        <!-- card -->
+        <div class="card">
+            <!-- card body -->
+            <div class="card-body">
+                <!-- card title -->
+                <h5 class="card-title
+                ">popular newspapers </h5>
+                <!-- card text -->
+                <p class="card-text">click to read more.</p>
+                <!-- a tag -->
+
+                <!-- list of popular newspapers with their logos and links -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group list-group-item">
+                        <!-- newspaper logo -->
+                      <a href="https://www.guardian.ng/" target="_blank">
+                          <img src="{% static 'assets/img/guardian.png' %}" alt="Guardian Newspaper" class="img-fluid" style="width: 150px;">
+                             </a>
+
+                    </li>
+                    <li class="list-group list-group-item">
+                      <a href="https://www.punchng.com/" target="_blank">
+    <img src="{% static 'assets/img/punch.png' %}" alt="Punch Newspaper" class="img-fluid" style="width: 150px;">
+</a>
+                    </li>
+                   <li class="list-group list-group-item">
+    <a href="https://www.thisdaylive.com/" target="_blank">
+        <img src="{% static 'assets/img/thisday.jpeg' %}" alt="This Day Newspaper" class="img-fluid" style="width: 150px;">
+    </a>
+</li>
+<li class="list-group list-group-item">
+    <a href="https://www.vanguardngr.com/" target="_blank">
+        <img src="{% static 'assets/img/Vanguard-news.webp' %}" alt="Vanguard Newspaper" class="img-fluid" style="width: 150px;">
+    </a>
+</li>
+                </ul>
+            </div>
+        </div>
+ </div>
+</div>
+{% endblock %}

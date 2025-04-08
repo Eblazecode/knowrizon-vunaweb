@@ -143,5 +143,46 @@ urlpatterns = [
     path("library-chatbot/", views.library_chatbot, name="library_chatbot"),
     path("open-source-quotes/", views.open_source_quotes, name="open_source_quotes"),
 
+    # student search functionalities
+    path("search_student_arxvi/", views.student_search_arxvi_index, name="search_student_arxvi_index"),
+    path("search_student_arxvi_result/", views.student_search_arxvi_result, name="search_student_arxvi_result"),
+    # core
+    path("search_student_core/", views.student_search_core, name="search_student_core_result"),
+    #veritas search
+    path("search_student_veritas/", views.student_search_veritas_result, name="search_student_veritas_result"),
+    path("search_student_detail/<int:journal_material_id>/", views.student_search_veritas_detail, name="search_student_veritas_detail"),
 
+    path("student_private_books/", views.students_private_books, name="student_private_books"),
+    path("student_public_books/", views.students_public_books, name="student_public_books"),
+    path("comp_sci_pub_books/", views.comp_sci_books_public_category, name="student_computer_sci_books"),
+    path("comp_sci_students_private_books", views.student_view_allbook_comp_sci_books, name="student_computer_sci_privatebooks"),
+    path('comp_sci_library_books/', views.view_protected_private_comp_sci_books, name='view_private_comp_sci_materials'),
+
+    path('computer_private_books_details/<str:category>/<path:book_id>/', views.comp_sci_book_details_view, name='comp_sci_private_books_details'),
+
+
+    #staff books
+    path("staff_private_books/", views.staff_private_books, name="staff_private_books"),
+    path("stadd_public_books/", views.staff_public_books, name="staff_public_books"),
+
+    path("comp_sci_pub_books/", views.comp_sci_books_staff_public_category, name="staff_computer_sci_books"),
+    path("comp_sci_staff_private_books", views.comp_sci_books_staff_private_category, name="staff_computer_sci_privatebooks"),
+
+    path('news/',views.news_view, name='newspapers'),
+    path('open_coure_wares/',views.open_courseware_home, name='open_course_wares'),
+
+    path('borrowers_home/', views.physical_book_borrowers_home, name='borrowers_home'),
+    path('student_borrowers/', views.physical_book_student_borrowers, name='physical_book_student_borrowers'),
+    path('staff_borrowers/', views.physical_book_staff_borrowers, name='physical_book_staff_borrowers'),
+    path('create_staff_borrower/', views.create_staff_borrow_record, name='create_staff_borrower'),
+
+    path('create_student_borrower/', views.create_student_borrower_record, name='create_student_borrower'),
+    # success
+    path('success', views.success_page, name='success_page'),
+
+    path('rresearch_databses/', views.full_research_databases, name='research_databases'),
+    path('national_repo/', views.national_repository, name='national_repository'),
 ]
+
+
+

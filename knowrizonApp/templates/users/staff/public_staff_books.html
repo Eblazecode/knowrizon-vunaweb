@@ -1,0 +1,17 @@
+
+{% extends "staff_base.html" %}
+{% load static %}
+{% block title %}open source books categories {% endblock %}
+
+{% block content %}
+
+
+
+    {% include 'includes/books_cate/public_books.html' %}
+    <script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+
+{% endblock %}

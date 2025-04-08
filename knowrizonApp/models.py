@@ -1,6 +1,6 @@
 # models.py
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.hashers import make_password
@@ -54,6 +54,7 @@ class students(models.Model):
     student_password = models.CharField(max_length=200)
     student_gender = models.CharField(max_length=50)
     student_dept = models.CharField(max_length=50)
+    role = models.CharField(max_length=20, default='student')  # Role field
     student_created_at = models.DateTimeField(auto_now_add=True)
     student_updated_at = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(null=True, blank=True)
@@ -76,6 +77,7 @@ class content_managers(models.Model):
     contet_manager_phone = models.CharField(max_length=50)
     content_manager_prefix = models.CharField(max_length=50)
     content_manager_password = models.CharField(max_length=50)
+    role = models.CharField(max_length=20, default='library_admin')  # Role field
     content_manager_dept = models.CharField(max_length=50)
     content_manager_created_at = models.DateTimeField(auto_now_add=True)
     content_manager_updated_at = models.DateTimeField(auto_now=True)
@@ -100,6 +102,7 @@ class researchers(models.Model):
     researcher_dept = models.CharField(max_length=50)
     researcher_phone = models.CharField(max_length=50)
     researcher_interest = models.CharField(max_length=50)
+    role = models.CharField(max_length=20, default='researcher')  # Role field
     researcher_created_at = models.DateTimeField(auto_now_add=True)
     researcher_updated_at = models.DateTimeField(auto_now=True)
 
@@ -133,7 +136,7 @@ class library_materials(models.Model):
 
 
 # library PDF materials models
-class PDF_materials(models.Model):
+class library_digital_materials(models.Model):
     pdf_material_id = models.AutoField(primary_key=True)
     pdf_material_ref_id = models.CharField(max_length=50)
     pdf_material_title = models.CharField(max_length=50)
@@ -258,6 +261,7 @@ class academic_staff(models.Model):
     academic_staff_prefix = models.CharField(max_length=10, default='')
     academic_staff_identity = models.CharField(max_length=50, default='')
     academic_staff_interest = models.CharField(max_length=50, default='interest')
+    role = models.CharField(max_length=20, default='staff')  # Role field
     academic_staff_created_at = models.DateTimeField(auto_now_add=True)
     academic_staff_updated_at = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(null=True, blank=True)  # Add this field
@@ -296,3 +300,61 @@ class OpenAccessResource(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# PROFILES MODELS
+class Profile(models.Model):
+    ROLE_CHOICES = (
+        ('admin', 'admin'),
+        ('staff', 'staff'),
+        ('student', 'Student'),
+        ('researcher', 'researcher'),
+    )
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+
+# staff book borrowers models
+class staff_book_borrowers(models.Model):
+    staff_borrower_id = models.AutoField(primary_key=True)
+    staff_ID = models.CharField(max_length=250, default='not specified')
+    staff_borrower_name = models.CharField(max_length=250)
+    staff_borrower_email = models.EmailField(max_length=250)
+    staff_borrower_dept = models.CharField(max_length=250)
+    staff_category = models.CharField(max_length=250, default='not specified')
+    book_title = models.CharField(max_length=250)
+    book_author = models.CharField(max_length=250)
+    book_number = models.CharField(max_length=250)
+    book_borrow_date = models.DateTimeField(auto_now_add=True)
+    book_return_date = models.DateTimeField(auto_now=True)
+    book_return_status = models.CharField(max_length=250, default='not returned')
+    staff_borrower_status = models.CharField(max_length=250, default='active')
+    staff_borrower_created_at = models.DateTimeField(auto_now_add=True)
+    staff_borrower_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.staff_borrower_name
+
+# models.py
+class student_book_borrowers(models.Model):
+    student_borrower_id = models.AutoField(primary_key=True)
+    student_mat_no= models.CharField(max_length=250, default='not specified')
+    student_borrower_name = models.CharField(max_length=250)
+    student_borrower_email = models.EmailField(max_length=250)
+    student_borrower_dept = models.CharField(max_length=250)
+    book_title = models.CharField(max_length=250)
+    book_author = models.CharField(max_length=250)
+    book_number = models.CharField(max_length=250)
+    book_borrow_date = models.DateTimeField(auto_now_add=True)
+    book_return_date = models.DateTimeField(auto_now=True)
+    book_return_status = models.CharField(max_length=250, default='not returned')
+    student_borrower_status = models.CharField(max_length=250, default='active')
+    student_borrower_created_at = models.DateTimeField(auto_now_add=True)
+    student_borrower_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student_borrower_name

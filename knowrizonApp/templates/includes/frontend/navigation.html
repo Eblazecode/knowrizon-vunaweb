@@ -27,42 +27,26 @@
                             <a class="nav-link click-scroll" href="#section_3">Events</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">Volunteer</a>
-                        </li>
                           <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">Databases</a>
+                           <a class="nav-link click-scroll" href="{% url 'research_databases' %}">Databases</a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">newspaper</a>
-                        </li>
+
                              <li class="nav-item dropdown">
                             <a class="nav-link click-scroll dropdown-toggle" href="{% url 'repository_routes' %}" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Repository</a>
 
                             <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">VUA repository</a></li>
+                                <li><a class="dropdown-item" href="{% url 'vua_repository' %}">Veritas repository</a></li>
 
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">CORE repository</a></li>
-                                   <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">Open Databases</a></li>
+                                <li><a class="dropdown-item" href="{% url 'search_open_access' %}">CORE repository</a></li>
 
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Arxvi OPAC</a></li>
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Nigerian Nat.OPAC</a></li>
+                                <li><a class="dropdown-item" href="{% url 'arxiv_search' %}">Arxvi OPAC</a></li>
+                           <li><a class="dropdown-item" href="{% url 'national_repository' %}">Nigerian OPAC</a></li>
                             </ul>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">  AI  </a>
-
-                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news.html">Open Databases</a></li>
-
-                                <li><a class="dropdown-item" href="../../../../../SOFTWARES/templatemo_581_kind_heart_charity/templatemo_581_kind_heart_charity/news-detail.html">Arxvi OPAC</a></li>
-                            </ul>
+                             <li class="nav-item">
+                           <a class="nav-link click-scroll" href="{% url 'newspapers' %}">Newspaper</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_6">Contact</a>
-                        </li>
 
                         <li class="nav-item ms-3">
                            <a class="nav-link custom-btn custom-border-btn btn" href="{% url 'login_decider' %}">login</a>

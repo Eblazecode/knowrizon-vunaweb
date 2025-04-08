@@ -1,0 +1,64 @@
+
+{% load static %}
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            transition: transform 0.3s ease-in-out;
+            text-align: center;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            max-width: 100px;
+            height: auto;
+            margin: 15px auto;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .btn-visit {
+            background: #007bff;
+            color: white;
+            padding: 8px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn-visit:hover {
+            background: #0056b3;
+        }
+    </style>
+
+
+<div class="container">
+    <h2 class="text-center mb-4">🎓 Open Courseware Platforms</h2>
+
+    <div class="row">
+        {% for courseware in courseware_list %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4">
+                <div class="card p-3 shadow-sm">
+                    <img src="{% static 'images/courseware/'|add:courseware.logo %}"
+                         onerror="this.onerror=null; this.src='{% static 'assets/img/mooclearning.jpg' %}';"
+                         alt="{{ courseware.name }} Logo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ courseware.name }}</h5>
+                        <a href="{{ courseware.url }}" class="btn-visit" target="_blank">Visit</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+

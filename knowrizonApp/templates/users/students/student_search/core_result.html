@@ -1,0 +1,91 @@
+{% extends "student_base.html" %}
+{% load static %}
+{% block title %}CORE search {% endblock %}
+
+{% block content %}
+
+     <div class="row">
+
+           <div class="col-lg-8">
+            <div class="card">
+               <div class="card-header">
+                    <h1 class="fs-1 ">CORE Repository search  </h1>
+                  </div>
+                <div class="card-body">
+                                       <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/image-64.png' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+           <p>CORE is an open access repository that aggregates and provides access
+                   to research papers from repositories and journals worldwide.</p>
+                        </div>
+                                       </div>
+
+
+                    <form method="GET"  action="{% url 'search_student_core_result' %}" >
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control h-100" placeholder="Search for everything..." style="height: 600px">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+               <!-- ASK A LIBARIAN CHATBOT -->
+
+        </div>
+      </div>
+
+
+
+<h2>Search Results for "{{ query }}"</h2>
+
+{% if results %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Search Results</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                {% for result in results %}
+                    <li class="media my-4">
+                        <img class="mr-3" src="{% static 'assets/img/journals.webp' %}" width="80px" alt="Thumbnail">
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1">
+                                <a href="{{ result.link }}" target="_blank">{{ result.title }}</a>
+                            </h5>
+                            <p><strong>Authors:</strong>
+                                {% for author in result.authors %}
+                                    {{ author }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    Unknown
+                                {% endfor %}
+                            </p>
+                            <p><strong>Year:</strong> {{ result.year|default:"Unknown Year" }}</p>
+                            <p><strong>Source:</strong> {{ result.source|default:"Not available" }}</p>
+                            <p><strong>Abstract:</strong> {{ result.abstract|truncatechars:500 }}</p>
+
+                               <div class="mt-2">
+                                        {% if result.download_link and result.download_link != "#" %}
+                                            <a href="{{ result.download_link }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
+                                        {% else %}
+                                            <button class="btn btn-secondary btn-sm" disabled>No Download</button>
+                                        {% endif %}
+                                    </div>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <p class="alert alert-warning">No Open Access articles found.</p>
+{% endif %}
+
+
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "search/search_base_template.html" %}
+{% load static %}
+
+{% block title %}Search Arxiv Index{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="fs-1"> National Repository  of Nigeria </h1>
+            </div>
+                <div class="card-body">
+                         <div class="media">
+                     <img class="mr-3" src="{% static 'assets/img/nln-logo.jpg' %}" alt="Generic placeholder image">
+                      <div class="media-body">
+                        <h5 class="mt-0 text-info"></h5>
+                        <p class="mb-0 ">
+                      The Apex Repository of the Federal Republic of Nigeria with objectives to:
+
+<ul class="text-black">
+    <li>Preserve in electronic format the intellectual and cultural resources of Nigeria for posterity.</li>
+    <li>Increase the visibility of the Nigerian knowledge storehouse and its scholarly, literary and cultural heritage; and</li>
+    <li>Increase the availability and accessibility of Nigerian content to the global community.</li>
+</ul>
+
+
+
+
+.</p>
+                          <a class="btn btn-success" target="_blank" href="https://nigeriareposit.nln.gov.ng/home">Visit the National repository of Nigeria</a>
+                      </div>
+                    </div>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
